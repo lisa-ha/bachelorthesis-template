@@ -16,13 +16,13 @@ Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{s
 
 \noindent \textbf{Protokoll}
 
-\noindent Jede der 192 Münzen mit Vorderseitenbild dient als Anfrage und wird mit den übrigen 191 verglichen. Als Treffer gelten die 6 bis 9 anderen Münzen derselben Gruppe, die ein Vorderseitenbild besitzen. Für jede Klasse wird das Merkmal mit der höchsten Confidence der Anfrage-Münze verwendet \todo{Entscheidung bestätigen}. Es wird mit den Merkmalen derselben Klasse auf der Vorderseite der übrigen Münzen verglichen (vgl. \cref{sec:vorgehen}). Der Wert einer Münze ist die höchste Ähnlichkeit über alle ihre passenden Merkmale. Anfragen, auf denen die Klasse nicht detektiert wurde, gehen nicht in die Wertung dieser Klasse ein. Für jede Klasse wird daher angegeben, auf wie vielen Münzen sie vorkommt (n). Zusätzlich wird ein Gesamtwert gebildet, indem die Ähnlichkeiten über alle Klassen gemittelt werden, die bei Anfrage und Kandidat vorliegen \todo{Entscheidung bestätigen}.
+\noindent Jede der 200 Münzen dient als Anfrage und wird mit den übrigen 199 verglichen. Als Treffer gelten die 9 anderen Münzen derselben Gruppe (alle Münzen besitzen ein Vorderseitenbild).Für jede Klasse wird das Merkmal mit der höchsten Confidence der Anfrage-Münze verwendet \todo{Entscheidung bestätigen}. Es wird mit den Merkmalen derselben Klasse auf der Vorderseite der übrigen Münzen verglichen (vgl. \cref{sec:vorgehen}). Der Wert einer Münze ist die höchste Ähnlichkeit über alle ihre passenden Merkmale. Anfragen, auf denen die Klasse nicht detektiert wurde, gehen nicht in die Wertung dieser Klasse ein. Für jede Klasse wird daher angegeben, auf wie vielen Münzen sie vorkommt (n). Zusätzlich wird ein Gesamtwert gebildet, indem die Ähnlichkeiten über alle Klassen gemittelt werden, die bei Anfrage und Kandidat vorliegen \todo{Entscheidung bestätigen}.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Kennzahlen}
 
-\noindent Bewertet wird die Reihenfolge der Suchergebnisse. Die Kennzahlen beziehen sich auf die ersten $k$ Münzen dieser Reihenfolge, also auf die Ergebnisse, die die Anwendung anzeigt. Da die Anwendung bis zu fünf Ergebnisse ausgibt, werden $k = 1$ und $k = 5$ betrachtet. HitRate@1 gibt den Anteil der Anfragen an, bei denen die ähnlichste Münze denselben Vorderseitenstempel hat. HitRate@5 gibt den Anteil der Anfragen an, bei denen mindestens eine der ersten fünf Münzen denselben Stempel hat. Beide Werte zeigen, wie oft eine Suche überhaupt zu einem Treffer führt. Precision@5 ist der Anteil der Treffer unter den ersten fünf Münzen, gemittelt über alle Anfragen. Sie zeigt, wie viele der angezeigten Ergebnisse im Durchschnitt passen. \todo{Quelle} Alle Werte werden pro Klasse und als Gesamtwert für jedes der drei Ähnlichkeitsmaße angegeben. Als Untergrenze dient der Wert, der sich bei einer zufälligen Reihenfolge ergibt. Er liegt für HitRate@1 und Precision@5 bei etwa [x]\,\% und für HitRate@5 bei etwa [y]\,\% \todo{Werte eintragen}.
+\noindent Bewertet wird die Reihenfolge der Suchergebnisse. Die Kennzahlen beziehen sich auf die ersten $k$ Münzen dieser Reihenfolge, also auf die Ergebnisse, die die Anwendung anzeigt. Da die Anwendung bis zu fünf Ergebnisse ausgibt, werden $k = 1$ und $k = 5$ betrachtet. HitRate@1 gibt den Anteil der Anfragen an, bei denen die ähnlichste Münze denselben Vorderseitenstempel hat. HitRate@5 gibt den Anteil der Anfragen an, bei denen mindestens eine der ersten fünf Münzen denselben Stempel hat. Beide Werte zeigen, wie oft eine Suche überhaupt zu einem Treffer führt. Precision@5 ist der Anteil der Treffer unter den ersten fünf Münzen, gemittelt über alle Anfragen. Sie zeigt, wie viele der angezeigten Ergebnisse im Durchschnitt passen. \todo{Quelle} Alle Werte werden pro Klasse und als Gesamtwert für jedes der drei Ähnlichkeitsmaße angegeben. Als Untergrenze dient der Wert, der sich bei einer zufälligen Reihenfolge ergibt. Er liegt für HitRate@1 und Precision@5 bei etwa $ \frac{9}{199} = 4,5\,\% $ und für HitRate@5 bei etwa $ 20,8\,\% $.
 
 \vspace{\baselineskip}
 
@@ -45,7 +45,54 @@ Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{s
 \label{sec:ergebnisse}
 \textbf{Merkmalsdetektion}
 
-\todo{daten aus tabellen nur obverse}
+\noindent Die Auswertung der Detektion beschränkt sich auf die Vorderseiten (242 Bilder von 200 Münzen). Bei einem Schwellenwert von 0,005 liefert YOLO-World 905 Detektionen, im Mittel 3,74 je Bild. Auf 12 Bildern (5,0\,\%) wird nichts detektiert, und 23 der 57 Prompts treten als Klasse auf (\cref{tab:schwellenwerte}). Mit steigendem Schwellenwert nimmt die Zahl der Detektionen stark ab: Bei 0,01 sind es 543, bei 0,05 noch 312 und bei 0,5 nur 7. Entsprechend steigt der Anteil der Bilder ohne Detektion von 5,0\,\% über 6,6\,\% und 16,9\,\% auf 97,1\,\% (235 Bilder). Diese Zahlen begründen die Wahl des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}).
+
+Am häufigsten wird auf den Vorderseiten die Klasse \textit{human face} detektiert (176 Münzen, 88\,\%), gefolgt von \textit{person} (159, 79,5\,\%), \textit{face} (80, 40\,\%) und \textit{dog} (70, 35\,\%). Alle weiteren Klassen kommen auf höchstens 20 Münzen (10\,\%) vor (\cref{tab:klassenhaeufigkeit}). Die Confidence ist insgesamt niedrig: Die durchschnittliche höchste Confidence je Münze liegt zwischen 0,53\,\% (\textit{tree}) und 22,02\,\% (\textit{dog}), bei \textit{human face} sind es 16,72\,\%. \todo{Optional: Einordnung, ob die Klassen, z.\,B. dog, inhaltlich zutreffen, nur wenn geprüft (siehe Qualitative Analyse). Erst nach Ergebnissen der Stempelsuche formulieren.}
+
+\begin{table}[htbp]
+\centering
+\caption{Häufigste Klassen auf den Vorderseiten (Schwellenwert 0{,}005, 200 Münzen)}
+\label{tab:klassenhaeufigkeit}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Klasse} & \textbf{Münzen} & \textbf{Häufigkeit} & \textbf{Ø max. Conf.} \\ \hline
+human face       & 176 & 88{,}00\,\% & 16{,}72\,\% \\ \hline
+person           & 159 & 79{,}50\,\% & 1{,}40\,\%  \\ \hline
+face             & 80  & 40{,}00\,\% & 7{,}89\,\%  \\ \hline
+dog              & 70  & 35{,}00\,\% & 22{,}02\,\% \\ \hline
+inscription      & 20  & 10{,}00\,\% & 2{,}57\,\%  \\ \hline
+circle           & 14  & 7{,}00\,\%  & 3{,}94\,\%  \\ \hline
+profile portrait & 9   & 4{,}50\,\%  & 4{,}79\,\%  \\ \hline
+statue           & 8   & 4{,}00\,\%  & 2{,}16\,\%  \\ \hline
+coin             & 4   & 2{,}00\,\%  & 0{,}86\,\%  \\ \hline
+letter           & 4   & 2{,}00\,\%  & 0{,}66\,\%  \\ \hline
+eye              & 3   & 1{,}50\,\%  & 0{,}87\,\%  \\ \hline
+head             & 2   & 1{,}00\,\%  & 0{,}72\,\%  \\ \hline
+horse            & 2   & 1{,}00\,\%  & 13{,}09\,\% \\ \hline
+snake            & 1   & 0{,}50\,\%  & 1{,}47\,\%  \\ \hline
+mask             & 1   & 0{,}50\,\%  & 15{,}02\,\% \\ \hline
+tree             & 1   & 0{,}50\,\%  & 0{,}53\,\%  \\ \hline
+bird             & 1   & 0{,}50\,\%  & 2{,}93\,\%  \\ \hline
+symbol           & 1   & 0{,}50\,\%  & 0{,}67\,\%  \\ \hline
+scepter          & 1   & 0{,}50\,\%  & 1{,}58\,\%  \\ \hline
+owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Detektionen auf den Vorderseitenbildern bei verschiedenen Schwellenwerten (242 Bilder)}
+\label{tab:schwellenwerte}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Schwellenwert}         & 0{,}005 & 0{,}01 & 0{,}05 & 0{,}5  \\ \hline
+\textbf{Detektionen}           & 905     & 543    & 312    & 7      \\ \hline
+\textbf{Ø je Bild}             & 3{,}74  & 2{,}24 & 1{,}29 & 0{,}03 \\ \hline
+\textbf{Bilder ohne Detektion} & 12      & 16     & 41     & 235    \\ \hline
+\textbf{Klassen}               & 23      & 18     & 9      & 2      \\ \hline
+\end{tabular}
+\end{table}
+\todo{erwähnen dass das alles auf unseren 242 bildern passiert ist; Zur Zählweise im Code: "Münzen" in Tabelle 5.1 zählt Münzen, auf denen die Klasse auf mindestens einem Vorderseitenbild vorkommt. "Häufigkeit" ist dieser Wert geteilt durch 200. Die Confidence ist der Mittelwert der je Münze höchsten Confidence der Klasse. Das gehört in die Beschriftung oder in den Text.}
 
 \vspace{\baselineskip}
 
