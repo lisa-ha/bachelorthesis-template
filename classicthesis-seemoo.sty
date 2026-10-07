@@ -1,0 +1,478 @@
+%***************************************************************************************************
+% classicthesis-seemoo.sty
+% Collaborative adaptions to the classicthesis style made by the members of SEEMOO
+%***************************************************************************************************
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{classicthesis-seemoo}[2026/06/01]
+
+\ifdefined\classicthesis\else\RequirePackage{classicthesis}\fi
+
+\RequirePackage{etoolbox} % for patching commands, toggles, etc.
+
+%-------------------------------------------------------------------------------
+% Options
+%-------------------------------------------------------------------------------
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{family=cts, prefix=cts@}
+
+% style options
+\DeclareStringOption[standard]{layout} % standard, balanced, tight or dense
+\DeclareBoolOption[false]{osf} % enable old-style figures (osf)
+\DeclareBoolOption[false]{smalltables} % set font size of tables to small
+\DeclareBoolOption[false]{centerfloats} % center certain floats like tables, figures by default
+\DeclareBoolOption[false]{tudacolors} % enable to use TUDA-CI colors
+\DeclareBoolOption[false]{mutelinks} % turn internal links black to improve readability
+\DeclareBoolOption[false]{fewerserifs} % less serifs and roboto font in headings
+\DeclareBoolOption[false]{smallcapscasesensitive} % make \spacedlowsmallcaps case sensitive
+
+% printing related options
+\DeclareBoolOption[true]{titleiscover} % set title page centering and title page PDF bookmark name
+
+% ToC and bookmark options
+\DeclareBoolOption[false]{cleantoc} % remove \addchapCondToC and \phantomchapCondToC from ToC
+\newtoggle{cts@hidefrontbackmatter} % hide front and back matter top-level PDF bookmarks
+\DeclareVoidOption{hidefrontbackmatter}{\toggletrue{cts@hidefrontbackmatter}}
+
+% document variant options
+\newtoggle{cts@parts} % enable parts
+\newtoggle{cts@phd} % enable phd variant (also enables parts)
+\DeclareVoidOption{parts}{\toggletrue{cts@parts}}
+\DeclareVoidOption{phd}{\toggletrue{cts@parts}\toggletrue{cts@phd}}
+
+% options propagating strings
+\DeclareStringOption{version} % custom version string for gitinfo2
+
+\ProcessKeyvalOptions{cts}
+
+% validate option combinations after processing the options
+\iftoggle{cts@hidefrontbackmatter}{%
+  \iftoggle{cts@parts}{}{%
+    \PackageError{cts}
+      {Option `hidefrontbackmatter' requires `parts' or `phd'}
+      {Enable `parts' (or `phd') when using `hidefrontbackmatter'.}%
+  }%
+}{}
+
+
+%***************************************************************************************************
+% Main style changes from classicthesis
+%***************************************************************************************************
+
+%-------------------------------------------------------------------------------
+% Disable old-style figures (osf) for body text and (when enabled) Palatino
+% chapter numbers. Essentially exchange calls to pplj (Palatino with old-style
+% figures) with calls to pplx (Palatino, lining figures).
+%-------------------------------------------------------------------------------
+\ifcts@osf%
+  % keep the default old-style figures from classicthesis
+\else%
+  \AtBeginDocument{%
+    \ifthenelse{\boolean{ct@palatino}}{%
+      \renewcommand{\rmdefault}{pplx} % lining figures for all numbers (but the chapter numbers)
+      \ifthenelse{\boolean{ct@eulerchapternumbers}}{}{%
+        \DeclareFixedFont{\chapterNumber}{T1}{pplx}{m}{n}{70}% lining figures for chapter numbers
+      }%
+      \normalfont%
+    }{}%
+  }%
+\fi
+
+%-------------------------------------------------------------------------------
+% Set font size of tabular to small
+%-------------------------------------------------------------------------------
+\ifcts@smalltables
+  \AtBeginEnvironment{tabular}{\small}
+  % NOTE: Don't add longtable as it will influence the long style from glossary
+\fi
+
+%-------------------------------------------------------------------------------
+% Center floats
+%-------------------------------------------------------------------------------
+\ifcts@centerfloats
+  \g@addto@macro\@floatboxreset\centering
+\fi
+
+%-------------------------------------------------------------------------------
+% Change some colors from classicthesis to match the ones from TUDA-CI
+%-------------------------------------------------------------------------------
+\ifcts@tudacolors
+  % chapter numbers (default lstset: commentstyle)
+  \definecolor{CTsemi}{rgb}{0.757,0.353,0.369} % simulated 90% opaque TUDA red instead of grey
+  % title color (default lstset: keywordstyle)
+  \definecolor{CTtitle}{rgb}{0.723,0.059,0.133} % TUDA red instead of Maroon
+  % url colors
+  \definecolor{CTurl}{rgb}{0.723,0.059,0.133} % TUDA red instead of Maroon
+  % numbers from citations brackets (default lstset: stringstyle)
+  \definecolor{CTcitation}{rgb}{0.723,0.059,0.133} % TUDA red instead of WebGreen
+\fi
+
+%-------------------------------------------------------------------------------
+% turn internal links to figures and acronyms black (default lstset: emphystyle)
+%-------------------------------------------------------------------------------
+\ifcts@mutelinks
+  \definecolor{CTlink}{named}{Black} % Black rather than RoyalBlue
+\fi
+
+%-------------------------------------------------------------------------------
+% Roboto and sans-serif for all headings (parts, chapters, sections, ...)
+%-------------------------------------------------------------------------------
+\ifcts@fewerserifs
+  % use roboto for sans-serif fonts
+  \RequirePackage{roboto}
+  \let\accentfont\robotoslab
+  \DeclareTextFontCommand{\textaccent}{\accentfont}
+
+  % use roboto for chapter numbers (80% height compared to classicthesis)
+  \renewcommand{\chapterNumber}{\fontsize{70}{56}\robotoslab\bfseries\selectfont}
+
+  % sans-serif part number followed by bold and huge sans-serif part headings
+  \ifthenelse{\boolean{ct@parts}}%
+  {%
+      \titleformat{\part}[display]%
+      {\normalfont\sffamily\centering\large}%
+      {\thispagestyle{empty}\partname~\MakeTextUppercase{\thepart}}{1em}%
+      {\color{CTtitle}\sffamily\bfseries\huge}[\bigskip\normalfont\normalsize\color{Black}\begin{quote}\ctparttext@print\end{quote}]
+  }{\relax}
+
+  % bold and huge sans-serif chapter headings
+  \titleformat{\chapter}[display]%
+  {\relax}{\mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{CTsemi}\chapterNumber\thechapter}}{0pt}%
+  {\raggedright\sffamily\bfseries\huge}[\normalsize\vspace*{.8\baselineskip}\titlerule]
+  % bold and large sans-serif sections
+  \titleformat{\section}
+  {\relax}{\sffamily\Large\bfseries\thesection}{1em}{\sffamily\Large\bfseries}
+  % bold sans-serif subsections
+  \titleformat{\subsection}
+  {\relax}{\sffamily\bfseries\thesubsection}{1em}{\sffamily\normalsize\bfseries}
+  % sans-serif subsubsections
+  \titleformat{\subsubsection}
+  {\relax}{\sffamily\thesubsubsection}{1em}{\sffamily\normalsize\bfseries}
+\fi
+
+%-------------------------------------------------------------------------------
+% Make small caps case sensitive (pdflatex and luatex, c.f. comment for xetex)
+%-------------------------------------------------------------------------------
+\ifcts@smallcapscasesensitive
+  \DeclareRobustCommand{\spacedlowsmallcaps}[1]{\textls[80]{\ct@caps{#1}}}
+  % use the following for xetex
+  %\DeclareRobustCommand{\spacedlowsmallcaps}[1]{{\addfontfeatures{LetterSpace=14.0}\ct@caps{#1}}}% WordSpace=1.8
+\fi
+
+%-------------------------------------------------------------------------------
+% Set the layout [standard, balanced, tight or dense]
+%-------------------------------------------------------------------------------
+
+% These are the parameters used to derive the balanced and tight layouts:
+% fixed parameters
+%   - pagewidth = 210 mm (597.51 pt), pageheight = 297 mm (845.05 pt)
+%   - marginparwidth = 7 em (76.22 pt), marginparsep = 2 em (21.78 pt)
+%   - head skip = 33 pt, foot skip = 42 pt
+%   - baselineskip = 13.6 pt (for 11 pt Palatino without linespread)
+% assumptions
+%   - approximate average character width of 11 pt Palatino: 4.9 pt
+%   - average character per word in academic writing: 5-6 (+1 for space)
+%   - 160 double-sided pages @ 100 gsm needs up to 5 mm binding corection (BCOR)
+% design goals (mostly based on "The Elements of Typographic Style")
+%   - character per line (CPL): 45-75 is good, 66 is ideal
+%   - up to 500 words per page (single column)
+%   - at least 40 pt outer clearance between usable margin and edge of paper
+%   - consider BCOR up to 7.5 mm for extensive dissertations/fancy bindings
+% --> the balanced and tight layouts preserve chars/page by design, but leave
+%     more room for figures and tables without sacrificing outer clearance
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% [standard] - the classicthesis default setting
+%   - area set to 336pt wide and 750pt height
+%   - linespread set to 1.05 in case of Palatino
+%   - about 69 CPL and 46 lines of text (roughly 453 - 529 words per page)
+%   - 67 pt (23.5 mm) outer clearance with 5 mm BCOR
+%   --> margin notes look nice, low horizontal space for figures and tables
+\ifdefstring{\cts@layout}{standard}{%
+  % nothing to do -- classicthesis defaults apply
+}{%
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% [balanced] - the balanced layout results in:
+%   - about 75 CPL and 42 lines of text (roughly 453 - 529 words per page)
+%   - 45 pt (16 mm) outer clearance with 5 mm BCOR
+%   --> still usable with margin notes, adequate space for figures and tables
+\ifdefstring{\cts@layout}{balanced}{%
+  \areaset[current]{368pt}{750pt}
+  \ifthenelse{\boolean{ct@palatino}}{%
+    \linespread{1.15}
+  }{%
+    \linespread{1.095} % = 1.15/1.05 --> derived from the Palatino linespreads
+    \PackageWarning{classicthesis-seemoo}{Using untested linespread for non-Palatino font}
+  }
+}{%
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% [tight] - the tight layout results in:
+%   - about 77 CPL and 41 lines of text (roughly 449 - 524 words per page)
+%   - 40 pt (14.1 mm) outer clearance with 5 mm BCOR (maximum!)
+%   --> margin notes look ok, can look tight, good space for figures and tables
+\ifdefstring{\cts@layout}{tight}{%
+  \areaset[current]{376pt}{750pt}
+  \ifthenelse{\boolean{ct@palatino}}{%
+    \linespread{1.175}
+  }{%
+    \linespread{1.119} % = 1.175/1.05 --> derived from the Palatino linespreads (untested)
+    \PackageWarning{classicthesis-seemoo}{Using untested linespread for non-Palatino font}
+  }
+}{%
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% [dense] - the dense layout (formerly known as adrianstyle) results in:
+%   - about 87 CPL and 46 lines of text (roughly 570 - 665 words per page)
+%   - 7 pt (2.6 mm) outer clearance with 5 mm BCOR
+%   --> margin notes look bad, ample space for figures and tables
+%   --> CPL too large, too much words per page, no space left to adjust for binding
+%   --> pages with two digit chapter numbers don't have enough margin
+%   --> not recommended from a typographic point of view
+\ifdefstring{\cts@layout}{dense}{%
+  \areaset[current]{15cm}{750pt}
+  % linespread historically unchanged
+  \PackageWarning{classicthesis-seemoo}{the `dense' layout (formerly known as adrianstyle) is not recommended from a typographic point of view}
+}{%
+  \PackageError{classicthesis-seemoo}{Invalid layout `\cts@layout'}{%
+    Valid options are: standard, balanced, tight, dense.%
+  }
+}}}}
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%-------------------------------------------------------------------------------
+% Determine the margin width adjustments to center the titlepage
+%-------------------------------------------------------------------------------
+\newlength{\titlePageShift}
+\AtBeginDocument{%
+  \ifcts@titleiscover
+    \setlength{\titlePageShift}{%
+      \dimexpr\oddsidemargin + 1in + \hoffset - (\paperwidth - \textwidth) / 2\relax
+    }%
+    \newcommand{\titlepagetype}{Cover}%
+  \else
+    \setlength{\titlePageShift}{0pt}%
+    \newcommand{\titlepagetype}{Title Page}%
+  \fi
+}
+
+
+%-------------------------------------------------------------------------------
+% Redefine \part{} to remove leading whitespaces in PDF bookmarks
+%-------------------------------------------------------------------------------
+% When using \part{}, the generated PDF bookmark has a leading whitespace for
+% unknown reasons. Using hyperref's \texorpdfstring within \part{} does not fix
+% the problem. The following command provides a workaround:
+% First, manually add a PDF bookmark (without a leading whitespace).
+% Then, disable the generation of PDF bookmarks temporarily to prevent the
+% creation of a PDF bookmark with a leading whitespace. Then, start the new part
+% and restore the automatic generation of PDF bookmarks.
+%-------------------------------------------------------------------------------
+\let\oldpart\part
+\newcounter{cts@partbookmark}
+\RenewDocumentCommand{\part}{s o m}{%
+  % stared version (KOMA's \part* adds ToC entries and bookmarks by default, without the bug!)
+  \IfBooleanTF{#1}{%
+    \oldpart*{#3}%
+  }{%
+  % non-stared version (fix the leading whitespace bug)
+    \phantomsection%
+    \stepcounter{cts@partbookmark}%
+    \hypersetup{bookmarksdepth=-2}%
+    \pdfbookmark[-1]{#3}{cts.part.\thects@partbookmark}%
+    \IfValueTF{#2}{\oldpart[#2]{#3}}{\oldpart{#3}}%
+    \hypersetup{bookmarksdepth}%
+  }%
+}
+
+
+%***************************************************************************************************
+% Extra formatting commands (targeted at the template designers)
+%***************************************************************************************************
+
+%-------------------------------------------------------------------------------
+% The following commands can be used for unnumbered chapters in the front and
+% back matter, depending on the need to control the header and the ToC entry:
+% \addchapCondToC     -->  heading    + ToC (if cleantoc is false) + PDF bookmark
+% \phantomchapCondToC -->  no heading + ToC (if cleantoc is false) + PDF bookmark
+% In addition, KOMA-Script provides the following:
+% \addchap            -->  heading + ToC + PDF bookmark
+% Note: The classicthesis package sets chaptermark to use spacedlowsmallcaps.
+%-------------------------------------------------------------------------------
+\newcounter{cts@chapterbookmark}
+\newcommand{\phantomchapCondToC}[1]{%
+  \ifcts@cleantoc%
+    \stepcounter{cts@chapterbookmark}%
+    \pdfbookmark[0]{#1}{cts.chapter.\thects@chapterbookmark}%
+  \else%
+    \phantomsection%
+    \addcontentsline{toc}{chapter}{\texorpdfstring{#1}{#1}}%
+  \fi%
+}
+
+\newcommand{\addchapCondToC}[1]{%
+  \phantomchapCondToC{#1}%
+  \markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}%
+  \chapter*{#1}%
+}
+
+%-------------------------------------------------------------------------------
+% The \tocextraspace command is useful to add a space in the ToC provided there
+% are already items in the ToC (otherwise the it would look odd). This is useful
+% in conjunction with the above \addchapCondToC and \phantomchapCondToC commands
+% which conditionally add items to the ToC.
+%-------------------------------------------------------------------------------
+% patch \addcontentsline to determine if ToC is empty or not
+\newif\ifhastocentry
+\pretocmd{\addcontentsline}{\hastocentrytrue}{}{}
+
+% insert a space into the ToC if there are already items in the ToC
+\newcommand{\tocextraspace}{%
+  \ifhastocentry
+    \addtocontents{toc}{\protect\vspace{\cftbeforepartskip}}%
+  \fi
+}
+
+% vertical alignment environment (for acknowledgments)
+\newenvironment{vplace}[1][1]
+  {\par\vspace*{\stretch{#1}}}
+  {\vspace*{\stretch{1}}\par}
+
+% raise an error if a certain package is not being loaded and provide instructions
+\newcommand{\AssertPackageLoaded}[1]{
+  \@ifpackageloaded{#1}{}{
+    \GenericError{}{Package #1 not loaded}{}
+    {Add or uncomment \string\usepackage{#1} in the main configuration file.}
+  }
+}
+
+%***************************************************************************************************
+% Extra formatting commands (targeted at the authors)
+%***************************************************************************************************
+
+%-------------------------------------------------------------------------------
+% useful for typesetting DOIs and URNs
+%-------------------------------------------------------------------------------
+\newcommand{\shorturl}[2]{\href{#1}{\nolinkurl{#2}}}
+
+
+%-------------------------------------------------------------------------------
+% useful for typesetting table headers
+%-------------------------------------------------------------------------------
+\newcommand{\tableheadline}[1]{\multicolumn{1}{l}{\spacedlowsmallcaps{#1}}}
+
+
+%-------------------------------------------------------------------------------
+% Enable wide text/floats taking the space of margin notes (435pt
+% instead of 336pt) note that this changes the \linewidth (not
+% \textwidth), so follow this example to include a wide figure.
+%
+%   \begin{figure}
+%   \begin{wide}
+%     \includegraphics[width=\linewidth]{graphics/logos/tud-logo}
+%     \caption{Athene logo of TU Darmstadt.}
+%   \end{wide}
+%   \end{figure}
+%
+%-------------------------------------------------------------------------------
+\newlength{\fullwidthlen}
+\setlength{\fullwidthlen}{\marginparwidth}
+\addtolength{\fullwidthlen}{\marginparsep}
+\RequirePackage[strict]{changepage} % distinguish left and right pages with adjustwidth environment
+\newenvironment{wide}{%
+  \begin{adjustwidth*}{}{-\fullwidthlen}\hsize=\linewidth%
+}{%
+  \end{adjustwidth*}%
+}
+
+
+%***************************************************************************************************
+% Useful drafting commands (targeted at the authors)
+%***************************************************************************************************
+
+%-------------------------------------------------------------------------------
+% When drafting show the date, git commit hash and mark overfull hboxes
+%-------------------------------------------------------------------------------
+\ifthenelse{\boolean{ct@drafting}}{%
+  \overfullrule=50pt
+  \newcommand{\cts@prelimcontent}{\today\ at \thistime}%
+  \ifx\cts@version\@empty\else
+    \appto\cts@prelimcontent{\ -- version \cts@version}%
+  \fi
+  \IfFileExists{.git/gitHeadInfo.gin}{%
+    \RequirePackage{gitinfo2}%
+    \appto\cts@prelimcontent{\ -- git \gitAbbrevHash}%
+  }{}%
+  \appto\cts@prelimcontent{\ -- overfull hboxes are highlighted with a bar}%
+  \renewcommand{\PrelimText}{\footnotesize[\,\cts@prelimcontent\,]}%
+}{}
+
+
+%-------------------------------------------------------------------------------
+% Plan chapter, section and subsection page lengths in drafting mode with:
+% - \draftchapter[Short Title]{Title}{pages}
+% - \draftsection[Short Title]{Title}{pages}
+% - \draftsubsection[Short Title]{Title}{pages}
+% and show the total page number of the previous chapter or part in the ToC:
+% - \draftshowchapterpages
+% - \draftshowpartpages
+%-------------------------------------------------------------------------------
+
+% patch \chapter and \part command to count the planned number of pages per chapter
+\newcounter{chapterpages}
+\pretocmd{\chapter}{\setcounter{chapterpages}{0}}{}{}
+\newcounter{partpages}
+\pretocmd{\part}{\setcounter{partpages}{0}}{}{}
+
+% internal helper to format the page number for the new \draftsec command
+\newcommand{\cts@draftpagehint}[1]{%
+  \texorpdfstring{%
+    \NoCaseChange{%
+      \textcolor{teal}{\normalfont\small\texttt{(#1 pages)}}%
+    }%
+  }{(#1 pages)}%
+}
+
+% internal helper function to add a planned number of pages to a sectioning command
+\newcommand{\cts@draftsec}[4]{%
+  % #1 = sectioning command
+  % #2 = short title (optional)
+  % #3 = full title
+  % #4 = planned number of pages shown in draft mode
+  \ifthenelse{\boolean{ct@drafting}}{%
+    \ifstrempty{#2}
+      {#1[#3 \cts@draftpagehint{#4}]{#3 \cts@draftpagehint{#4}}}
+      {#1[#2 \cts@draftpagehint{#4}]{#3 \cts@draftpagehint{#4}}}%
+    \addtocounter{chapterpages}{#4}%
+    \addtocounter{partpages}{#4}%
+  }{%
+    \ifstrempty{#2}
+      {#1{#3}}
+      {#1[#2]{#3}}%
+  }%
+}
+
+% define draft sectioning commands to plan the number of pages
+\newcommand{\draftchapter}[3][]{\cts@draftsec{\chapter}{#1}{#2}{#3}}
+\newcommand{\draftsection}[3][]{\cts@draftsec{\section}{#1}{#2}{#3}}
+\newcommand{\draftsubsection}[3][]{\cts@draftsec{\subsection}{#1}{#2}{#3}}
+
+% internal helper function to sum up planned part or chapter totals
+\newcommand{\cts@draftshowtotal}[3][]{%
+  % #1 = optional prefix like an indent (e.g. \hspace{1.5em})
+  % #2 = label (e.g. "chapter" or "part")
+  % #3 = counter value (e.g. \thechapterpages)
+  \ifthenelse{\boolean{ct@drafting}}{%
+    \addtocontents{toc}{%
+      \protect#1%
+      \protect\textcolor{teal}{%
+        \protect\small
+        \protect\texttt{planned total (#2): #3 pages}%
+      }%
+      \protect\par
+    }%
+  }{}%
+}
+
+% show planned page totals for the preceding chapter or part in the ToC
+\newcommand{\draftshowchapterpages}{\cts@draftshowtotal[\hspace{1.5em}]{chapter}{\thechapterpages}}
+\newcommand{\draftshowpartpages}{\cts@draftshowtotal{part}{\thepartpages}}

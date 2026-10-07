@@ -1,0 +1,27 @@
+% tikz-setup.tex -- einmal in der Präambel: \input{tikz-setup}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit, shapes.geometric, decorations.pathreplacing}
+
+\definecolor{figblue}{HTML}{3B6EA5}
+\definecolor{figorange}{HTML}{D9822B}
+\definecolor{figgreen}{HTML}{4C9A6A}
+\definecolor{figpurple}{HTML}{7B5EA7}
+\definecolor{figgray}{HTML}{808080}
+
+\tikzset{
+  figbox/.style={draw=black!70, rounded corners=2pt, fill=white, align=center,
+    inner sep=4pt, font=\small, minimum height=9mm},
+  sblue/.style={fill=figblue!15, draw=figblue},
+  sorange/.style={fill=figorange!15, draw=figorange},
+  sgreen/.style={fill=figgreen!15, draw=figgreen},
+  spurple/.style={fill=figpurple!15, draw=figpurple},
+  figarrow/.style={-{Stealth[length=2.2mm]}, line width=0.8pt, black!75},
+  figlabel/.style={font=\footnotesize, text=black!75, align=center},
+  figneuron/.style={circle, draw=black!70, fill=white, minimum size=5mm, inner sep=0pt},
+  imgcoords/.style={shift={(#1.south west)},
+    x={($(#1.south east)-(#1.south west)$)},
+    y={($(#1.north west)-(#1.south west)$)}},
+}
+
+% Platzhalter/echtes Münzbild (Dateiname anpassen); in der Preview vorher definiert
+\providecommand{\coinpic}[1]{\includegraphics[width=#1]{coin3545_obverse.jpeg}}

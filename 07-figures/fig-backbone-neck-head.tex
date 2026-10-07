@@ -1,0 +1,15 @@
+\begin{tikzpicture}[node distance=7mm]
+  \node[figbox] (in) {Eingabe-\\bild};
+  \node[figbox, sblue, right=of in, minimum height=2.2cm, minimum width=1.1cm] (b1) {};
+  \node[figbox, sblue, right=1mm of b1, minimum height=1.7cm, minimum width=0.9cm] (b2) {};
+  \node[figbox, sblue, right=1mm of b2, minimum height=1.3cm, minimum width=0.7cm] (b3) {};
+  \node[figbox, sblue, right=1mm of b3, minimum height=0.9cm, minimum width=0.5cm] (b4) {};
+  \node[figbox, sorange, right=14mm of b4, minimum height=1.8cm, text width=2.2cm] (neck) {Neck\\[-1pt]{\footnotesize führt Merkmale zusammen}};
+  \node[figbox, sgreen, right=of neck, minimum height=1.8cm, text width=2.6cm] (head) {Head\\[-1pt]{\footnotesize Bounding Boxes, Confidence Scores, Klassen}};
+  \node[figbox, right=of head] (out) {Aus-\\gabe};
+  \node[figlabel, above=2mm of b2.north east] {Backbone};
+  \draw[figarrow] (in) -- (b1);
+  \draw[figarrow] (b4) -- (neck);
+  \draw[figarrow] (neck) -- (head);
+  \draw[figarrow] (head) -- (out);
+\end{tikzpicture}

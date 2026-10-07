@@ -1,0 +1,11 @@
+\begin{tikzpicture}[node distance=6mm]
+  \node[figbox, text width=1.8cm] (s1) {Münzbild};
+  \node[figbox, sblue, text width=2.4cm, right=of s1] (s2) {Merkmals-\\detektion};
+  \node[figbox, sorange, text width=2.4cm, right=of s2] (s3) {Feature-\\Vektoren};
+  \node[figbox, sgreen, text width=2.4cm, right=of s3] (s4) {Vergleich der Merkmale};
+  \node[figbox, right=of s4, text width=1.8cm] (res) {Ergebnis};
+  \node[cylinder, shape border rotate=90, draw=black!70, fill=black!5, aspect=0.25, minimum height=1.2cm, minimum width=1.4cm, font=\footnotesize, align=center, below=7mm of s4] (db) {Datenbank};
+  \node[figlabel, below=1mm of db] {bereits verarbeitete Münzen};
+  \foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/res} \draw[figarrow] (\a) -- (\b);
+  \draw[figarrow] (db) -- (s4);
+\end{tikzpicture}

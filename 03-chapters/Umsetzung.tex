@@ -1,0 +1,101 @@
+% !TeX root = ../Thesis.tex
+
+%************************************************
+\chapter{Umsetzung}\label{ch:umsetzung}
+%************************************************
+\glsresetall % Resets all acronyms to not used
+Dieses Kapitel beschreibt die Umsetzung des in \cref{ch:entwurf} entwickelten Ansatzes. \cref{sec:rahmenbedingungen} nennt die technischen Rahmenbedingungen, \cref{sec:implementierung} die Implementierung der einzelnen Komponenten und \cref{sec:herausforderungen} die Herausforderungen bei der Umsetzung.
+
+%**********Technische Rahmenbedingungen*************
+\section{Technische Rahmenbedingungen}
+\label{sec:rahmenbedingungen}
+Die Anwendung wurde in Python [Version] \todo{Wert einfügen} entwickelt und lokal auf [CPU/GPU, Modell, Arbeitsspeicher] \todo{Wert einfügen} unter [Betriebssystem] \todo{Wert einfügen} betrieben. Tabelle \cref{tab:bibliotheken} zeigt die eingesetzten Bibliotheken.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \begin{tabularx}{\textwidth}{|l|l|X|}
+        \hline
+        \textbf{Bibliothek} & \textbf{Version} & \textbf{Zweck} \\
+        \hline
+        Ultralytics &  & Detektion mit YOLO-World, Extraktion der Feature-Vektoren \\
+        \hline
+        OpenCV &  & Dekodieren der Bilder \\
+        \hline
+        Requests &  & Abruf der Daten über die CN-Schnittstelle \\
+        \hline
+        FastAPI, Uvicorn &  & Backend, lokale Bereitstellung \\
+        \hline
+        SQLite &  & Speicherung der Münzdaten und Vektoren \\
+        \hline
+    \end{tabularx}
+    \caption{Verwendete Bibliotheken}
+    \label{tab:bibliotheken}
+\end{table}
+
+\noindent Als Modell dient YOLOv8s-World-v2 (vgl. \cref{sec:modelle}). Die Benutzeroberfläche besteht aus HTML, CSS und JavaScript.Parameter wie Modellpfade, Prompt-Liste, Schwellenwert, Batchgröße und die Werte des Positions- und Größenfilters stehen in separaten JSON-Konfigurationsdateien und lassen sich ohne Änderung des Programmcodes anpassen. Die verwendeten Werte sind in Anhang B zusammengestellt.
+
+%**********Implementierung*************
+\section{Implementierung}
+\label{sec:implementierung}
+\textbf{Aufbau}
+
+\noindent Die Anwendung ist modular aufgebaut. Der \lstinline|Request_Handler| bezieht Daten und Bilder aus der CN-Schnittstelle, der \lstinline|DatabaseHandler| übernimmt die Datenbank, der \lstinline|YoloHandler| die Detektion und Vektorextraktion, der \lstinline|CoinMatcher| mit dem \lstinline|VectorComparator| die Suche, und der \lstinline|ApiHandler| verbindet diese Komponenten mit der Oberfläche (vgl. Abbildung \cref{app:example} \todo{UML einfügen}).
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Datenbeschaffung und Speicherung}
+
+\noindent Der \lstinline|Request_handler| ruft Metadaten und Bild-URLs ab und lädt die Bilder, die mit OpenCV als NumPy-Arrays dekodiert werden. Vorder- und Rückseite werden getrennt behandelt, pro Seite können mehrere Bilder vorliegen. Die Datenbank wird gruppenweise aufgebaut: Sobald zehn Münzen mit demselben Vorderseitenstempel vorliegen, werden ihre Bilder verarbeitet und die Münzen gespeichert. Die Münzen liegen in einer SQLite-Tabelle. Metadaten stehen in eigenen Spalten, Bild-URLs, Literatur und die erzeugten Merkmalsinformationen als JSON-Text. Letztere sind nach Münzseite und Bild gegliedert. Pro Bild gibt es den Gesamtbild-Vektor und je Klasse eine Liste von Detektionen mit Confidence Score, normierter Bounding Box und Feature-Vektor.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Detektion und Vektorextraktion}
+
+\noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 21, der letzte Block des Necks (C2fAttn, P5/32), dessen Ausgabe an den Detektionskopf weitergegeben wird \todo{QUELLE: yolov8-worldv2.yaml}. Die Ausgabe wird räumlich gemittelt \todo{QUELLE: Ultralytics, tasks.py} und ergibt einen Vektor der Dimension 512 \todo{Wert prüfen}. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 16 Bildern verarbeitet, die Größe ist konfigurierbar.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergleich}
+
+\noindent Der \lstinline|CoinMatcher| lädt beim Start alle Münzen mit ihren Vektoren in den Arbeitsspeicher und vergleicht eine Anfrage sequenziell mit allen. Der \lstinline|VectorComparator| setzt die Maße aus \cref{sec:merkmale} um und rechnet sie in eine Ähnlichkeit zwischen 0 und 1 um. Die Kosinus-Ähnlichkeit wird dazu linear von $ [-1, 1] $ auf $ [0, 1] $ abgebildet, die beiden Distanzen $ d $ als $ \frac{1}{1+d} $. Beim objektbasierten Vergleich wählt die nutzende Person ein detektiertes Merkmal aus. Dessen Ausschnitt wird durch das Modell geführt, der Vektor wird  mit den Vektoren gleicher Klasse auf der gewählten Münzseite verglichen. Treffer müssen den Positions- und Größenfilter erfüllen (Werte in \cref{app:example}); beide Werte sind konfigurierbar. Pro Münze zählt de rhöchste Wert, danach werden die münzen absteigend sortiert und die ersten \lstinline|top_k| zurückgegeben. Ähnliche Klassen werden nicht zusammengefasst.
+
+Zusätzlich ist ein Gesamtbildvergleich umgesetzt, bei dem der Vektor des Gesamtbildes mit denen in der Datenbank verglichen wird. Hat eine Münze mehrere Bilder einer Seite, zählt das ähnlichste. Er ergänzt die Anwendung und ist nicht Gegenstand der Untersuchung (vgl. \cref{sec:gesamtansatzdatengrundlage}).
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Backend und Oberfläche}
+
+\noindent Das Backend stellt fünf Routen bereit: 
+\begin{itemize}
+    \item zwei zum Abruf von Münzen,
+    \item \lstinline|/api/search/detect| für die Detektion,
+    \item \lstinline|/api/search/object| für den objektbasierten Vergleich und
+    \item \lstinline|/api/search/vector| für den Gesamtbildvergleich.
+\end{itemize}
+Die Oberfläche läuft in zwei Schritten. Der Nutzer lädt ein Münzbild hoch, bei aktivierter Detektion erscheinen die Bounding Boxes mit Klasse und Confidence Score, und eines der Merkmale wird per Klick oder Dropdown gewählt. Anschließend werden Münzseite, Anzahl der Ergebnisse (1 bis 5) und Ähnlichkeitsmaß eingestellt und die Suche gestartet. Die Ergebnisse erscheinen mit Bild, Ähnlichkeitswert, Münzinformationen und Suchzeit.
+
+%**********Herausforderungen*************
+\section{Herausforderungen}
+\label{sec:herausforderungen}
+\textbf{Vektoren für einzelne Merkmale}
+
+\noindent Die Embedding-Funktion von Ultralytics liefert einen Vektor pro Bild, nicht pro Bounding Box. Um Vektoren einzelner Merkmale zu erhalten, werden die Boxen ausgeschnitten und einzeln durch das Modell geführt \todo{bestätigen: Grund für den Ausschnitt statt eines Pooling-Verfahrens auf der Feature-Karte}. Das hat zwei Folgen; der Vektor beschreibt das Merkmal ohne Kontext des Gesamtbildes und jede Detektion kostet einen zusätzlichen Modellaufruf.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Abhängigkeit von der Prompt-Liste}
+
+\noindent Die Schicht 21 bezieht die Textrepräsentationen der Prompts ein. Die Vektoren hängen daher von der Prompt-Liste ab. Anfrage und Datenbank müssen dieselbe Liste verwenden und bei jeder Änderung muss die Datenbank neu aufgebaut werden. Die Liste wird deshalb nur einmal in der Konfiguration festgelegt (\cref{app:example}).
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Laufzeit beim Aufbau der Datenbank}
+
+\noindent Der Aufbau erfordert viele Modellaufrufe. Je Bild einen für die Detektion und einen für den Gesamtbild-Vektor, dazu einen je detektiertem Ausschnitt. Wegen des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}) entstehen pro Bild viele Detektionen, für die 200 Münzen insgesamt [Anzahl] \todo{Wert eintragen} Ausschnitte. \todo{Beschreibung des Problems: Bei einzelner Verarbeitung der Ausschnitte dauerte der Aufbau [Zeit], bei gleichzeitiger Übergabe [Problem].} Deshalb werden Bilder und Detektionen gruppenweise je Stempelgruppe verarbeitet und die Ausschnitte in Batches zu 16 Bildern an das Modell übergeben. Dadurch verkürzte sich der Aufbau auf [Zeit] \todo{Wert eintragen}. Die Suche selbst vergleicht die Anfrage sequenziell mit allen gespeicherten Vektoren und benötigt bei 200 Münzen [Messwert] \todo{Wert eintragen} Sekunden. Bei größeren Beständen wäre eine Vektorisierung oder ein Suchindex nötig.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Uneinheitliche Datenlage}
+
+\noindent Pro Münzseite liegen null bis zwei Bilder vor, acht Münzen haben kein Vorderseitenbild. Die Datenstruktur ordnet Merkmale deshalb Münze, Seite und Bild zu, Münzen ohne Bild werden übersprungen, und pro Münze zählt das ähnlichste Bild.

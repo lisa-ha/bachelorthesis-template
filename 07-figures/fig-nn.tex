@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % Netz 4-4-4-2 (nur Aufbau: Schichten und Verbindungen)
+  \foreach \l/\n/\col in {0/4/figblue!20,1/4/figorange!20,2/4/figorange!20,3/2/figgreen!25} {
+    \foreach \i in {1,...,\n} {
+      \node[figneuron, fill=\col] (n\l-\i) at (\l*1.5, {(\n+1)/2*0.8-\i*0.8}) {};
+    }
+  }
+  \foreach \l/\m/\cnt in {0/1/4,1/2/4,2/3/2} {
+    \foreach \i in {1,...,4} {
+      \foreach \j in {1,...,\cnt} {
+        \draw[black!35, line width=0.3pt] (n\l-\i) -- (n\m-\j);
+      }
+    }
+  }
+  \node[figlabel] at (0,-2.4) {Eingabe};
+  \node[figlabel] at (2.25,-2.4) {verdeckte Schichten};
+  \node[figlabel] at (4.5,-2.4) {Ausgabe};
+\end{tikzpicture}

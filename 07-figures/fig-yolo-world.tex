@@ -1,0 +1,18 @@
+\begin{tikzpicture}[node distance=7mm]
+  \node[figbox] (in) {Eingabe-\\bild};
+  \node[figbox, sblue, right=of in, minimum height=1.6cm] (bb) {Backbone};
+  \node[figbox, sorange, right=of bb, minimum height=1.6cm] (neck) {Neck\\[-1pt]{\footnotesize (mit RepVL-PAN)}};
+  \node[figbox, sgreen, right=of neck, minimum height=1.6cm] (head) {Head};
+  \node[figbox, right=of head] (out) {Boxen +\\Klassen};
+  \draw[figarrow] (in) -- (bb);
+  \draw[figarrow] (bb) -- (neck);
+  \draw[figarrow] (neck) -- (head);
+  \draw[figarrow] (head) -- (out);
+  % Textzweig
+  \node[figbox, spurple, above=1.4cm of in, xshift=-2mm] (pr) {Textbeschreibungen\\[-1pt]{\footnotesize (Prompts)}};
+  \node[figbox, spurple, right=of pr] (clip) {CLIP-Text-\\Encoder};
+  \node[figbox, spurple, right=of clip] (emb) {Text-\\Vektoren};
+  \draw[figarrow, figpurple] (pr) -- (clip);
+  \draw[figarrow, figpurple] (clip) -- (emb);
+  \draw[figarrow, figpurple] (emb.south) -- (neck.north) node[midway, right, figlabel, align=left] {Verknüpfung mit\\Bildinformation};
+\end{tikzpicture}

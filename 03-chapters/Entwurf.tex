@@ -1,0 +1,110 @@
+% !TeX root = ../Thesis.tex
+
+%************************************************
+\chapter{Entwurf}\label{ch:entwurf}
+%************************************************
+\glsresetall % Resets all acronyms to not used
+
+%****************Gesamtansatz und Datengrundlage****************************
+\section{Gesamtansatz und Datengrundlage}
+\label{sec:gesamtansatzdatengrundlage}
+\textbf{Gesamtansatz}
+
+\noindent Dieses Kapitel beschreibt den Ansatz zur Detektion und zum Vergleich visueller Merkmale auf antiken Münzbildern. Er besteht aus vier Schritten. Zunächst wird ein Münzbild eingelesen. Anschließend lokalisiert YOLO-World darauf einzelne visuelle Merkmale und ordnet sie einer Klasse zu, etwa Porträt, Symbol oder Inschrift. Für jedes detektierte Merkmal wird ein Feature-Vektor extrahiert (vgl. \cref{sec:merkmale}). Diese Vektoren werden mit den Vektoren der in einer Datenbank hinterlegten Münzen verglichen, und die ähnlichsten Münzen werden ausgegeben. Die Auswertung folgt in \cref{ch:evaluation}.
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-pipeline.tex}}
+  \caption[Ablauf des Gesamtansatzes]{Gesamtansatz dieser Arbeit: Auf dem Münzbild werden Merkmale detektiert, zu jedem Merkmal wird ein Feature-Vektor bestimmt, und diese Vektoren werden mit den Vektoren bereits verarbeiteter Münzen in der Datenbank verglichen. Eigene Darstellung.}
+  \label{fig:pipeline}
+\end{figure}
+
+\noindent Im Mittelpunkt stehen damit die einzelnen Merkmale und nicht die Münze als Ganzes. Die Klasse eines detektierten Merkmals dient dabei der Gruppierung, verglichen werden die zugehörigen Feature-Vektoren. Ob die Klasse inhaltlich zutrifft, ist für den Vergleich nicht ausschlaggebend (vgl. \cref{sec:zielsetzungundforschungsfragen}). Zusätzlich soll der Ansatz ohne technisches Vorwissen nutzbar sein, etwa für Forschende der Numismatik. Dazu kann ein eigenes Münzbild bereitgestellt und mit den gespeicherten Münzen verglichen werden. Das System bietet außerdem einen Vergleich ganzer Münzbilder auf Basis des Gesamtbild-Vektors an. Dieser ist nicht Gegenstand der Untersuchung und dient nur als ergänzende Funktion der Anwendung.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Datengrundlage}
+
+\noindent Die Münzbilder stammen aus dem Corpus Nummorum (CN) \cite{corpusnummorum,peter2024corpus}, einem Online-Portal für antike Münzen aus Thrakien, Moesia Inferior, Mysien und der Troas \todo{Zeitraum ergänzen?}. Es erfasst Prägungen von der archaischen Zeit bis zu den unter römischer Herrschaft
+emittierten Münzen \cite{cn-about}. Die Datenbasis besteht aus Münzen des Münzkabinetts Berlin und aus Gipsabdrücken (engl. Plaster Casts) von Münzen, die an der Berlin-Brandenburgischen Akademie der Wissenschaften (BBAW) aufbewahrt werden und aus zahlreichen, heute teilweise nicht mehr vorhandenen Sammlungen stammen \cite{cn-about}. Daneben werden digitale Museumskataloge integriert, und Nutzer können eigene Münzen hochladen \cite{cn-about}. Das Portal umfasst rund 41.000 Münzen (Stand: 5.\ Oktober 2026)\cite{corpusnummorum}. Die Zahl wächst laufend. Davon werden 200 über die öffentliche API bezogen \cite{cn-data-api}, damit die Auswertung im Rahmen der Arbeit möglich bleibt. Die Bilder zeigen daher je nach Münze ein Original oder einen Gipsabdruck. Ein Gipsabguss
+formt nur die Oberfläche der Münze ab, Farbe und Patina sind darauf daher nicht erkennbar. Abnutzung bleibt im Relief erkennbar, Korrosion nur, soweit sie die Oberfläche verändert hat. Die Abbildungen der Gipsabgüsse dürfen für wissenschaftliche Zwecke unter CC BY-NC-SA verwendet werden, für Aufnahmen der Originale liegen die Rechte bei den jeweiligen Rechteinhabern \cite{cn-bildrechte}.
+
+Die Münzen wurden in aufsteigender ID-Reihenfolge abgerufen. Eine Stempelgruppe wurde gebildet, sobald zehn Münzen mit demselben Vorderseitenstempel vorlagen; das wurde 20-mal wiederholt. Die Coin-IDs der 200 Münzen liegen zwischen 348 und 3545. Die Stempelzuordnung stammt aus der CN-Datenbank \cite{cn-about}. Die Gruppen dienen als Grundwahrheit für die Auswertung (vgl. \cref{ch:evaluation}). Acht Münzen besitzen kein Vorderseitenbild und eine kein Rückseitenbild. Auf der Vorderseite stehen daher 192 Münzen zur Verfügung. Insgesamt liegen 230 Vorderseiten- und 249 Rückseitenbilder vor; 50 Münzen haben auf mindestens einer Seite mehr als ein Bild. Die Zusammensetzung nach Bildart, Region, Münzstätte und Datierung zeigt Tabelle [A].
+Die Bilder werden als Vorschaubilder der Größe [Wert]\todo{Wert einfügen} geladen. Sie werden nicht weiterverarbeitet; lediglich das Modell skaliert sie intern auf die Eingabegröße [Wert]\todo{Wert einfügen}.
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% Beamer presentation requires \usepackage{colortbl} instead of \usepackage[table,xcdraw]{xcolor}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+%\rowcolor[HTML]{EFEFEF} 
+\textbf{Merkmal}                                & \textbf{Wert}                             \\ \hline
+Münzen                                          & 200                                       \\ \hline
+Stempelgruppen (obverse)                    & 20                                        \\ \hline
+Münzen je Gruppe                                & 10                                        \\ \hline
+Münzen mit Vorderseitenbild                     & 200                                       \\ \hline
+Münzen mit Rückseitenbild                       & 199                                       \\ \hline
+Bilder Vorderseite/Rückseite                    & 230/249                                   \\ \hline
+Münzen mit \textgreater{1} Bild pro Seite & 50                                        \\ \hline
+Bildart                                         & [Foto: x, Gipsabdruck: y] \\ \hline
+Regionen                                        & [a, b, c, d]                          \\ \hline
+Münzstätten                                     & [Anzahl oder auch e, f, g]            \\ \hline
+Datierung                                       & [frühestes - spätestes]               \\ \hline
+\end{tabular}
+\caption{Überblick der verwendeten Münzdaten}
+\label{tab:muenzdaten}
+\end{table}
+
+%****************Verwendete YOLO-Modelle****************************
+\section{Verwendete YOLO-Modelle}
+\label{sec:modelle}
+In dieser Arbeit werden zwei YOLO-Modelle betrachtet. Den Ausgangspunkt bildete YOLOv8 \cite{jocher2023yolov8}, das in der vortrainierten Form ohne eigenes Nachtraining eingesetzt wurde. Untersucht werden sollte, ob ein nicht auf Münzen angepasstes Modell überhaupt Merkmale auf antiken Münzbildern detektiert. Das Modell wurde auf dem COCO-Datensatz \cite{lin2014microsoft} trainiert, der 80 Klassen alltäglicher Objekte umfasst \cite{ultralytics-yolov8}. Münzspezifische Merkmale wie Legenden oder Gottheiten sind darin nicht enthalten, die Ergebnisse waren entsprechend unbefriedigend (vgl. \cref{sec:ergebnisse}) \todo{oder appendix?}. YOLOv8 bleibt in der Anwendung nutzbar, steht aber nicht mehr im Zentrum der Forschungsfrage.
+
+Die feste Klassenmenge war damit die zentrale Einschränkung. Ein wesentliches Kriterium für den weiteren Verlauf war daher, visuelle Merkmale mit möglichst geringem oder ohne aufgabenspezifisches Training detektieren zu können, ohne an vorgegebene Klassen gebunden zu sein. Dafür wurde YOLO-World \cite{cheng2024yoloworld} ausgewählt. Das Modell erkennt Objektklassen anhand von Textbeschreibungen im Zero-Shot-Verfahren (vgl. \cref{sec:glmaschinelleslernen}) \cite{cheng2024yoloworld,ultralytics-yoloworld}. CN stellt zwar einen Datensatz mit Motivklassen bereit, jedoch ohne Annotationen der Merkmalspositionen \cite{cn-object-detection-dataset}. Für antike Münzbilder relevante Merkmale können so untersucht werden, ohne zuvor einen annotierten Trainingsdatensatz zu erstellen. YOLO-World erweitert die in \cref{sec:ooyolo} beschriebene Detektion und baut auf der Architektur von YOLOv8 auf. Klassische YOLO-Modelle sind auf die Klassen beschränkt, die beim Training annotiert waren. YOLO-World ermöglicht dagegen die Detektion anhand frei formulierter Textbeschreibungen (Open Vocabulary). Dazu wird der Detektor mit dem vortrainierten Text-Encoder des CLIP-Modells \cite{radford2021learning} kombiniert. Dieser wandelt Texte in Vektoren um, die mit den vom Detektor erzeugten Objekt-Repräsentationen verglichen werden (vgl. \cref{sec:merkmale}) \cite{cheng2024yoloworld}. Im Netzwerk werden Bild- und Textinformationen im sogenannten RepVL-PAN, einer Erweiterung des Necks, verknüpft \cite{cheng2024yoloworld}.
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-yolo-world.tex}}
+  \caption[Aufbau von YOLO-World]{Vereinfachter Aufbau von YOLO-World: Textbeschreibungen (Prompts) werden vom CLIP-Text-Encoder in Vektoren umgewandelt und im RepVL-PAN, einer Erweiterung des Necks, mit der Bildinformation verknüpft. Eigene Darstellung in Anlehnung an~\cite{cheng2024yoloworld}}
+  \label{fig:yolo-world}
+\end{figure}
+
+Die Leistung eines Detektors hängt von der Architektur, den Trainingsdaten und dem Bildmaterial ab. Kleine, schlecht sichtbare oder teilweise verdeckte Objekte erschweren die Detektion, ebenso starke Unterschiede innerhalb einer Klasse oder schwer abgrenzbare Klassen \cite{liu2020deep}. Bei antiken Münzbildern treten auch Probleme auf wie Korrosion und Abnutzung (vgl. \cref{sec:glnumismatik}), die Motive und Legenden teilweise unkenntlich machen~\cite{cooper2020learning,anwar2026reading}.
+Stempelunterschiede führen zu Abweichungen innerhalb derselben Motivklasse~\cite{wikipedia-muenzpraegung}. Zudem wurden im Rahmen der Recherche für diese Arbeit keine Untersuchungen gefunden, in denen YOLO-World auf Münzbildern trainiert oder angepasst wurde. YOLO-Varianten wurden dagegen bereits zur Zeichenerkennung auf Münzen eingesetzt~\cite{anwar2026reading}.
+
+%****************Vorgehen****************************
+\section{Vorgehen}
+\label{sec:vorgehen}
+Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetektion, Vektorextraktion und Vergleich.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Merkmalsdetektion}
+
+\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden (vgl. \cref{sec:ergebnisse}). Überlappende Detektionen werden durch die Standard-NMS von Ultralytics zusammengefasst (Parameter in \cref{app:example}). Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box gespeichert.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vektorextraktion}
+
+\noindent Zu jeder Detektion wird ein Feature-Vektor bestimmt. Dazu wird die Bounding Box aus dem Originalbild ausgeschnitten und erneut durch YOLO-World geleitet. Als Vektor dient die Ausgabe des letzten Neck-Blocks (Schicht 21), die über die räumlichen Dimensionen gemittelt wird (Dimension [512]). Der Vektor beschreibt damit den Ausschnitt ohne Kontext des Gesamtbildes. Ebenso wird für jedes Münzbild ein Gesamtbild-Vektor erzeugt. Alle Vektoren werden mit Klasse, Confidence Score, Bounding Box und Münzseite in der Datenbank gespeichert.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergleich}
+
+\noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen \todo{Umgang mit verwandten Klassen ergänzen}. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
+Für zwei Vektoren A und B der Dimension n werden die drei Maße aus Abschnitt 2.4 verwendet. Um alle Maße in einem Ranking zu verwenden, werden sie in eine Ähnlichkeit $ s \in [0, 1] $ umgerechnet: 
+\begin{itemize}
+    \item $ s = \frac{1}{1+d} $ für die euklidische, sowie die Manhattan-Distanz und
+    \item $ s = \frac{cos+1}{2} $ für die Kosinus-Ähnlichkeit.
+\end{itemize}
+Die Umrechnung ist monoton und ändert das Ranking eines einzelnen Maßes nicht. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in Kapitel 5 verglichen.
+Pro Münze zählt der höchste Ähnlichkeitswert über alle passenden Merkmale. Die Münzen werden nach Ähnlichkeit absteigend sortiert, und die ähnlichsten [1 bis 5] werden ausgegeben. \todo{Offen: Kombination mehrerer Merkmale zu einem Münzwert, siehe 3.4}
+
+
+%****************Bewertungskonzept****************************
+\section{Bewertungskonzept}
+\label{sec:bewertungskonzept}
+Ob sich Münzen desselben Stempels anhand einzelner Merkmale wiederfinden lassen, wird mithilfe der Stempelgruppen als Grundwahrheit untersucht (vgl. \cref{sec:gesamtansatzdatengrundlage}). Für jede Münze wird geprüft, ob Münzen derselben Gruppe unter den ähnlichsten Treffern liegen. Verglichen werden die Merkmalsklassen und die drei Ähnlichkeitsmaße. Ergänzend werden einzelne Fälle qualitativ untersucht. Das genaue Vorgehen und die Kennzahlen werden in \cref{sec:evaluationsaufbau} beschrieben.

@@ -1,0 +1,14 @@
+% Optional: nur einbinden, wenn der Text Verlustfunktion und Backpropagation beschreibt
+\begin{tikzpicture}
+  \node[figbox, sblue] (in) at (0,0) {Eingabe};
+  \node[figbox, sorange] (net) at (3,0) {Netz};
+  \node[figbox, sblue] (out) at (6,0) {Ausgabe};
+  \node[figbox, sorange] (loss) at (9,0) {Verlust-\\funktion};
+  \node[figbox, sgreen] (exp) at (9,-1.8) {erwartetes\\Ergebnis};
+  \draw[figarrow] (in) -- (net);
+  \draw[figarrow] (net) -- (out);
+  \draw[figarrow] (out) -- (loss);
+  \draw[figarrow] (exp) -- (loss);
+  \draw[figarrow, dashed] (loss.north) -- ++(0,0.8) -| (net.north)
+    node[pos=0.25, above, figlabel] {Backpropagation};
+\end{tikzpicture}

@@ -1,0 +1,230 @@
+% !TeX root = ../Thesis.tex
+
+%************************************************
+\chapter{Ergänzende Informationen}\label{ch:ergänzendeinfos}
+%************************************************
+\glsresetall % Resets all acronyms to not used
+
+% ============================================================
+% Stempelgruppen
+% ============================================================
+
+\begin{landscape}
+
+\small
+
+\begin{longtable}{
+    |c|
+    |c|
+    |c|
+    |c|
+    |p{2.5cm}|
+    |p{2.2cm}|
+    |p{2.5cm}|
+    |p{2.5cm}|
+}
+    \caption{Übersicht der verwendeten Stempelgruppen}
+    \label{tab:stempelgruppen} \\
+
+    \hline
+    \textbf{Nr.} &
+    \textbf{Vorderseiten\-stempel} &
+    \textbf{Münzen mit Vorderseiten\-bild} &
+    \textbf{Verschiedene Rückseiten\-stempel} &
+    \textbf{Münzstätte} &
+    \textbf{Region} &
+    \textbf{Datierung} &
+    \textbf{Bild-/Objektart} \\
+    \hline
+    \endfirsthead
+
+    \hline
+    \textbf{Nr.} &
+    \textbf{Vorderseiten\-stempel} &
+    \textbf{Münzen mit Vorderseiten\-bild} &
+    \textbf{Verschiedene Rückseiten\-stempel} &
+    \textbf{Münzstätte} &
+    \textbf{Region} &
+    \textbf{Datierung} &
+    \textbf{Bild-/Objektart} \\
+    \hline
+    \endhead
+
+    1  & 973  & 9  & 5              & & & & \\ \hline
+    2  & 985  & 9  & 8              & & & & \\ \hline
+    3  & 1002 & 9  & 8              & & & & \\ \hline
+    4  & 1249 & 10 & 6              & & & & \\ \hline
+    5  & 1311 & 10 & 6              & & & & \\ \hline
+    6  & 1386 & 10 & 6 (+1 ohne ID) & & & & \\ \hline
+    7  & 463  & 10 & 6              & & & & \\ \hline
+    8  & 1275 & 10 & 9              & & & & \\ \hline
+    9  & 2785 & 10 & 6              & & & & \\ \hline
+    10 & 2816 & 10 & 2              & & & & \\ \hline
+    11 & 2905 & 10 & 6              & & & & \\ \hline
+    12 & 2926 & 10 & 4 (+1 ohne ID) & & & & \\ \hline
+    13 & 3570 & 7  & 5              & & & & \\ \hline
+    14 & 3765 & 10 & 8              & & & & \\ \hline
+    15 & 3788 & 9  & 8              & & & & \\ \hline
+    16 & 3822 & 9  & 4              & & & & \\ \hline
+    17 & 3829 & 10 & 5              & & & & \\ \hline
+    18 & 960  & 10 & 7              & & & & \\ \hline
+    19 & 1055 & 10 & 9              & & & & \\ \hline
+    20 & 932  & 10 & 4              & & & & \\ \hline
+
+\end{longtable}
+
+\normalsize
+
+\end{landscape}
+
+% ============================================================
+% Konfigurationsparameter
+% ============================================================
+Konfigurationsparameter:
+\begin{table}[htbp]
+    \centering
+    \caption{Konfigurationsparameter der Anwendung}
+    \label{tab:konfigurationsparameter}
+
+    \begin{tabularx}{\textwidth}{|X|l|l|}
+        \hline
+        \textbf{Parameter} &
+        \textbf{Wert} &
+        \textbf{Datei} \\
+        \hline
+
+        Modell (verwendet)
+            & \texttt{yolov8s-worldv2.pt}
+            & \texttt{yolo\_config.json} \\
+        \hline
+
+        Modell (erster Ansatz)
+            & \texttt{yolov8n.pt}
+            & \texttt{yolo\_config.json} \\
+        \hline
+
+        Confidence-Schwellenwert
+            & 0{,}005
+            & \texttt{yolo\_config.json} \\
+        \hline
+
+        Anzahl der Prompts
+            & 57 (Anhang B)
+            & \texttt{yolo\_config.json} \\
+        \hline
+
+        Batchgröße (Ausschnitte)
+            & 16
+            & \texttt{data.json} \\
+        \hline
+
+        Anzahl Stempelgruppen
+            & 20
+            & \texttt{data.json} \\
+        \hline
+
+        Münzen je Stempelgruppe
+            & 10
+            & \texttt{data.json} \\
+        \hline
+
+        Seitengröße beim API-Abruf
+            & 100
+            & \texttt{data.json} \\
+        \hline
+
+        Positionstoleranz (Mittelpunktabstand)
+            & 0{,}15
+            & Objektkonfiguration \\
+        \hline
+
+        Schwellenwert Flächenverhältnis
+            & 0{,}5
+            & Objektkonfiguration \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\todo{TODO: Ultralytics-Standardwerte prüfen und anschließend ergänzen: Bildgröße: vermutlich 640 px, IoU-Schwelle NMS: vermutlich 0,7, Maximale Detektionen je Bild: vermutlich 300, verwendete Ultralytics-Version}
+
+% ============================================================
+% Im Code festgelegte Parameter
+% ============================================================
+Im Code festgelegte Parameter:
+\begin{table}[htbp]
+    \centering
+    \caption{Im Programmcode festgelegte Parameter}
+    \label{tab:codeparameter}
+
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \textbf{Parameter} &
+        \textbf{Wert} \\
+        \hline
+
+        Schicht für die Feature-Vektoren
+            & 21 \\
+        \hline
+
+        Standard-Ähnlichkeitsmaß
+            & Kosinus-Ähnlichkeit \\
+        \hline
+
+        Anzahl Ergebnisse (Frontend)
+            & 1 bis 5, Standard: 1 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+% ============================================================
+% Prompt-Liste für YOLO-World
+% ============================================================
+Verwendete Prompts für die Merkmalsdetektion mit YOLO-World
+\begin{table}[htbp]
+    \centering
+    \caption{Verwendete Prompts für die Merkmalsdetektion mit YOLO-World}
+    \label{tab:promptliste}
+
+    \begin{tabularx}{\textwidth}{|l|X|}
+        \hline
+        \textbf{Gruppe} &
+        \textbf{Prompts} \\
+        \hline
+
+        Kopf und Gesicht (10)
+            & person, human face, profile portrait, head, beard, hair, eye, nose, mouth, ear \\
+        \hline
+
+        Kopfschmuck (5)
+            & crown, helmet, laurel wreath, wreath, diadem \\
+        \hline
+
+        Tiere (10)
+            & bird, eagle, owl, horse, lion, bull, dog, wolf, snake, hedgehog \\
+        \hline
+
+        Waffen und Attribute (9)
+            & shield, sword, spear, bow, arrow, torch, staff, scepter, trident \\
+        \hline
+
+        Pflanzen (5)
+            & leaf, branch, tree, flower, vine \\
+        \hline
+
+        Architektur (5)
+            & temple, building, column, tower, arch \\
+        \hline
+
+        Himmelskörper und Zeichen (5)
+            & star, sun, moon, cross, circle \\
+        \hline
+
+        Schrift (4)
+            & text, letter, symbol, inscription \\
+        \hline
+
+        Sonstiges (4)
+            & coin, statue, mask, face \\
+        \hline
+    \end{tabularx}
+\end{table}

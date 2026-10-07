@@ -1,0 +1,328 @@
+% !TeX root = Thesis.tex
+
+% ****************************************************************************************************
+% classicthesis-config.tex
+% formerly known as loadpackages.sty, classicthesis-ldpkg.sty, and classicthesis-preamble.sty
+% Use it at the beginning of your ClassicThesis.tex, or as a LaTeX Preamble
+% in your ClassicThesis.{tex,lyx} with \input{classicthesis-config}
+% ****************************************************************************************************
+% If you like the classicthesis, then I would appreciate a postcard.
+% My address can be found in the file ClassicThesis.pdf. A collection
+% of the postcards I received so far is available online at
+% http://postcards.miede.de
+% ****************************************************************************************************
+
+% set important options before any package can load any of the packages below
+\PassOptionsToPackage{dvipsnames}{xcolor} % for classicthesis (e.g. pass before loading tikz)
+\PassOptionsToPackage{hyperfootnotes=false,pdfa}{hyperref} % for classicthesis and pdfx
+
+% ****************************************************************************************************
+% 0. Set the encoding of your files. UTF-8 is the only sensible encoding nowadays. If you can't read
+% äöüßáéçèê∂åëæƒÏ€ then change the encoding setting in your editor, not the line below. If your editor
+% does not support utf8 use another editor!
+% ****************************************************************************************************
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} % T2A for cyrillics
+
+
+% ****************************************************************************************************
+% 1. Configure classicthesis for your needs here, e.g., remove "drafting" below
+% in order to deactivate the time-stamp on the pages
+% ****************************************************************************************************
+\PassOptionsToPackage{
+	% -- TemplateKnob
+	drafting=true,            % print version information on the bottom of the pages
+	tocaligned=false,         % the left column of the toc will be aligned (no indentation)
+	dottedtoc=true,           % page numbers in ToC flushed right
+	eulerchapternumbers=true, % use AMS Euler for chapter font (otherwise Palatino)
+	floatperchapter=false,    % numbering per chapter for all floats (i.e., Figure 1.1)
+	eulermath=true,           % use awesome Euler fonts for mathematical formulae (only with pdfLaTeX)
+	beramono=true,            % toggle a nice monospaced font (w/ bold)
+	palatino=false,            % deactivate standard font for loading another one, see the last section at the end of this file for suggestions
+	%linedheaders=true,       % obsolete / available for backwards compatibility
+	style=classicthesis       % classicthesis, arsclassica, linedheaders, plain
+}{classicthesis}
+
+% classicthesis overrides for special Makefile test targets
+\ifdefined\injectCToptions
+	\injectCToptions
+\fi
+
+% ****************************************************************************************************
+% 2. Language, time and dates, personal data and custom classicthesis template modifications
+% ****************************************************************************************************
+\usepackage[ngerman,american]{babel} % change this to your language(s), main language last
+% Spanish languages need extra options in order to work with this template
+%\usepackage[spanish,es-lcroman]{babel}
+\usepackage[useregional]{datetime2} % for formatting dates (load after babel/polyglossia)
+\usepackage{etoolbox}
+% load personal information like title, name, dates, ...
+\input{00-definitions/PersonalInfo}
+
+\PassOptionsToPackage{
+	% -- TemplateKnob (also have a look into classicthesis-seemoo.sty for further options)
+	layout=standard,      % pick from standard, balanced, tight and dense (not recommended)
+	% layout definitions:
+	%   - standard: the default classicthesis layout with big margins (~69 CPL, 46 lines)
+	%   - balanced: wider text area, but still useful margins (~75 CPL, 42 lines)
+	%   - tight: even wider text area, tight margin, BCOR > 5 mm looks bad (~77 CPL, 41 lines)
+	%   - dense: tiny margins, BCOR > 5 mm almost impossible, not recommended (~87 CPL, 46 lines)
+	% how to pick:
+	%   - I want to use margin notes --> standard or balanced (tight can be ok with BCOR <= 5 mm)
+	%   - I value readability (<80 CPL, up to ~500 words per page) --> standard, balanced, tight
+	%   - I have lots of plots and tables --> balanced, tight, dense
+	%   - I need as much text as possible per page --> dense
+	% notes:
+	%   - standard, balanced and tight are roughly equal in the amount of information per page
+	%   - balanced and tight are optimized for dina4 with 11 pt Palatino font
+	osf=false,            % enable old style figure fonts (not recommended)
+	cleantoc=false,       % remove less important chapters from the ToC
+	%hidefrontbackmatter, % hide the front and back matter PDF bookmarks
+	titleiscover=true,    % treat the title page as the cover (i.e. center the title page)
+	%parts,               % use parts (as in a book; for long theses only!)
+	%phd,                 % use for a full-blown PhD thesis (with parts, author references, etc.)
+	%version=0.1.0,       % when drafting: the version number is displayed on the bottom of the pages
+}{classicthesis-seemoo}
+
+% classicthesis-seemoo overrides for special Makefile test targets
+\ifdefined\injectCTSoptions
+	\injectCTSoptions
+\fi
+% ****************************************************************************************************
+
+
+% ****************************************************************************************************
+% 3. Loading some handy packages
+% ****************************************************************************************************
+
+% ********************************************************************
+% BibLaTeX for compiling bibliographies
+% ********************************************************************
+\usepackage[%
+	backend=biber,bibencoding=utf8, % instead of bibtex
+	sorting=snyt,                   % shorthand, name, year, title
+	maxbibnames=10,                 % default: 3, et al.
+	defernumbers=true,              % enable so split references (author's publications) have continuous numbers
+	natbib=true,                    % natbib compatibility mode (\citep and \citet still work)
+	language=auto,
+	style=numeric-comp
+]{biblatex}
+\DeclareSortingTemplate{snyt}{
+	\sort{
+		\field{shorthand}
+	}
+	\sort{
+		\field{author}
+	}
+	\sort{
+		\field{year}
+	}
+	\sort{
+		\field{title}
+	}
+}
+
+% ********************************************************************
+% General useful packages
+% ********************************************************************
+\usepackage[fleqn]{amsmath} % math environments and more by the AMS (fleqn=flush left equations)
+\usepackage{graphicx}       % include figures (jpg, png, pdf, ...)
+\usepackage{scrhack}        % fix warnings when using KOMA with listings package
+\usepackage{xspace}         % to get the spacing after macros right
+
+% optional packages for certain document variants or specific problems
+\usepackage[autostyle=true]{csquotes} % for citing in the PhD statement
+%\usepackage[LabelsAligned,NoDate]{currvita} % nice cv style for PhD theses (required for the CV)
+\usepackage{pdfpages}                % include papers, e.g., for cumulative PhD theses
+%\usepackage{xurl}                    % break URLs within word boundaries (not recommended)
+
+% useful packages for drafting
+\usepackage{lipsum}         % for generating template text
+\usepackage{todonotes}      % manage todos with todonotes
+
+% ********************************************************************
+% TikZ and PGFPlots
+% ********************************************************************
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{
+	chains,
+	positioning,
+	quotes,
+}
+
+\def\StripPrefix#1>{}
+\def\isOverleaf{\fi
+	\def\overleafJobname{output}% overleaf defaults to 'output' as \jobname
+	\edef\overleafJobname{\expandafter\StripPrefix\meaning\overleafJobname}%
+	\edef\job{\jobname}%
+	\ifx\job\overleafJobname
+		}
+
+		% To cache tikz pictures you have to run pdflatex with -shell-escape or --enable-write18
+		\ifnum\pdfshellescape=1
+			\usepgfplotslibrary{external}
+			\if\isOverleaf
+				\tikzexternaldisable
+			\else
+				\tikzexternalize
+			\fi
+		\fi
+
+		% Lengths for matlab2tikz
+		\newlength\figureheight
+		\newlength\figurewidth
+		% ****************************************************************************************************
+
+
+		% ****************************************************************************************************
+		% 4. Setup floats: tables, (sub)figures, and captions
+		% ****************************************************************************************************
+		\graphicspath{{06-pictures/}} %path for figures
+		\usepackage{float}
+		\usepackage{tabularx} % better tables
+		\usepackage{booktabs}   % professionelle Tabellenlinien
+		\usepackage{longtable}  % mehrseitige Tabellen
+		\usepackage{pdflscape}  % Querformat für einzelne Seiten
+		\setlength{\extrarowheight}{3pt} % increase table row height
+		\usepackage{multirow} % for table cells spanning multiple rows
+		\usepackage{subcaption} % for subfigures, subtables, ... (subcaption supersedes subfig)
+		% ****************************************************************************************************
+
+
+		% ****************************************************************************************************
+		% 5. Setup code listings
+		% ****************************************************************************************************
+		\usepackage{listings}
+		\lstset{
+		% color scheme follows template
+		commentstyle=\color{CTsemi},
+		keywordstyle={\color{CTtitle}},
+		stringstyle=\color{CTcitation},
+		basicstyle=\ttfamily\lst@ifdisplaystyle\small\fi, % use normal font size in \lstinline
+	emphstyle={\color{CTlink}},
+	tabsize=2,
+	showstringspaces=false,
+	captionpos=b, % caption below listing
+	breaklines=true,
+	frame=tb,
+	numberstyle=\scriptsize,
+	numbers=left,
+	stepnumber=1,
+	numbersep=8pt,
+}
+% ****************************************************************************************************
+
+
+% ****************************************************************************************************
+% 6. Last calls before the bar closes
+% ****************************************************************************************************
+% ********************************************************************
+% Her Majesty herself
+% ********************************************************************
+\usepackage{classicthesis}
+\usepackage[osf]{newpxtext}
+
+% pdfx for PDF/A (must be loaded after classicthesis, otherwise there will be an issue with the PDF
+% bookmarks from the second chapter onwards pointing to the previous page. Seems like an interaction
+% between koma-script, titlesec (classicthesis) and hyperref (classicthesis and pdfx).
+\usepackage{colorprofiles}       % required for pdfx
+\usepackage[a-2b, mathxmp]{pdfx} % reads \jobname.xmpdata and expands commands upon being loaded
+
+% load custom modifications to classicthesis and macros from SEEMOO
+\usepackage{classicthesis-seemoo}
+
+% ********************************************************************
+% Use the glossaries package for acronyms and fix the long style
+% Note: load after hyperref, babel, polyglossia, inputenc and fontenc
+% ********************************************************************
+\usepackage[
+	nopostdot,
+	acronym,
+	shortcuts,
+	nonumberlist,
+	nolist]{glossaries}
+\makeglossaries
+
+% prevent the long glossary style from incrementing the table counter
+\newglossarystyle{fixedlong}{
+	\setglossarystyle{long}
+	\renewenvironment{theglossary}{
+		\edef\savedtablecounter{\the\value{table}}
+		\begin{longtable}{lp{\glsdescwidth}}
+			}{
+		\end{longtable}
+		\setcounter{table}{\savedtablecounter}
+	}
+}
+\setglossarystyle{fixedlong}
+
+% ********************************************************************
+% Fine-tune hyperreferences (hyperref should be called last)
+% ********************************************************************
+\hypersetup{%
+	% -- TemplateKnob
+	%draft, % hyperref's draft mode, for printing see below
+	colorlinks=true, linktocpage=true,%
+	% uncomment the following line if you want to have black links (e.g., for printing)
+	%colorlinks=false, linktocpage=false, pdfborder={0 0 0},%
+	breaklinks=true, pageanchor=true,%
+	% configure bookmark stuff
+	plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
+	hypertexnames=true,%
+	% define link colors with colors from classicthesis
+	urlcolor=CTurl, linkcolor=CTlink, citecolor=CTcitation,%
+	%urlcolor=Black, linkcolor=Black, citecolor=Black,
+	% pdfinfo is already set via pdfx (c.f. the PDF/A workflow)
+}
+
+
+% ********************************************************************
+% Setup autoreferences (hyperref and babel)
+% ********************************************************************
+% There are some issues regarding autorefnames
+% http://www.tex.ac.uk/cgi-bin/texfaq2html?label=latexwords
+% you have to redefine the macros for the
+% language you use, e.g., american, ngerman
+% (as chosen when loading babel/AtBeginDocument)
+% ********************************************************************
+\makeatletter
+\@ifpackageloaded{babel}%
+{%
+	\addto\extrasamerican{%
+		\renewcommand*{\figureautorefname}{Figure}%
+		\renewcommand*{\tableautorefname}{Table}%
+		\renewcommand*{\partautorefname}{Part}%
+		\renewcommand*{\chapterautorefname}{Chapter}%
+		\renewcommand*{\sectionautorefname}{Section}%
+		\renewcommand*{\subsectionautorefname}{Section}%
+		\renewcommand*{\subsubsectionautorefname}{Section}%
+	}%
+	\addto\extrasngerman{%
+		\renewcommand*{\paragraphautorefname}{Absatz}%
+		\renewcommand*{\subparagraphautorefname}{Unterabsatz}%
+		\renewcommand*{\footnoteautorefname}{Fu\"snote}%
+		\renewcommand*{\FancyVerbLineautorefname}{Zeile}%
+		\renewcommand*{\theoremautorefname}{Theorem}%
+		\renewcommand*{\appendixautorefname}{Anhang}%
+		\renewcommand*{\equationautorefname}{Gleichung}%
+		\renewcommand*{\itemautorefname}{Punkt}%
+	}%
+	% Fix to getting autorefs for subfigures right (thanks to Belinda Vogt for changing the definition)
+	\providecommand{\subfigureautorefname}{\figureautorefname}%
+}{\relax}
+\makeatother
+
+% ********************************************************************
+% (Better) alternative to \autoref is \cref via the cleveref package
+% - load at the very last (after hyperref, amsmath, babel, ...)
+% ********************************************************************
+\usepackage[capitalize, noabbrev, ngerman, english]{cleveref} % need to pass languages explicitly
+%\crefformat{part}{Part #2\MakeUppercase{#1}#3}
+
+
+% ********************************************************************
+% Development Stuff
+% ********************************************************************
+\listfiles

@@ -1,0 +1,68 @@
+% !TeX root = ../Thesis.tex
+
+% Vorgaben zum Titelblatt einer Dissertation: https://www.intern.tu-darmstadt.de/media/dezernat_ii/promotionen_dokumente/Dissertation-Titelblatt.de.pdf
+
+%*******************************************************
+% Titlepage
+%*******************************************************
+\pdfbookmark[0]{\titlepagetype}{titlepage}
+\begin{titlepage}
+    \begin{addmargin}[-\titlePageShift]{\titlePageShift}
+    \begin{center}
+    \begin{otherlanguage}{ngerman}
+        \large
+
+        \includegraphics[width=6cm]{graphics/logos/tud-logo-rgb}
+
+        \vfill
+
+        \begingroup
+            \color{CTtitle}\spacedallcaps{\myTitle} \\ \bigskip
+        \endgroup
+
+        \vfill
+
+        Am \myFacultyDE \\
+        der Technischen Universität Darmstadt \\
+        eingereichte
+
+        % -- TemplateKnob
+        %% Use this for the final version:
+        % Vom \myFacultyDE \\
+        % der Technischen Universität Darmstadt \\
+        % genehmigte
+
+        \vspace{2ex}
+
+        \spacedlowsmallcaps{Dissertation}
+
+        \vspace{2ex}
+
+        zur Erlangung des akademischen Grades \\
+        \myDegreePhD \\
+        von
+
+        \vspace{2ex}
+
+        \spacedlowsmallcaps{\myName}
+
+        \vfill
+
+        \begin{tabular}{r@{~}l}
+        Erstreferent: & \myProf \\
+        Korreferent: & \myOtherProf \\
+        \end{tabular}
+
+        \vfill
+
+        \myLocation \DTMfetchyear{myDisputationDate} \\
+        Hochschulkennziffer \myUniKennziffer
+
+        \vfill
+
+        \includegraphics[width=5cm]{graphics/logos/seemoo-logo-rgb} \\
+
+    \end{otherlanguage}
+    \end{center}
+    \end{addmargin}
+\end{titlepage}

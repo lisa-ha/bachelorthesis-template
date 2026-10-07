@@ -1,0 +1,29 @@
+% !TeX root = ../Thesis.tex
+
+%*******************************************************
+% Abstract
+%*******************************************************
+
+\iftoggle{cts@phd}{%
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\let\cleardoublepage\relax
+}{}
+
+\addchapCondToC{Abstract}
+Diese Arbeit untersucht die Detektion und den Vergleich visueller Merkmale auf antiken Münzbildern mithilfe von YOLO. Dabei wird betrachtet, inwieweit sich Merkmale mit einem nicht speziell für diesen Anwendungsbereich trainierten Modell erkennen und anschließend anhand ihrer Feature-Vektoren miteinander vergleichen lassen.
+Für die Merkmalsdetektion wird YOLO-World verwendet. Erkannte Merkmale werden innerhalb der Münzbilder lokalisiert und durch Feature-Vektoren numerisch repräsentiert. Diese bilden anschließend die Grundlage für den Vergleich entsprechender Merkmale verschiedener Münzbilder mithilfe unterschiedlicher Distanz- und Ähnlichkeitsmaße.
+Zur praktischen Umsetzung wird eine Anwendung entwickelt, welche die Verarbeitung der Münzbilder, die Speicherung der erkannten Merkmale und ihrer Feature-Vektoren sowie den Vergleich mit bereits verarbeiteten Münzen ermöglicht.
+\todo{Ergebnisse ergänzen}
+
+\iftoggle{cts@phd}{%
+\vfill
+\begin{otherlanguage}{ngerman}
+  \addchapCondToC{Zusammenfassung}
+  Kurze Zusammenfassung des Inhaltes in deutscher Sprache\dots
+  \lipsum[11-20][1-12]
+\end{otherlanguage}
+\endgroup
+\vfill
+}{}

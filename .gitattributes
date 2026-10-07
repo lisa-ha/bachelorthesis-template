@@ -1,0 +1,8 @@
+# Suppress diff for the following file types
+*.dict -diff
+*.eps -diff
+*.pdf -diff
+
+# Suppress diff for the following very long files
+gfx/matlab/matlab2tikz.m -diff
+#gfx/matlab/matlab2tikz.m -diff

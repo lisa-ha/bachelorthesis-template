@@ -1,0 +1,68 @@
+% !TeX root = ../Thesis.tex
+
+% ##################################################################################################
+% -- TemplateKnob
+%   >> Personal information to be filled in by thesis author !!!   <<
+% NOTES:
+% - use \xspace to ensure space after a newcommands (but not for \metaMy... macros and URLs)
+% - babel must be loaded for bilingual name definitions
+% - datetime2 must be loaded before this file is included to store dates via \DTMsavedate
+% ##################################################################################################
+
+% --------------------------------------------------------------------------------------------------
+% Main information (required for any type of thesis)
+% --------------------------------------------------------------------------------------------------
+% IMPORTANT: \metaMy... commands must not have \xspace to avoid errors with pdfx
+\newcommand{\metaMyTitle}{YOLO-basierte Detektion und Vergleich visueller Merkmale auf antiken Münzbildern}                  % your title
+\newcommand{\metaMyName}{Lisa Haußmann und Dominik Schmitt-Klink}                 % your name
+\newcommand{\metaMySubject}{Short summary of the contents}    % avoid &, %, #, \xspace etc.
+
+\DTMsavedate{mySubmissionDate}{2026-10-28}                    % yyyy-mm-dd: thesis submission date
+\newcommand{\myProf}{Dr. Karsten Tolle \xspace}  % advisor (bsc/msc) or first examiner
+
+% DO NOT CHANGE: meta data for TUbama PDF/A compliance (pdfx includes the .xmpdata file when loaded)
+\begin{filecontents*}{\jobname.xmpdata}
+	\Title{\metaMyTitle}
+	\Author{\metaMyName}
+	\Copyright{Copyright \copyright\ \DTMfetchyear{mySubmissionDate}\ "\metaMyName"}
+	\Subject{\metaMySubject}
+\end{filecontents*}
+
+% DO NOT CHANGE: derived macros
+\newcommand{\myTitle}{\metaMyTitle\xspace}
+\newcommand{\myName}{\metaMyName\xspace}
+
+
+% --------------------------------------------------------------------------------------------------
+% Further information (Bachelor's or Master's theses only)
+% --------------------------------------------------------------------------------------------------
+%\newcommand{\myDegree}{\iflanguage{ngerman}{Bachelorarbeit}{Bachelor's Thesis}\xspace}
+\newcommand{\myDegree}{\iflanguage{ngerman}{Bachelorarbeit}{Master's Thesis}\xspace}
+\newcommand{\mySupervisor}{Sebastian Gampe\xspace}         % usually the name of a WiMi
+\newcommand{\myThesiscode}{SEEMOO-MSC-$0000$\xspace}          % you will get this from our secretary
+
+
+% --------------------------------------------------------------------------------------------------
+% General information of SEEMOO and the TU Darmstadt.
+% --------------------------------------------------------------------------------------------------
+\newcommand{\myFaculty}{Department of Computer Science\xspace}
+\newcommand{\myFacultyDE}{Fachbereich Informatik\xspace}
+\newcommand{\myDepartment}{Big Data Lab\xspace}
+\newcommand{\myDepartmentDE}{Big Data Lab\xspace}
+\newcommand{\myUni}{Goethe Universität Frankfurt am Main\xspace}
+\newcommand{\myUniKennziffer}{D17\xspace}
+\newcommand{\myLocation}{Frankfurt\xspace}
+
+
+% --------------------------------------------------------------------------------------------------
+% Further information (PhD theses only)
+% --------------------------------------------------------------------------------------------------
+\newcommand{\myURN}{urn:nbn:de:tuda-tuprints-83253}               % DO NOT PUT \xspace here
+\newcommand{\myDegreePhD}{Doktor-Ingenieur (Dr.-Ing.)\xspace}
+\newcommand{\myOtherProf}{Dr. The Anh Vuong\xspace}                   % second examiner
+\DTMsavedate{myDisputationDate}{1984-12-31}                       % yyyy-mm-dd: disputation date
+
+% the following are only relevant if you include the CV
+\DTMsavedate{myBirthDate}{1970-01-01}                             % yyyy-mm-dd: birth date
+\newcommand{\myBirthPlace}{Darmstadt, Deutschland\xspace}
+\newcommand{\myNationality}{German\xspace}

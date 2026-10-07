@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+  \node[inner sep=0] (p) at (0,0) {\coinpic{4.2cm}};
+  \begin{scope}[imgcoords=p]
+    \draw[black!60, step=1/7, line width=0.4pt] (0,0) grid (1,1);
+    \fill[figorange, opacity=0.3] (3/7,3/7) rectangle (4/7,4/7);
+    \draw[figgreen, line width=1.4pt] (0.25,0.3) rectangle (0.75,0.82);
+    \fill[figorange] (0.5,0.56) circle (1.5pt);
+  \end{scope}
+  \node[figlabel, anchor=west, text width=3.6cm, align=left] (l1) at (2.6,0.6) {Zelle: zuständig für Objekte, deren Mittelpunkt in ihr liegt};
+  \node[figlabel, anchor=west, text width=3.6cm, align=left] (l2) at (2.6,-1.0) {Bounding Box des Objekts};
+  \draw[figarrow, figorange] (l1.west) -- ($(p.center)+(0.0,0.0)$);
+  \draw[figarrow, figgreen] (l2.west) -- ($(p.center)+(0.9,-1.0)$);
+\end{tikzpicture}

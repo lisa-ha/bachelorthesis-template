@@ -1,0 +1,56 @@
+% !TeX root = ../Thesis.tex
+
+%************************************************
+\chapter{Evaluation}\label{ch:evaluation}
+%************************************************
+\glsresetall % Resets all acronyms to not used
+
+%*************Evaluationsaufbau***************
+\section{Evaluationsaufbau}
+\label{sec:evaluationsaufbau}
+\noindent \textbf{Grundwahrheit/Ground Truth}
+
+Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Da die Gruppen anhand der Vorderseiten-ID gebildet wurden, wird die Auswertung auf den Vorderseiten durchgeführt. Für die Rückseiten gilt die Grundwahrheit nur eingeschränkt, da Münten mit gleichen Vorderseitenstempel unterschiedliche Rückseitenstempel haben können.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Protokoll}
+
+\noindent Jede der 192 Münzen mit Vorderseitenbild dient als Anfrage und wird mit den übrigen 191 verglichen. Als Treffer gelten die 6 bis 9 anderen Münzen derselben Gruppe, die ein Vorderseitenbild besitzen. Für jede Klasse wird das Merkmal mit der höchsten Confidence der Anfrage-Münze verwendet \todo{Entscheidung bestätigen}. Es wird mit den Merkmalen derselben Klasse auf der Vorderseite der übrigen Münzen verglichen (vgl. \cref{sec:vorgehen}). Der Wert einer Münze ist die höchste Ähnlichkeit über alle ihre passenden Merkmale. Anfragen, auf denen die Klasse nicht detektiert wurde, gehen nicht in die Wertung dieser Klasse ein. Für jede Klasse wird daher angegeben, auf wie vielen Münzen sie vorkommt (n). Zusätzlich wird ein Gesamtwert gebildet, indem die Ähnlichkeiten über alle Klassen gemittelt werden, die bei Anfrage und Kandidat vorliegen \todo{Entscheidung bestätigen}.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Kennzahlen}
+
+\noindent Bewertet wird die Reihenfolge der Suchergebnisse. Die Kennzahlen beziehen sich auf die ersten $k$ Münzen dieser Reihenfolge, also auf die Ergebnisse, die die Anwendung anzeigt. Da die Anwendung bis zu fünf Ergebnisse ausgibt, werden $k = 1$ und $k = 5$ betrachtet. HitRate@1 gibt den Anteil der Anfragen an, bei denen die ähnlichste Münze denselben Vorderseitenstempel hat. HitRate@5 gibt den Anteil der Anfragen an, bei denen mindestens eine der ersten fünf Münzen denselben Stempel hat. Beide Werte zeigen, wie oft eine Suche überhaupt zu einem Treffer führt. Precision@5 ist der Anteil der Treffer unter den ersten fünf Münzen, gemittelt über alle Anfragen. Sie zeigt, wie viele der angezeigten Ergebnisse im Durchschnitt passen. \todo{Quelle} Alle Werte werden pro Klasse und als Gesamtwert für jedes der drei Ähnlichkeitsmaße angegeben. Als Untergrenze dient der Wert, der sich bei einer zufälligen Reihenfolge ergibt. Er liegt für HitRate@1 und Precision@5 bei etwa [x]\,\% und für HitRate@5 bei etwa [y]\,\% \todo{Werte eintragen}.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Einflussfaktoren}
+
+\noindent Zusätzlich werden die Ergebnisse nach Bildtyp (Fotos, Plaster Casts) getrennt ausgewertet, da diese sich in Darstellung und Kontrast unterscheiden. \todo{Optional: Ergebnisse mit und ohne Positions- und Größenfilter}
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Einschränkungen}
+
+\noindent Die Grundwahrheit gilt nur für Vorderseiten. Mit 200 Münzen sind die Ergebnisse als Tendenzen zu verstehen. Die Münzen wurden nicht zufällig, sondern in aufsteigender ID-Reihenfolge ausgewählt (vgl. \cref{sec:gesamtansatzdatengrundlage}). Der Zustand der Münzen und die Qualität der Bilder können die Ähnlichkeit beeinflussen, unabhängig vom Stempel (vgl. \cref{sec:glnumismatik}).
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Testfälle}
+
+%**************Ergebnisse********************
+\section{Ergebnisse}
+\label{sec:ergebnisse}
+\textbf{Merkmalsdetektion}
+
+\todo{daten aus tabellen nur obverse}
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergleich}
+
+\section{Qualitative Analyse}
+\label{sec:qualitativeanalyse}
+Die Kennzahlen zeigen, bei welchen Münzen der Ansatz funktioniert, aber nicht warum. Dazu werden 20 zufällig gewählte Münzen (fester Startwert) einzeln untersucht und anschließend einzelne Positiv- und Negativbeispiele getrennt davon gezeigt. Beschrieben werden Erhaltungszustand (dreistufige Skala \todo{Kriterien definieren}), Licht und Kontrast, Bildtyp und Klasse des Merkmals. Bei Fehlschlägen wird zunächst geprüft, ob die Bounding Box das Merkmal trifft. So lässt sich zwischen Fehlern der Detektion und Fehlern des Vergleichs unterscheiden. Die Analyse zeigt Zusammenhänge auf und keine Ursachen, da das Modell seine Entscheidungen nicht erklärt.

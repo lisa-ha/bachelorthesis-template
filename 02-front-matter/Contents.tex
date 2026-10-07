@@ -1,0 +1,58 @@
+% !TeX root = ../Thesis.tex
+
+%*******************************************************
+% Table of Contents
+%*******************************************************
+\pdfbookmark[0]{\contentsname}{tableofcontents}
+\setcounter{tocdepth}{2} % <-- 2 includes up to subsections in the ToC
+\setcounter{secnumdepth}{3} % <-- 3 numbers up to subsubsections
+\manualmark
+\markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
+\tableofcontents
+\automark[section]{chapter}
+\renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+\renewcommand{\sectionmark}[1]{\markright{\textsc{\thesection}\enspace\spacedlowsmallcaps{#1}}}
+%*******************************************************
+% List of Figures and of the Tables
+%*******************************************************
+\clearpage
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+%*******************************************************
+% List of Figures
+%*******************************************************
+\phantomchapCondToC{\listfigurename}
+\listoffigures
+
+\vspace{8ex}
+
+%*******************************************************
+% List of Tables
+%*******************************************************
+\phantomchapCondToC{\listtablename}
+\listoftables
+
+\vspace{8ex}
+% \newpage
+
+% %*******************************************************
+% % List of Listings
+% %*******************************************************
+% % Change the listing caption to "Quelltext"
+% \renewcommand{\lstlistingname}{Quelltext}
+% \phantomchapCondToC{\lstlistlistingname}
+% \lstlistoflistings
+%
+% \vspace{8ex}
+
+%*******************************************************
+% Acronyms
+%*******************************************************
+\phantomchapCondToC{Akronyme}
+\printglossary[type=\acronymtype]
+
+\endgroup
+
+% add space after contents if parts are not enabled (needs to be here for LaTeX reasons)
+\nottoggle{cts@parts}{\tocextraspace}{}

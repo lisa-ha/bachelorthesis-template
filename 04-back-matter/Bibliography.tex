@@ -1,0 +1,29 @@
+% !TeX root = ../Thesis.tex
+
+%*******************************************************
+% Bibliography
+%*******************************************************
+
+\defbibheading{bibintoc}[\bibname]{
+  % -- TemplateKnob
+  % add extra space before the bibliography ToC entry
+  \addtocontents{toc}{\protect\vspace{\beforebibskip}}
+  % ensure that the bibliography bookmark is at the root level
+  \bookmarksetup{startatroot}
+  % use an unnumbered chapter that adds an entry to the ToC
+  \addchap{#1}
+}
+
+% -- TemplateKnob
+% AI Declaration -> adjust this text as necessary
+\defbibnote{aideclaration}{This thesis was written independently and was linguistically revised with the help of \todo[inline,inlinewidth=10cm,noinlinepar]{<name of the AI-tool you used for polishing the text>}.}
+% NOTE: If you use AI for more things, you have to explicitly acknowledge this. See: https://www.informatik.tu-darmstadt.de/media/informatik/fb20_studium/infos_dozenten/20240126_KI_Hilfsmittel.pdf
+
+
+% Bibliography
+\printbibliography[
+  heading=bibintoc,
+  prenote=aideclaration,
+  notkeyword=mypublication,
+  notkeyword=supervisedthesis
+]
