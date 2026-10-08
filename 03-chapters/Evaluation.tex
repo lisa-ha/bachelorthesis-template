@@ -51,7 +51,7 @@ Am häufigsten wird auf den Vorderseiten die Klasse \textit{human face} detektie
 
 \begin{table}[htbp]
 \centering
-\caption{Häufigste Klassen auf den Vorderseiten (Schwellenwert 0{,}005, 200 Münzen)}
+\caption{Häufigste Klassen auf den Vorderseiten (Schwellenwert 0{,}005, 200 Münzen). "Münzen" gibt die Anzahl Münzen an, auf denen die Klasse auf mindestens einem Vorderseitenbild vorkommt. "Häufigkeit" ist dieser Wert geteilt durch die gesamte Münzanzahl (200). Die Confidence ist der Mittelwert der je Münze höchsten Confidence der Klasse.}
 \label{tab:klassenhaeufigkeit}
 \begin{tabular}{|l|r|r|r|}
 \hline
@@ -78,21 +78,6 @@ scepter          & 1   & 0{,}50\,\%  & 1{,}58\,\%  \\ \hline
 owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]
-\centering
-\caption{Detektionen auf den Vorderseitenbildern bei verschiedenen Schwellenwerten (242 Bilder)}
-\label{tab:schwellenwerte}
-\begin{tabular}{|l|r|r|r|r|}
-\hline
-\textbf{Schwellenwert}         & 0{,}005 & 0{,}01 & 0{,}05 & 0{,}5  \\ \hline
-\textbf{Detektionen}           & 905     & 543    & 312    & 7      \\ \hline
-\textbf{Ø je Bild}             & 3{,}74  & 2{,}24 & 1{,}29 & 0{,}03 \\ \hline
-\textbf{Bilder ohne Detektion} & 12      & 16     & 41     & 235    \\ \hline
-\textbf{Klassen}               & 23      & 18     & 9      & 2      \\ \hline
-\end{tabular}
-\end{table}
-\todo{erwähnen dass das alles auf unseren 242 bildern passiert ist; Zur Zählweise im Code: "Münzen" in Tabelle 5.1 zählt Münzen, auf denen die Klasse auf mindestens einem Vorderseitenbild vorkommt. "Häufigkeit" ist dieser Wert geteilt durch 200. Die Confidence ist der Mittelwert der je Münze höchsten Confidence der Klasse. Das gehört in die Beschriftung oder in den Text.}
 
 \vspace{\baselineskip}
 

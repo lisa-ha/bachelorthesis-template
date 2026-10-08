@@ -9,24 +9,27 @@ Dieses Kapitel beschreibt die Umsetzung des in \cref{ch:entwurf} entwickelten An
 %**********Technische Rahmenbedingungen*************
 \section{Technische Rahmenbedingungen}
 \label{sec:rahmenbedingungen}
-Die Anwendung wurde in Python [Version] \todo{Wert einfügen} entwickelt und lokal auf [CPU/GPU, Modell, Arbeitsspeicher] \todo{Wert einfügen} unter [Betriebssystem] \todo{Wert einfügen} betrieben. Tabelle \cref{tab:bibliotheken} zeigt die eingesetzten Bibliotheken.
+Die Anwendung wurde in Python 3.14.4 entwickelt und lokal auf [CPU/GPU, Modell, Arbeitsspeicher] \todo{Wert einfügen} unter Windows 11 betrieben. \cref{tab:bibliotheken} zeigt die eingesetzten Bibliotheken.
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \small
     \begin{tabularx}{\textwidth}{|l|l|X|}
         \hline
         \textbf{Bibliothek} & \textbf{Version} & \textbf{Zweck} \\
         \hline
-        Ultralytics &  & Detektion mit YOLO-World, Extraktion der Feature-Vektoren \\
+        Ultralytics & 8.4.173 & Detektion mit YOLO-World, Extraktion der Feature-Vektoren \\
         \hline
-        OpenCV &  & Dekodieren der Bilder \\
+        CLIP (Ultralytics-Fork) & Commit a13192f & Text-Encoder von YOLO-World \\ \hline
+        OpenCV (opencv-python) & 5.0.0.93 & Dekodieren der Bilder \\
         \hline
-        Requests &  & Abruf der Daten über die CN-Schnittstelle \\
+        NumPy & 2.5.3 & Bilder und Vektoren als Arrays \\ \hline
+        Requests & 2.34.2 & Abruf der Daten über die CN-Schnittstelle \\
         \hline
-        FastAPI, Uvicorn &  & Backend, lokale Bereitstellung \\
+        FastAPI, Uvicorn & 0.142.2, 0.54.0 & Backend, lokale Bereitstellung \\
         \hline
-        SQLite &  & Speicherung der Münzdaten und Vektoren \\
+        ReportLab, pypdf & 5.0.1, 6.19.0 & Erzeugen des PDF-Steckbriefs einer Münze \\ \hline
+        SQLite (sqlite3) & \makecell[l]{Teil der Python-\\Standardbibliothek} & Speicherung der Münzdaten und Vektoren \\
         \hline
     \end{tabularx}
     \caption{Verwendete Bibliotheken}
@@ -40,19 +43,19 @@ Die Anwendung wurde in Python [Version] \todo{Wert einfügen} entwickelt und lok
 \label{sec:implementierung}
 \textbf{Aufbau}
 
-\noindent Die Anwendung ist modular aufgebaut. Der \lstinline|Request_Handler| bezieht Daten und Bilder aus der CN-Schnittstelle, der \lstinline|DatabaseHandler| übernimmt die Datenbank, der \lstinline|YoloHandler| die Detektion und Vektorextraktion, der \lstinline|CoinMatcher| mit dem \lstinline|VectorComparator| die Suche, und der \lstinline|ApiHandler| verbindet diese Komponenten mit der Oberfläche (vgl. Abbildung \cref{app:example} \todo{UML einfügen}).
+Der \lstinline|Request_handler| bezieht Daten und Bilder aus der CN-Schnittstelle, der \lstinline|DatabaseHandler| übernimmt die Datenbank, der \lstinline|YoloHandler| die Detektion und Vektorextraktion, der \lstinline|CoinMatcher| mit dem \lstinline|VectorComparator| die Suche, der \lstinline|PDFGenerator| die Erzeugung des PDF-Steckbriefs einer Münze, und der \lstinline|ApiHandler| verbindet diese Komponenten mit der Oberfläche (vgl. Abbildung \cref{app:example} \todo{UML einfügen}).
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Datenbeschaffung und Speicherung}
 
-\noindent Der \lstinline|Request_handler| ruft Metadaten und Bild-URLs ab und lädt die Bilder, die mit OpenCV als NumPy-Arrays dekodiert werden. Vorder- und Rückseite werden getrennt behandelt, pro Seite können mehrere Bilder vorliegen. Die Datenbank wird gruppenweise aufgebaut: Sobald zehn Münzen mit demselben Vorderseitenstempel vorliegen, werden ihre Bilder verarbeitet und die Münzen gespeichert. Die Münzen liegen in einer SQLite-Tabelle. Metadaten stehen in eigenen Spalten, Bild-URLs, Literatur und die erzeugten Merkmalsinformationen als JSON-Text. Letztere sind nach Münzseite und Bild gegliedert. Pro Bild gibt es den Gesamtbild-Vektor und je Klasse eine Liste von Detektionen mit Confidence Score, normierter Bounding Box und Feature-Vektor.
+\noindent Der \lstinline|Request_handler| ruft Metadaten und Bild-URLs ab und lädt die Bilder, die mit OpenCV als NumPy-Arrays dekodiert werden. Vorder- und Rückseite werden getrennt behandelt, pro Seite können mehrere Bilder vorliegen. Die Datenbank wird gruppenweise aufgebaut; Sobald zehn Münzen mit demselben Vorderseitenstempel vorliegen, werden ihre Bilder verarbeitet und die Münzen gespeichert. Münzen ohne Vorderseitenbild oder ohne Stempel-ID werden dabei übersprungen. Die Münzen liegen in einer SQLite-Tabelle. Metadaten stehen in eigenen Spalten, Bild-URLs, Literatur und die erzeugten Merkmalsinformationen als JSON-Text. Letztere sind nach Münzseite und Bild gegliedert. Pro Bild gibt es den Gesamtbild-Vektor und je Klasse eine Liste von Detektionen mit Confidence Score, normierter Bounding Box und Feature-Vektor.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Detektion und Vektorextraktion}
 
-\noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 21, der letzte Block des Necks (C2fAttn, P5/32), dessen Ausgabe an den Detektionskopf weitergegeben wird \todo{QUELLE: yolov8-worldv2.yaml}. Die Ausgabe wird räumlich gemittelt \todo{QUELLE: Ultralytics, tasks.py} und ergibt einen Vektor der Dimension 512 \todo{Wert prüfen}. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 16 Bildern verarbeitet, die Größe ist konfigurierbar.
+\noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Zuvor werden Detektionen verworfen, deren Box mindestens 85\,\% der Bildfläche einnimmt (\texttt{max\_area\_ratio}, Anhang B). Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 21, der letzte Block des Necks (C2fAttn, P5/32), dessen Ausgabe an den Detektionskopf weitergegeben wird \todo{QUELLE: yolov8-worldv2.yaml}. Die Ausgabe wird räumlich gemittelt \todo{QUELLE: Ultralytics, tasks.py} und ergibt einen Vektor der Dimension 512 \todo{Wert prüfen}. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 16 Bildern verarbeitet, die Größe ist konfigurierbar.
 
 \vspace{\baselineskip}
 
@@ -66,14 +69,21 @@ Zusätzlich ist ein Gesamtbildvergleich umgesetzt, bei dem der Vektor des Gesamt
 
 \noindent \textbf{Backend und Oberfläche}
 
-\noindent Das Backend stellt fünf Routen bereit: 
+\noindent Das Backend stellt sieben Routen bereit:
 \begin{itemize}
-    \item zwei zum Abruf von Münzen,
+    \item \lstinline|/api/coins| und \lstinline|/api/coin| zum Abruf von Münzen,
+    \item \lstinline|/api/coins/by_dies| zum Abruf der Münzen eines Stempels,
     \item \lstinline|/api/search/detect| für die Detektion,
-    \item \lstinline|/api/search/object| für den objektbasierten Vergleich und
-    \item \lstinline|/api/search/vector| für den Gesamtbildvergleich.
+    \item \lstinline|/api/search/object| für den objektbasierten Vergleich,
+    \item \lstinline|/api/search/vector| für den Gesamtbildvergleich und
+    \item \lstinline|/api/coin/pdf| für den Export einer Münze als PDF.
 \end{itemize}
 Die Oberfläche läuft in zwei Schritten. Der Nutzer lädt ein Münzbild hoch, bei aktivierter Detektion erscheinen die Bounding Boxes mit Klasse und Confidence Score, und eines der Merkmale wird per Klick oder Dropdown gewählt. Anschließend werden Münzseite, Anzahl der Ergebnisse (1 bis 5) und Ähnlichkeitsmaß eingestellt und die Suche gestartet. Die Ergebnisse erscheinen mit Bild, Ähnlichkeitswert, Münzinformationen und Suchzeit.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Evaluation}
+\todo{evaluationsklassen aufnehmen}
 
 %**********Herausforderungen*************
 \section{Herausforderungen}
@@ -98,4 +108,4 @@ Die Oberfläche läuft in zwei Schritten. Der Nutzer lädt ein Münzbild hoch, b
 
 \noindent \textbf{Uneinheitliche Datenlage}
 
-\noindent Pro Münzseite liegen null bis zwei Bilder vor, acht Münzen haben kein Vorderseitenbild. Die Datenstruktur ordnet Merkmale deshalb Münze, Seite und Bild zu, Münzen ohne Bild werden übersprungen, und pro Münze zählt das ähnlichste Bild.
+\noindent Pro Münzseite liegen bis zu zwei Bilder vor, auf der Vorderseite jeweils mindestens eines, auf der Rückseite hat eine Münze kein Bild. Die Datenstruktur ordnet Merkmale deshalb Münze, Seite und Bild zu, und pro Münze zählt das ähnlichste Bild. Münzen ohne Vorderseitenbild oder ohne Stempel-ID werden beim Aufbau der Datenbank übersprungen.
