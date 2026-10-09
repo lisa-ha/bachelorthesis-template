@@ -1,0 +1,68 @@
+% In die Präambel (z.B. classicthesis-config.tex), falls noch nicht vorhanden:
+% \definecolor{klasseHell}{HTML}{A9C8EF}
+% \definecolor{klasseDunkel}{HTML}{1B559C}
+% \definecolor{klasseHellText}{HTML}{4F86CC} % etwas dunkler als klasseHell, damit die Schrift lesbar bleibt
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.87\textwidth,
+    height=11cm,
+    xbar,
+    bar width=7pt,
+    bar shift=0pt,
+    xmin=0, xmax=112,
+    clip=false,
+    xlabel={Anteil der Münzen bzw. Ø max.\ Confidence in \%},
+    symbolic y coords={{owl},{scepter},{symbol},{bird},{tree},{mask},{snake},{horse},{head},{eye},{letter},{coin},{statue},{profile portrait},{circle},{inscription},{dog},{face},{person},{human face}},
+    ytick=data,
+    ytick pos=left,
+    xtick pos=bottom,
+    enlarge y limits=0.03,
+    yticklabel style={font=\small},
+    xticklabel style={font=\small},
+    xtick={0,10,20,30,40,50,60,70,80,90,100},
+    xmajorgrids=true,
+    grid style={gray!25},
+    axis line style={gray!60},
+    tick style={gray!60},
+    legend style={at={(0.98,0.03)}, anchor=south east, font=\small, draw=none, fill=white, fill opacity=0.9, text opacity=1},
+    legend cell align=left,
+]
+% Reihenfolge: zuerst der jeweils größere Wert (hinten), dann der kleinere (vorne)
+\addplot[draw=none, fill=klasseDunkel, forget plot] coordinates {(88.00,{human face}) (79.50,{person}) (40.00,{face}) (35.00,{dog}) (10.00,{inscription}) (7.00,{circle}) (4.00,{statue}) (2.00,{coin}) (2.00,{letter}) (1.50,{eye}) (1.00,{head})};
+\addplot[draw=none, fill=klasseHell, forget plot] coordinates {(4.79,{profile portrait}) (13.09,{horse}) (1.47,{snake}) (15.02,{mask}) (0.53,{tree}) (2.93,{bird}) (0.67,{symbol}) (1.58,{scepter}) (2.37,{owl})};
+\addplot[draw=none, fill=klasseDunkel, forget plot] coordinates {(4.50,{profile portrait}) (1.00,{horse}) (0.50,{snake}) (0.50,{mask}) (0.50,{tree}) (0.50,{bird}) (0.50,{symbol}) (0.50,{scepter}) (0.50,{owl})};
+\addplot[draw=none, fill=klasseHell, forget plot] coordinates {(16.72,{human face}) (1.40,{person}) (7.89,{face}) (22.02,{dog}) (2.57,{inscription}) (3.94,{circle}) (2.16,{statue}) (0.86,{coin}) (0.66,{letter}) (0.87,{eye}) (0.72,{head})};
+% nur für die Legende
+\addlegendimage{area legend, draw=klasseDunkel, fill=klasseDunkel}
+\addlegendentry{Münzen mit Klasse (Anteil an 200)}
+\addlegendimage{area legend, draw=klasseHell, fill=klasseHell}
+\addlegendentry{Ø max.\ Confidence}
+% Werte am Ende des jeweils längeren Balkens: Ø max. Confidence | Anteil der Münzen
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:88.80,{human face}) {\textcolor{klasseHellText}{16{,}7\,\%} \,|\, \textcolor{klasseDunkel}{88{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:80.30,{person}) {\textcolor{klasseHellText}{1{,}4\,\%} \,|\, \textcolor{klasseDunkel}{79{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:40.80,{face}) {\textcolor{klasseHellText}{7{,}9\,\%} \,|\, \textcolor{klasseDunkel}{40{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:35.80,{dog}) {\textcolor{klasseHellText}{22{,}0\,\%} \,|\, \textcolor{klasseDunkel}{35{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:10.80,{inscription}) {\textcolor{klasseHellText}{2{,}6\,\%} \,|\, \textcolor{klasseDunkel}{10{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:7.80,{circle}) {\textcolor{klasseHellText}{3{,}9\,\%} \,|\, \textcolor{klasseDunkel}{7{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:5.59,{profile portrait}) {\textcolor{klasseHellText}{4{,}8\,\%} \,|\, \textcolor{klasseDunkel}{4{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:4.80,{statue}) {\textcolor{klasseHellText}{2{,}2\,\%} \,|\, \textcolor{klasseDunkel}{4{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:2.80,{coin}) {\textcolor{klasseHellText}{0{,}9\,\%} \,|\, \textcolor{klasseDunkel}{2{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:2.80,{letter}) {\textcolor{klasseHellText}{0{,}7\,\%} \,|\, \textcolor{klasseDunkel}{2{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:2.30,{eye}) {\textcolor{klasseHellText}{0{,}9\,\%} \,|\, \textcolor{klasseDunkel}{1{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:1.80,{head}) {\textcolor{klasseHellText}{0{,}7\,\%} \,|\, \textcolor{klasseDunkel}{1{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:13.89,{horse}) {\textcolor{klasseHellText}{13{,}1\,\%} \,|\, \textcolor{klasseDunkel}{1{,}0\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:2.27,{snake}) {\textcolor{klasseHellText}{1{,}5\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:15.82,{mask}) {\textcolor{klasseHellText}{15{,}0\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:1.33,{tree}) {\textcolor{klasseHellText}{0{,}5\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:3.73,{bird}) {\textcolor{klasseHellText}{2{,}9\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:1.47,{symbol}) {\textcolor{klasseHellText}{0{,}7\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:2.38,{scepter}) {\textcolor{klasseHellText}{1{,}6\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\node[anchor=west, font=\scriptsize, inner sep=1.5pt] at (axis cs:3.17,{owl}) {\textcolor{klasseHellText}{2{,}4\,\%} \,|\, \textcolor{klasseDunkel}{0{,}5\,\%}};
+\end{axis}
+\end{tikzpicture}
+\caption{Häufigste Klassen auf den Vorderseiten (Schwellenwert 0{,}005, 200 Münzen). Dunkler Balken: Anteil der Münzen, auf denen die Klasse auf mindestens einem Vorderseitenbild vorkommt. Heller Balken: Mittelwert der je Münze höchsten Confidence der Klasse.}
+\label{fig:klassenhaeufigkeit}
+\end{figure}
