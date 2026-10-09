@@ -12,10 +12,9 @@
 }{}
 
 \addchapCondToC{Abstract}
-Diese Arbeit untersucht die Detektion und den Vergleich visueller Merkmale auf antiken Münzbildern mithilfe von YOLO. Dabei wird betrachtet, inwieweit sich Merkmale mit einem nicht speziell für diesen Anwendungsbereich trainierten Modell erkennen und anschließend anhand ihrer Feature-Vektoren miteinander vergleichen lassen.
-Für die Merkmalsdetektion wird YOLO-World verwendet. Erkannte Merkmale werden innerhalb der Münzbilder lokalisiert und durch Feature-Vektoren numerisch repräsentiert. Diese bilden anschließend die Grundlage für den Vergleich entsprechender Merkmale verschiedener Münzbilder mithilfe unterschiedlicher Distanz- und Ähnlichkeitsmaße.
-Zur praktischen Umsetzung wird eine Anwendung entwickelt, welche die Verarbeitung der Münzbilder, die Speicherung der erkannten Merkmale und ihrer Feature-Vektoren sowie den Vergleich mit bereits verarbeiteten Münzen ermöglicht.
-\todo{Ergebnisse ergänzen}
+Diese Arbeit untersucht, ob sich einzelne visuelle Merkmale auf antiken Münzbildern ohne münzspezifisches Training detektieren und für den Vergleich von Münzen nutzen lassen. Manuelle Stempelstudien sind sehr aufwendig, und bestehende bildbasierte Verfahren erfordern meist ein Training auf münzspezifischen Daten.
+Für die Detektion wird das Open-Vocabulary-Modell YOLO-World eingesetzt, das Merkmale im Zero-Shot-Verfahren anhand von Textbeschreibungen erkennt. Zu jedem detektierten Merkmal wird ein Feature-Vektor aus einer internen Schicht des Netzwerks extrahiert. Merkmale derselben Klasse auf verschiedenen Münzen werden mit euklidischer Distanz, Manhattan-Distanz und Kosinus-Ähnlichkeit verglichen. Die Umsetzung erfolgt als Anwendung, die Verarbeitung, Speicherung und Suche ermöglicht.
+Die Auswertung nutzt 200 Münzen aus dem Corpus Nummorum in 20 Stempelgruppen zu je zehn Münzen als Grundwahrheit. Geprüft wird, ob Münzen mit demselben Vorderseitenstempel unter den ähnlichsten Treffern liegen (HitRate@1, HitRate@5, Precision@5). \todo{Ergebnisse in einem bis zwei Sätzen: Detektion (z.\,B. 905 Detektionen, 23 von 57 Prompts als Klasse) und beste Trefferquote mit Maß, jeweils gegen die Zufallsgrenze von etwa 4,5\,\%} Grenzen ergeben sich aus der Abhängigkeit von der Prompt-Liste, der kleinen Datenbasis und dem Erhaltungszustand der Münzen.
 
 \iftoggle{cts@phd}{%
 \vfill

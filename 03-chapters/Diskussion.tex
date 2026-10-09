@@ -7,36 +7,47 @@
 
 \section{Beantwortung der Forschungsfragen}
 \label{sec:beantwortungfragen}
+\noindent \textit{Welche Grenzen zeigt ein Ansatz ohne münzspezifisches Training bei der Anwendung auf antike Münzbilder?}
+
+\noindent Der Ansatz stößt an mehreren Stellen an Grenzen. Erstens liefert YOLO-World nur [Anzahl] der 57 Prompts als Klasse mit meist niedriger Confidence (vgl. \cref{sec:ergebnisse}), und ob eine Klasse inhaltlich zutrifft, lässt sich ohne eigene Prüfung nicht sagen \todo{an qualitative Analyse anpassen}. Zweitens hängen Detektion und Vektoren von der festgelegten Prompt-Liste ab. Drittens [Einfluss von Erhaltungszustand und Bildtyp, aus Ergebnissen]. Viertens beschreibt ein Vektor das Merkmal ohne Kontext des Gesamtbildes. Die Einzelheiten und die Grenzen der Untersuchung selbst behandelt \cref{sec:grenzen-untersuchung}.
 
 \section{Einordnung in bestehende Arbeiten}
 \label{sec:bestehendearbeiten}
 Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in drei Gruppen einteilen. Die Arbeit liegt an der Schnittstelle dieser Gruppen, unterscheidet sich aber in einem Punkt von allen; sie verzichtet auf münzspezifisches Training.
 
-\noindent \textbf{Zuordnung ganzer Münzen.} Guo et al. \cite{guo2023siamese} ordnen Münzbilder über ein Siamese-Netz mit Vision Transformern einer Prägung (Issue) zu, indem sie paarweise entscheiden, ob zwei Bilder zur selben Prägung gehören. Neue Prägungen lassen sich so ohne Neutraining ergänzen. Das Netz wird aber auf Münzpaaren trainiert, und verglichen wird die ganze Münze. Fare und Arandjelović \cite{fare2017ancient} untersuchen die Münzsuche systematisch im Hinblick auf den Erhaltungsgrad und nennen diesen eine zentrale Schwierigkeit. Der Erhaltungszustand spielt auch in dieser Arbeit eine Rolle (vgl. \cref{sec:qualitativeanalyse}).
+\vspace{\baselineskip}
 
-\noindent \textbf{Erkennung einzelner Motive und Zeichen.} Cooper und Arandjelović \cite{cooper2020learning} trainieren je Motiv (z.\,B. Pferd, Adler, Schild) ein CNN, das erkennt, ob es auf der Rückseite vorkommt. Die Trainingslabels stammen aus Beschreibungstexten von Händlern, es wurden also keine Bildpositionen annotiert. Kim und Pavlovic \cite{kim2016discovering} suchen mit CNNs charakteristische Bildregionen je Münzklasse. Anwar \cite{anwar2026reading} behandelt einzelne Buchstaben als Objekte und trainiert verschiedene YOLO-Modelle nach, auf einem eigens annotierten Datensatz mit 38,808 Bounding Boxes. Das ist die engste Verbindung zu dieser Arbeit, denn auch dort wird ein YOLO-Detektor auf Münzbilder angewendet. Der Unterschied liegt darin, dass das Modell dort mit manuellen Annotationen nachtrainiert wird, hier jedoch ohne Nachtraining anhand von Textbeschreibungen detektiert. \todo{prüfen: 81\%, 84\%, NMI 0.959, 38.808 Boxen} \todo{anwar widerspruch: text 914\% und tabelle 90,4\%}
+\noindent \textbf{Zuordnung ganzer Münzen} 
 
-\noindent \textbf{Stempelanalyse.} Heinecke et al. \cite{heinecke2021unsupervised} gruppieren Münzbilder ohne Trainingsdaten nach dem Stempel, indem sie Schlüsselpunkte auf dem gesamten Münzbild vergleichen und die Gruppen statistisch bestimmen. Sie arbeiten auf Denaren aus der Zeit Neros und prüfen manuell, wie gut die Gruppen den echten Stempeln entsprechen. Das Ziel entspricht dem hier verwendeten Ansatz, Münzen desselben Stempels zu finden. Anders als hier werden aber keine einzelnen Merkmale detektiert und keine gelernten Feature-Vektoren verglichen.
+\noindent Guo et al. \cite{guo2023siamese} ordnen Münzbilder über ein Siamese-Netz mit Vision Transformern einer Prägung (Issue) zu, indem sie paarweise entscheiden, ob zwei Bilder zur selben Prägung gehören. Neue Prägungen lassen sich so ohne Neutraining ergänzen. Das Netz wird aber auf Münzpaaren trainiert, und verglichen wird die ganze Münze. Fare und Arandjelović \cite{fare2017ancient} untersuchen die Münzsuche systematisch im Hinblick auf den Erhaltungsgrad und nennen diesen eine zentrale Schwierigkeit. Der Erhaltungszustand spielt auch in dieser Arbeit eine Rolle (vgl. \cref{sec:qualitativeanalyse}).
 
-\noindent \textbf{Abgrenzung.} Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur [Zahl] Klassen detektiert, die Stempelsuche wird auf 200 Münzen gezeigt, und eine inhaltliche Prüfung der Klassen fehlt \todo{an Ergebnisse anpassen}.
+\vspace{\baselineskip}
 
-\noindent \textbf{Vergleichbarkeit der Ergebnisse.} Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei [x]\,\% (HitRate@1) und [y]\,\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
+\noindent \textbf{Erkennung einzelner Motive und Zeichen} 
+
+\noindent Cooper und Arandjelović \cite{cooper2020learning} trainieren je Motiv (z.\,B. Pferd, Adler, Schild) ein CNN, das erkennt, ob es auf der Rückseite vorkommt. Die Trainingslabels stammen aus Beschreibungstexten von Händlern, es wurden also keine Bildpositionen annotiert. Kim und Pavlovic \cite{kim2016discovering} suchen mit CNNs charakteristische Bildregionen je Münzklasse. Anwar \cite{anwar2026reading} behandelt einzelne Buchstaben als Objekte und trainiert verschiedene YOLO-Modelle nach, auf einem eigens annotierten Datensatz mit 38,808 Bounding Boxes. Das ist die engste Verbindung zu dieser Arbeit, denn auch dort wird ein YOLO-Detektor auf Münzbilder angewendet. Der Unterschied liegt darin, dass das Modell dort mit manuellen Annotationen nachtrainiert wird, hier jedoch ohne Nachtraining anhand von Textbeschreibungen detektiert. \todo{prüfen: 81\%, 84\%, NMI 0.959, 38.808 Boxen} \todo{anwar widerspruch: text 914\% und tabelle 90,4\%}
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Stempelanalyse} 
+
+\noindent Heinecke et al. \cite{heinecke2021unsupervised} gruppieren Münzbilder ohne Trainingsdaten nach dem Stempel, indem sie Schlüsselpunkte auf dem gesamten Münzbild vergleichen und die Gruppen statistisch bestimmen. Sie arbeiten auf Denaren aus der Zeit Neros und prüfen manuell, wie gut die Gruppen den echten Stempeln entsprechen. Das Ziel entspricht dem hier verwendeten Ansatz, Münzen desselben Stempels zu finden. Anders als hier werden aber keine einzelnen Merkmale detektiert und keine gelernten Feature-Vektoren verglichen.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Abgrenzung} 
+\noindent Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur [Zahl] Klassen detektiert, die Stempelsuche wird auf 200 Münzen gezeigt, und eine inhaltliche Prüfung der Klassen fehlt \todo{an Ergebnisse anpassen}.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergleichbarkeit der Ergebnisse} 
+\noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei [x]\,\% (HitRate@1) und [y]\,\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
 
 \section{Grenzen}
 \label{sec:grenzen}
-\textbf{Umfang und Auswahl der Daten} 
-
-\noindent Die Auswertung beruht auf 200 Münzen in 20 Stempelgruppen mit je zehn Münzen, die in aufsteigender ID-Reihenfolge und nicht zufällig aus dem Corpus Nummorum gewählt wurden (vgl. \cref{sec:gesamtansatzdatengrundlage}). Die Ergebnisse gelten daher für diese Auswahl und lassen sich nicht ohne Weiteres auf andere Prägungen, Epochen oder Regionen übertragen. Wegen der kleinen Gruppen können einzelne Münzen die Kennzahlen deutlich verändern \todo{ggf. mit Streuung belegen}.
-
-\vspace{\baselineskip}
-
-\noindent \textbf{Grundwahrheit} 
-
-\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Sie gilt nur für die Vorderseiten (vgl. \cref{sec:evaluationsaufbau}), sodass Rückseiten nicht ausgewertet werden. Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft \todo{klären, woher CN die Zuordnung hat}.
-
-\vspace{\baselineskip}
-
-\noindent \textbf{Bildmaterial} 
+\subsection{Grenzen des Ansatzes}
+\label{sec:grenzen-ansatz}
+\textbf{Bildmaterial} 
 
 \noindent Die Bilder stammen teils von Originalen und teils von Gipsabgüssen und unterscheiden sich in Kontrast, Licht und Aufnahmebedingungen (vgl. \cref{sec:glnumismatik}). Zusammen mit Abnutzung und Korrosion kann dies die Ähnlichkeit zweier Münzen beeinflussen, unabhängig davon, ob sie vom selben Stempel stammen. Die Auswertung nach Bildtyp zeigt Unterschiede \todo{Ergebnis einsetzen}, trennt aber nicht von den Einflüssen des Erhaltungszustands.
 
@@ -51,6 +62,18 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 \noindent \textbf{Vektoren einzelner Merkmale} 
 
 \noindent Der Vektor eines Merkmals wird aus dem ausgeschnittenen Bildausschnitt bestimmt und kennt den Kontext des Gesamtbildes nicht (vgl. \cref{sec:herausforderungen}). Ob Vektoren aus dem ganzen Bild mit Pooling auf der Feature-Karte bessere Ergebnisse liefern, wurde nicht untersucht.
+
+\subsection{Grenzen der Untersuchung}
+\label{sec:grenzen-untersuchung}
+\textbf{Umfang und Auswahl der Daten} 
+
+\noindent Die Auswertung beruht auf 200 Münzen in 20 Stempelgruppen mit je zehn Münzen, die in aufsteigender ID-Reihenfolge und nicht zufällig aus dem Corpus Nummorum gewählt wurden (vgl. \cref{sec:gesamtansatzdatengrundlage}). Die Ergebnisse gelten daher für diese Auswahl und lassen sich nicht ohne Weiteres auf andere Prägungen, Epochen oder Regionen übertragen. Wegen der kleinen Gruppen könnten einzelne Münzen die Kennzahlen deutlich verändern.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Grundwahrheit} 
+
+\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Sie gilt nur für die Vorderseiten (vgl. \cref{sec:evaluationsaufbau}), sodass Rückseiten nicht ausgewertet werden. Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft.
 
 \vspace{\baselineskip}
 
