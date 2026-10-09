@@ -10,5 +10,48 @@
 
 \section{Ausblick}
 \label{sec:ausblick}
+\textbf{Kombination mehrerer Merkmale zu einem Münzwert}
 
-Kombination mehrerer Merkmale zu einem Münzwert
+\noindent Derzeit zählt je Münze der höchste Ähnlichkeitswert über alle passenden Merkmale (vgl. \cref{sec:vorgehen}). Eine Münze trägt aber meist mehrere Merkmale, die zusammen aussagekräftiger sein könnten als das ähnlichste einzelne. Denkbar sind eine Gewichtung nach Klasse oder Confidence oder ein Wert, der die Übereinstimmung mehrerer Merkmale berücksichtigt. 
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Kombination von Vorder- und Rückseite}
+
+\noindent Die Auswertung beschränkt sich auf die Vorderseiten, weil die Stempelgruppen über den Vorderseitenstempel gebildet wurden (vgl. \cref{sec:evaluationsaufbau}). Eine Kombination beider Seiten würde mehr Information nutzen, da Münzen mit demselben Vorderseitenstempel unterschiedliche Rückseitenstempel haben können. Sie bräuchte eine Grundwahrheit, die auch die Rückseitenstempel erfasst.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Prompt-Liste auf Motivbeschreibungen anpassen}
+
+\noindent Die Prompt-Liste wurde manuell festgelegt (vgl. \cref{sec:vorgehen}). Sie könnte stärker an numismatische Motivbeschreibungen angelehnt werden, etwa aus den Beschreibungen der CN-Einträge, auch mit zusammengesetzten Ausdrücken wie einer Tierdarstellung mit Attribut statt einzelner Begriffe. Da die Vektoren von der Prompt-Liste abhängen (vgl. \cref{sec:herausforderungen}), müsste die Datenbank dafür neu aufgebaut werden. Zu prüfen wäre, welche Formulierungen die Detektion und den Vergleich verbessern.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Training auf Münzen}
+
+\noindent Ein Modell, das auf antiken Münzen nachtrainiert wird, könnte genauere Boxen und münzspezifische Klassen liefern, wie es Anwar~\cite{anwar2026reading} für Buchstaben zeigt. Dafür fehlen jedoch Annotationen der Merkmalspositionen (vgl. \cref{sec:zielsetzungundforschungsfragen}). Möglich wäre, sie aufwendig manuell zu erstellen oder wie Cooper und Arandjelović~\cite{cooper2020learning} aus vorhandenen Beschreibungstexten abzuleiten. Ein Vergleich mit dem hier untersuchten Ansatz ohne Training auf denselben Daten würde zeigen, wie viel das Training bringt.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergrößerung des Datensatzes}
+
+\noindent Die Ergebnisse beruhen auf 200 Münzen in 20 Stempelgruppen (vgl. \cref{sec:grenzen}). Ein größerer Bestand mit zufälliger Auswahl, weiteren Prägungen und Regionen würde die Aussagen belastbarer machen und zeigen, ob sie sich übertragen lassen.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Suche in großen Beständen}
+
+\noindent Die Anfrage wird derzeit nacheinander mit allen gespeicherten Vektoren verglichen (vgl. \cref{sec:herausforderungen}). Bei 200 Münzen ist das unproblematisch. Bei einem Bestand in der Größenordnung des gesamten Corpus Nummorum wäre ein Suchindex nötig, der die Vektoren vorab so ordnet, dass nur die Umgebung der Anfrage durchsucht werden muss. Die Suche würde dadurch schneller, könnte aber nur annähernd die ähnlichsten Treffer liefern.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Nutzerstudie mit Fachleuten}
+
+\noindent Der Ansatz soll auch ohne technisches Vorwissen nutzbar sein, etwa für Forschende der Numismatik (vgl. \cref{sec:gesamtansatzdatengrundlage}). Die Auswertung in dieser Arbeit prüft aber nur gegen die Stempelgruppen und eigene Stichproben (vgl. \cref{sec:qualitativeanalyse}). Eine Studie, in der Numismatikerinnen und Numismatiker die Anwendung benutzen, könnte zeigen, ob die gefundenen Münzen und Merkmale für ihre Arbeit nützlich sind und ob die Bedienung verständlich ist. Sie könnte auch zeigen, ob die vorgeschlagenen Treffer die manuelle Stempelsuche erleichtern \todo{Formulierung abstimmen, ob ihr das Ziel so formuliert habt}.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vektoren durch Pooling}
+
+\noindent Bisher wird je Detektion der Bildausschnitt einzeln durch das Modell geführt (vgl. \cref{sec:herausforderungen}). Alternativ könnte das Bild einmal verarbeitet und der Vektor aus der Feature-Karte über die Fläche der Box gemittelt werden. Das wäre schneller und würde Kontext einbeziehen, das Merkmal aber nicht mehr isoliert beschreiben. Ein Vergleich beider Verfahren würde zeigen, welchen Einfluss das hat.

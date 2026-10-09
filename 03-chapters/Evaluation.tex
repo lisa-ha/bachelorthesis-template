@@ -10,7 +10,7 @@
 \label{sec:evaluationsaufbau}
 \noindent \textbf{Grundwahrheit/Ground Truth}
 
-\noindent Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Da die Gruppen anhand der Vorderseiten-ID gebildet wurden, wird die Auswertung auf den Vorderseiten durchgeführt. Für die Rückseiten gilt die Grundwahrheit nur eingeschränkt, da Münten mit gleichen Vorderseitenstempel unterschiedliche Rückseitenstempel haben können.
+\noindent Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Da die Gruppen anhand der Vorderseiten-ID gebildet wurden, wird die Auswertung auf den Vorderseiten durchgeführt. Für die Rückseiten gilt die Grundwahrheit nur eingeschränkt, da Münzen mit gleichen Vorderseitenstempel unterschiedliche Rückseitenstempel haben können.
 
 \vspace{\baselineskip}
 
@@ -34,11 +34,20 @@
 
 \noindent \textbf{Einschränkungen}
 
-\noindent Die Grundwahrheit gilt nur für Vorderseiten. Mit 200 Münzen sind die Ergebnisse als Tendenzen zu verstehen. Die Münzen wurden nicht zufällig, sondern in aufsteigender ID-Reihenfolge ausgewählt (vgl. \cref{sec:gesamtansatzdatengrundlage}). Der Zustand der Münzen und die Qualität der Bilder können die Ähnlichkeit beeinflussen, unabhängig vom Stempel (vgl. \cref{sec:glnumismatik}).
+\noindent Die Ergebnisse sind wegen Umfang und Auswahl als Tendenzen zu verstehen. Es sind 200 Münzen in 20 Stempelgruppen, die nicht zufällig, sondern in aufsteigender ID-Reihenfolge gewählt wurden (vgl. \cref{sec:gesamtansatzdatengrundlage}). Der Zustand der Münzen und die Bildqualität können die Ähnlichkeit unabhängig vom Stempel beeinflussen (vgl. \cref{sec:glnumismatik}). Weitere Grenzen werden in \cref{sec:grenzen} diskutiert.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Testfälle}
+
+\noindent Ergänzend zu den Kennzahlen werden einzelne Fälle genauer untersucht (vgl. \cref{sec:qualitativeanalyse}). Dazu werden 20 der 200 Münzen mit einem festen Startwert zufällig ausgewählt \todo{Startwert nennen}, sodass die Auswahl reproduzierbar ist und nicht von einzelnen guten oder schlechten Beispielen abhängt. Für jede dieser Münzen wird festgehalten:
+\begin{itemize}
+    \item der Erhaltungszustand auf einer dreistufigen Skala \todo{Kriterien definieren, z.\,B. Lesbarkeit der Legende, erkennbare Details des Motivs, sichtbare Korrosion; ggf. an \cite{wikipedia-erhaltungsgrade} anlehnen},
+    \item Licht und Kontrast des Bildes,
+    \item der Bildtyp (Foto oder Gipsabguss),
+    \item die Klasse des detektierten Merkmals.
+\end{itemize}
+Bei Fehlschlägen, also wenn unter den ähnlichsten Treffern keine Münze desselben Stempels liegt, wird zunächst geprüft, ob die Bounding Box das Merkmal trifft. So lässt sich zwischen Fehlern der Detektion und Fehlern des Vergleichs unterscheiden. Zusätzlich werden einzelne Positiv- und Negativbeispiele getrennt von der Stichprobe gezeigt \todo{Auswahlkriterium nennen, z.\,B. Positivbeispiel: ähnlichste Münze hat denselben Stempel; Negativbeispiel: keine der ersten fünf}.
 
 %**************Ergebnisse********************
 \section{Ergebnisse}
@@ -81,25 +90,16 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{table}[htbp]
-\centering
-\caption{Detektionen auf den Vorderseitenbildern bei verschiedenen Schwellenwerten (242 Bilder und 57 übergebene Klassen)}
-\label{tab:schwellenwerte}
-\begin{tabular}{|l|r|r|r|r|}
-\hline
-\textbf{Schwellenwert}         & 0{,}005 & 0{,}01 & 0{,}05 & 0{,}5  \\ \hline
-\textbf{Detektionen}           & 905     & 543    & 312    & 7      \\ \hline
-\textbf{Ø erkannte Klassen je Bild}             & 3{,}74  & 2{,}24 & 1{,}29 & 0{,}03 \\ \hline
-\textbf{Bilder ohne Detektion} & 12      & 16     & 41     & 235    \\ \hline
-\textbf{Gefundene Klassen}               & 23      & 18     & 9      & 2      \\ \hline
-\end{tabular}
-\end{table}
-\todo{erwähnen dass das alles auf unseren 242 bildern passiert ist; Zur Zählweise im Code: "Münzen" in Tabelle 5.1 zählt Münzen, auf denen die Klasse auf mindestens einem Vorderseitenbild vorkommt. "Häufigkeit" ist dieser Wert geteilt durch 200. Die Confidence ist der Mittelwert der je Münze höchsten Confidence der Klasse. Das gehört in die Beschriftung oder in den Text.}
+\noindent \textbf{Vergleich}
+
+\noindent \textit{Welches Ähnlichkeitsmaß trennt Münzen desselben Stempels am besten von Münzen anderer Stempel?} 
+
+\noindent Bei [x]\,\% der Anfragen hat die ähnlichste gefundene Münze denselben Vorderseitenstempel (HitRate@1). Unter den fünf ähnlichsten Münzen befindet sich bei [y]\,\% der Anfragen mindestens eine Münze desselben Stempels (HitRate@5). \todo{Zahlen aus Tabelle 5.x} Unter den untersuchten Maßen erzielte [Maß] auf dem verwendeten Datensatz die höchste HitRate@1 und die deutlichste Trennung zwischen stempelgleichen und stempelverschiedenen Paaren. Daher wird es für den nachfolgenden Vergleich verwendet. \todo{Nur stehen lassen, wenn es zu den Tabellenwerten passt}
 
 \vspace{\baselineskip}
 
-\noindent \textbf{Vergleich}
+\noindent \textit{Bringt der Ansatz mit lokalisierten Merkmalen gegenüber dem Gesamtbild einen Vorteil?}Eig kein teil der forschungsfrage... \todo{Nur wenn der Gesamtbildvergleich ausgewertet wird}
 
 \section{Qualitative Analyse}
 \label{sec:qualitativeanalyse}
-Die Kennzahlen zeigen, bei welchen Münzen der Ansatz funktioniert, aber nicht warum. Dazu werden 20 zufällig gewählte Münzen (fester Startwert) einzeln untersucht und anschließend einzelne Positiv- und Negativbeispiele getrennt davon gezeigt. Beschrieben werden Erhaltungszustand (dreistufige Skala \todo{Kriterien definieren}), Licht und Kontrast, Bildtyp und Klasse des Merkmals. Bei Fehlschlägen wird zunächst geprüft, ob die Bounding Box das Merkmal trifft. So lässt sich zwischen Fehlern der Detektion und Fehlern des Vergleichs unterscheiden. Die Analyse zeigt Zusammenhänge auf und keine Ursachen, da das Modell seine Entscheidungen nicht erklärt.
+Die Kennzahlen zeigen, bei welchen Münzen der Ansatz funktioniert, aber nicht warum. Dazu werden die in \cref{sec:evaluationsaufbau} beschriebenen Testfälle untersucht. Die Analyse zeigt Zusammenhänge auf und keine Ursachen, da das Modell seine Entscheidungen nicht erklärt. \todo{Befunde einfügen}
