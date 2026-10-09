@@ -1,0 +1,50 @@
+% Benötigt die Farben klasseHell, klasseDunkel, klasseHellText aus classicthesis-config.tex
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    name=vs, 
+    width=0.8\linewidth, height=4.6cm,
+    title={Vorderseite}, title style={font=\small, yshift=-4pt},
+    xlabel={}, ylabel={Anteil der Paare in \%},
+    ymin=0, ymajorgrids=true,
+    xticklabel style={/pgf/number format/.cd, use comma, 1000 sep={\,}, fixed, fixed zerofill, precision=2},
+    yticklabel style={/pgf/number format/.cd, use comma, 1000 sep={\,},},
+    xtick pos=bottom, ytick pos=left,
+    axis line style={gray!60}, tick style={gray!60},
+    grid style={gray!25},
+    ticklabel style={font=\small},
+    label style={font=\small},
+]
+\addplot[ybar interval, fill=klasseHell, draw=white, line width=0.6pt] coordinates {(0.0609,3.21) (0.0694,2.29) (0.0778,0.79) (0.0863,1.18) (0.0948,1.76) (0.1032,2.57) (0.1117,3.26) (0.1202,4.89) (0.1286,5.76) (0.1371,7.42) (0.1456,7.65) (0.1540,8.52) (0.1625,8.30) (0.1710,7.98) (0.1794,7.29) (0.1879,5.81) (0.1963,4.39) (0.2048,3.88) (0.2133,2.94) (0.2217,2.43) (0.2302,1.74) (0.2387,1.43) (0.2471,1.25) (0.2556,0.93) (0.2641,0.75) (0.2725,0.37) (0.2810,0.17) (0.2895,0.26) (0.2979,0.17) (0.3064,0.58) (0.3149,0.58)};
+\addplot[ybar interval, fill=klasseDunkel, fill opacity=0.5, draw=klasseDunkel, line width=0.6pt] coordinates {(0.0609,2.48) (0.0694,2.48) (0.0778,0.93) (0.0863,0.93) (0.0948,0.93) (0.1032,2.17) (0.1117,2.79) (0.1202,4.95) (0.1286,4.95) (0.1371,4.64) (0.1456,6.19) (0.1540,8.67) (0.1625,5.88) (0.1710,7.43) (0.1794,8.98) (0.1879,5.26) (0.1963,4.33) (0.2048,5.57) (0.2133,4.95) (0.2217,2.17) (0.2302,3.41) (0.2387,0.93) (0.2471,1.55) (0.2556,2.17) (0.2641,0.93) (0.2725,0.31) (0.2810,1.86) (0.2895,0.00) (0.2979,0.93) (0.3064,1.24) (0.3149,1.24)};
+\draw[klasseDunkel, thick, dashed] (axis cs:0.1746,\pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.1746,\pgfkeysvalueof{/pgfplots/ymax});
+\draw[gray!70!black, thick, dotted] (axis cs:0.1641,\pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.1641,\pgfkeysvalueof{/pgfplots/ymax});
+\end{axis}
+\begin{axis}[
+    name=rs, at={(vs.below south west)}, anchor=north west, yshift=-0.6cm,
+    width=0.8\linewidth, height=4.6cm,
+    title={Rückseite}, title style={font=\small, yshift=-4pt},
+    xlabel={Ähnlichkeit (Manhattan-Distanz, umgerechnet als $\frac{1}{1+d}$)}, ylabel={Anteil der Paare in \%},
+    ymin=0, ymajorgrids=true,
+    xticklabel style={/pgf/number format/.cd, use comma, 1000 sep={\,}, fixed, fixed zerofill, precision=2},
+    yticklabel style={/pgf/number format/.cd, use comma, 1000 sep={\,},},
+    xtick pos=bottom, ytick pos=left,
+    axis line style={gray!60}, tick style={gray!60},
+    grid style={gray!25},
+    ticklabel style={font=\small},
+    label style={font=\small},
+    legend style={at={(0.5,-0.42)}, anchor=north, legend columns=1, font=\footnotesize, draw=none},
+    legend cell align=left, legend image code/.code={{\fill[#1] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);}},
+]
+\addplot[ybar interval, fill=klasseHell, draw=white, line width=0.6pt] coordinates {(0.0497,2.04) (0.0657,0.39) (0.0817,1.97) (0.0977,8.22) (0.1136,11.18) (0.1296,13.77) (0.1456,18.11) (0.1616,15.58) (0.1776,11.88) (0.1935,7.28) (0.2095,4.27) (0.2255,2.70) (0.2415,1.15) (0.2575,0.64) (0.2734,0.82) (0.2894,0.82)};
+\addlegendentry{{Paare mit verschiedenem Stempel}}
+\addplot[ybar interval, fill=klasseDunkel, fill opacity=0.5, draw=klasseDunkel, line width=0.6pt] coordinates {(0.0497,1.92) (0.0657,0.00) (0.0817,0.00) (0.0977,5.77) (0.1136,3.85) (0.1296,3.85) (0.1456,15.38) (0.1616,13.46) (0.1776,15.38) (0.1935,7.69) (0.2095,5.77) (0.2255,5.77) (0.2415,7.69) (0.2575,7.69) (0.2734,5.77) (0.2894,5.77)};
+\addlegendentry{{Paare mit gleichem Stempel}}
+\draw[klasseDunkel, thick, dashed] (axis cs:0.1913,\pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.1913,\pgfkeysvalueof{/pgfplots/ymax});
+\draw[gray!70!black, thick, dotted] (axis cs:0.1583,\pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.1583,\pgfkeysvalueof{/pgfplots/ymax});
+\end{axis}
+\end{tikzpicture}
+\caption[Ähnlichkeit stempelgleicher und stempelverschiedener Paare]{Verteilung der Ähnlichkeit für Paare mit gleichem und mit verschiedenem Stempel (Manhattan-Distanz, ausgewählte Detektion gleicher Klasse). Die gestrichelte Linie markiert den Mittelwert der Paare mit gleichem Stempel, die gepunktete den der Paare mit verschiedenem Stempel. Der Anteil bezieht sich jeweils auf die Zahl der Paare der Gruppe (Vorderseite: 646 gleiche, 12\,838 verschiedene Paare; Rückseite: 104 gleiche, 17\,084 verschiedene Paare).}
+\label{fig:aehnlichkeit-verteilung}
+\end{figure}

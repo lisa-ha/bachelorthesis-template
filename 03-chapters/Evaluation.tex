@@ -10,7 +10,9 @@
 \label{sec:evaluationsaufbau}
 \noindent \textbf{Grundwahrheit/Ground Truth}
 
-\noindent Als Grundwahrheit dienen die Stempelzuordnungen aus CN. Auf der Vorderseite sind das die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Auf der Rückseite werden die Rückseitenstempel-IDs verwendet. Von den 198 Münzen mit Rückseiten-ID teilen nur 119 ihren Stempel mit mindestens einer anderen Münze (125 verschiedene IDs), sodass die Rückseite nur ergänzend ausgewertet wird. Hauptgrundlage ist die Vorderseite.
+\noindent Als Grundwahrheit dienen die Stempelzuordnungen aus CN. Auf der Vorderseite sind das die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Auf der Rückseite werden die Rückseitenstempel-IDs verwendet. Von den 198 Münzen mit Rückseiten-ID teilen nur 119 ihren Stempel mit mindestens einer anderen Münze (125 verschiedene IDs, vlg. \cref{fig:rueckseitenstempel}), sodass die Rückseite nur ergänzend ausgewertet wird. Hauptgrundlage ist die Vorderseite.
+
+\input{07-figures/fig-rueckseitenstempel.tex}
 
 \vspace{\baselineskip}
 
@@ -92,9 +94,9 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 
 \noindent \textbf{Vergleich}
 
-\noindent \cref{tab:distanzen} zeigt die Kennzahlen der drei Maße. Auf der Vorderseite erzielt die Manhattan-Distanz die höchsten Werte: Bei 17,3\,\% der 156 Anfragen hat die ähnlichste Münze denselben Vorderseitenstempel (HitRate@1), bei 46,2\,\% liegt mindestens eine Münze desselben Stempels unter den fünf ähnlichsten (HitRate@5). Kosinus-Ähnlichkeit und euklidische Distanz liefern nahezu dieselben Rangfolgen (HitRate@1 je 16,7\,\%, HitRate@5 43,6\,\% bzw. 42,9\,\%). Die Unterschiede entsprechen einer Anfrage bei HitRate@1 und bis zu fünf Anfragen bei HitRate@5 und sind daher gering. Auf der Rückseite liegen Kosinus und euklidische Distanz bei HitRate@5 vorn (29,0\,\% gegenüber 27,4\,\%), die Manhattan-Distanz bei HitRate@1 (16,1\,\% gegenüber 14,5\,\%). Da die Grundwahrheit über den Vorderseitenstempel gebildet wurde, wird die Manhattan-Distanz für die weiteren Auswertungen verwendet.
+\noindent \cref{fig:distanzvergleich} und \cref{tab:distanzen} zeigt die Kennzahlen der drei Maße. Auf der Vorderseite erzielt die Manhattan-Distanz die höchsten Werte: Bei 17,3\,\% der 156 Anfragen hat die ähnlichste Münze denselben Vorderseitenstempel (HitRate@1), bei 46,2\,\% liegt mindestens eine Münze desselben Stempels unter den fünf ähnlichsten (HitRate@5). Kosinus-Ähnlichkeit und euklidische Distanz liefern nahezu dieselben Rangfolgen (HitRate@1 je 16,7\,\%, HitRate@5 43,6\,\% bzw. 42,9\,\%). Die Unterschiede entsprechen einer Anfrage bei HitRate@1 und bis zu fünf Anfragen bei HitRate@5 und sind daher gering. Auf der Rückseite liegen Kosinus und euklidische Distanz bei HitRate@5 vorn (29,0\,\% gegenüber 27,4\,\%), die Manhattan-Distanz bei HitRate@1 (16,1\,\% gegenüber 14,5\,\%). Da die Grundwahrheit über den Vorderseitenstempel gebildet wurde, wird die Manhattan-Distanz für die weiteren Auswertungen verwendet.
 
-\noindent Die mittlere Ähnlichkeit stempelgleicher Paare liegt bei allen Maßen nur knapp über der stempelverschiedener Paare (Kosinus 0,9962 gegenüber 0,9957). Zudem haben nur 646 der höchstens 1\,800 stempelgleichen Paare auf der Vorderseite (36\,\%) dieselbe Klasse der ausgewählten Detektion. Bei den übrigen wird auf Münzen desselben Stempels eine andere Klasse am sichersten detektiert, sodass sie gar nicht miteinander verglichen werden.
+\input{07-figures/fig-distanzvergleich.tex}
 
 \begin{table}[H]
 \centering
@@ -110,12 +112,23 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 \textbf{Zufall}      & [ ] & [ ] & [ ] & [ ] & [ ] & [ ] \\ \hline
 \end{tabular}
 \end{table}
+\todo{Zufall ausfüllen}
+
+\noindent Die mittlere Ähnlichkeit stempelgleicher Paare liegt bei allen Maßen nur knapp über der stempelverschiedener Paare (Kosinus 0,9962 gegenüber 0,9957). Zudem haben nur 646 der höchstens 1\,800 stempelgleichen Paare auf der Vorderseite (36\,\%) dieselbe Klasse der ausgewählten Detektion. Bei den übrigen wird auf Münzen desselben Stempels eine andere Klasse am sichersten detektiert, sodass sie gar nicht miteinander verglichen werden.
+
+\input{07-figures/fig-aehnlichkeit-verteilung.tex}
+
+\noindent \cref{fig:aehnlichkeit-verteilung} zeigt, wie sich die Ähnlichkeitswerte auf Paare mit gleichem und mit verschiedenem Stempel verteilen. Je weiter die beiden Verteilungen auseinanderliegen, desto besser lassen sich Münzen desselben Stempels allein über die Ähnlichkeit erkennen. Auf der Vorderseite überlagern sich die Verteilungen fast vollständig. Die mittlere Ähnlichkeit stempelgleicher Paare liegt mit 0,175 nur knapp über der stempelverschiedener Paare (0,164). Ein stempelgleiches Paar ist damit nicht systematisch ähnlicher als ein beliebiges anderes Paar derselben Klasse. Auf der Rückseite liegen die stempelgleichen Paare etwas weiter rechts (Mittelwert 0,191 gegenüber 0,158), beruhen aber auf nur 104 Paaren. Die geringe Trennung erklärt, warum die Trefferraten in \cref{fig:distanzvergleich} zwar über dem Zufall, aber deutlich unter 100\,\% liegen: Unter den ähnlichsten Münzen finden sich regelmäßig Münzen anderer Stempel, deren Merkmale ebenso ähnlich bewertet werden.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Modellvergleich}
 
-\noindent \cref{tab:modelle_vorderseite, modelle_rueckseite} vergleicht YOLOv8n (COCO, 80 feste Klassen) mit YOLO-World. YOLOv8n detektiert bei gleichem Schwellenwert mehr als doppelt so viele Boxen (8,2 gegenüber 3,7 je Vorderseitenbild) und findet auf mehr Bildern mindestens ein Objekt (97,9\,\% gegenüber 95,0\,\%). Auch bei der Stempelsuche liegt YOLOv8n auf der Vorderseite leicht vorn (HitRate@5 41,5\,\% gegenüber 38,0\,\%, HitRate@1 15,0\,\% gegenüber 12,5\,\%). Auf der Rückseite ist YOLO-World bei HitRate@1 besser (14,3\,\% gegenüber 11,8\,\%), YOLOv8n bei HitRate@5 (26,9\,\% gegenüber 24,4\,\%). Die Unterschiede betragen auf der Vorderseite fünf bis sieben von 200 Anfragen. Die frei formulierbaren Prompts von YOLO-World führen hier also zu keiner besseren Stempelsuche. Zu beachten ist, dass YOLOv8n die kleinste Modellvariante ist, YOLO-World dagegen die Variante \texttt{s}. Die Werte unterscheiden sich von \cref{tab:distanzen}, da hier ohne Klassenbedingung und über alle Anfragen gerechnet wird (vgl. \cref{sec:evaluationsaufbau}).
+\noindent \cref{fig:modellvergleich} vergleicht YOLOv8n (COCO, 80 feste Klassen) mit YOLO-World. 
+
+\input{07-figures/fig-modellvergleich.tex}
+
+\noindent YOLOv8n detektiert bei gleichem Schwellenwert mehr als doppelt so viele Boxen (8,2 gegenüber 3,7 je Vorderseitenbild) und findet auf mehr Bildern mindestens ein Objekt (97,9\,\% gegenüber 95,0\,\%). Auch bei der Stempelsuche liegt YOLOv8n auf der Vorderseite leicht vorn (HitRate@5 41,5\,\% gegenüber 38,0\,\%, HitRate@1 15,0\,\% gegenüber 12,5\,\%). Auf der Rückseite ist YOLO-World bei HitRate@1 besser (14,3\,\% gegenüber 11,8\,\%), YOLOv8n bei HitRate@5 (26,9\,\% gegenüber 24,4\,\%). Die Unterschiede betragen auf der Vorderseite fünf bis sieben von 200 Anfragen. Die frei formulierbaren Prompts von YOLO-World führen hier also zu keiner besseren Stempelsuche. Zu beachten ist, dass YOLOv8n die kleinste Modellvariante ist, YOLO-World dagegen die Variante \texttt{s}. Die Werte unterscheiden sich von \cref{tab:distanzen}, da hier ohne Klassenbedingung und über alle Anfragen gerechnet wird (vgl. \cref{sec:evaluationsaufbau}). Die Unterschiede sind in \cref{tab:modelle_vorderseite,tab:modelle_rueckseite} ebenso tabellarisch dargestellt.
 
 \begin{table}[H]
 \centering

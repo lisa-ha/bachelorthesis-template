@@ -1,0 +1,48 @@
+% Benötigt die Farben klasseHell, klasseDunkel, klasseHellText aus classicthesis-config.tex
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.62\linewidth, height=7cm,
+    xmin=0, xmax=112, clip=false,
+    xtick={0,20,40,60,80,100},
+    xlabel={in \%},
+    symbolic y coords={{rprecisionat5},{rhitrateat5},{rhitrateat1},{rcoverage},{oprecisionat5},{ohitrateat5},{ohitrateat1},{ocoverage}},
+    ytick=data, enlarge y limits=0.07,
+    yticklabels={{Precision@5},{HitRate@5},{HitRate@1},{Bilder mit Detektion},{Precision@5},{HitRate@5},{HitRate@1},{Bilder mit Detektion}},
+    xmajorgrids=true,
+    yticklabel style={font=\footnotesize},
+    xtick pos=bottom, ytick pos=left,
+    axis line style={gray!60}, tick style={gray!60},
+    grid style={gray!25},
+    ticklabel style={font=\small},
+    label style={font=\small},
+    legend style={at={(0.5,1.02)}, anchor=south, legend columns=2, font=\footnotesize, draw=none, /tikz/every even column/.append style={column sep=10pt}},
+]
+\draw[gray!55, line width=1.2pt] (axis cs:6.2,{rprecisionat5}) -- (axis cs:7.4,{rprecisionat5});
+\draw[gray!55, line width=1.2pt] (axis cs:26.9,{rhitrateat5}) -- (axis cs:24.4,{rhitrateat5});
+\draw[gray!55, line width=1.2pt] (axis cs:11.8,{rhitrateat1}) -- (axis cs:14.3,{rhitrateat1});
+\draw[gray!55, line width=1.2pt] (axis cs:98.0,{rcoverage}) -- (axis cs:94.0,{rcoverage});
+\draw[gray!55, line width=1.2pt] (axis cs:10.6,{oprecisionat5}) -- (axis cs:9.8,{oprecisionat5});
+\draw[gray!55, line width=1.2pt] (axis cs:41.5,{ohitrateat5}) -- (axis cs:38.0,{ohitrateat5});
+\draw[gray!55, line width=1.2pt] (axis cs:15.0,{ohitrateat1}) -- (axis cs:12.5,{ohitrateat1});
+\draw[gray!55, line width=1.2pt] (axis cs:97.9,{ocoverage}) -- (axis cs:95.0,{ocoverage});
+\addplot[only marks, mark=*, mark size=3pt, color=klasseHell, mark options={draw=klasseHellText}] coordinates {(6.2,{rprecisionat5}) (26.9,{rhitrateat5}) (11.8,{rhitrateat1}) (98.0,{rcoverage}) (10.6,{oprecisionat5}) (41.5,{ohitrateat5}) (15.0,{ohitrateat1}) (97.9,{ocoverage})};
+\addplot[only marks, mark=*, mark size=3pt, color=klasseDunkel] coordinates {(7.4,{rprecisionat5}) (24.4,{rhitrateat5}) (14.3,{rhitrateat1}) (94.0,{rcoverage}) (9.8,{oprecisionat5}) (38.0,{ohitrateat5}) (12.5,{ohitrateat1}) (95.0,{ocoverage})};
+\legend{YOLOv8n, YOLO-World}
+\draw[gray!40] (rel axis cs:0,0.5) -- ([xshift=1.7cm]rel axis cs:1,0.5);
+\node[rotate=90, font=\small] at ([xshift=1.5cm]rel axis cs:1,0.75) {Vorderseite};
+\node[rotate=90, font=\small] at ([xshift=1.5cm]rel axis cs:1,0.25) {Rückseite};
+\node[font=\scriptsize, anchor=west] at (axis cs:8.9,{rprecisionat5}) {\textcolor{klasseHellText}{6{,}2} \,|\, \textcolor{klasseDunkel}{7{,}4}};
+\node[font=\scriptsize, anchor=west] at (axis cs:28.4,{rhitrateat5}) {\textcolor{klasseHellText}{26{,}9} \,|\, \textcolor{klasseDunkel}{24{,}4}};
+\node[font=\scriptsize, anchor=west] at (axis cs:15.8,{rhitrateat1}) {\textcolor{klasseHellText}{11{,}8} \,|\, \textcolor{klasseDunkel}{14{,}3}};
+\node[font=\scriptsize, anchor=west] at (axis cs:99.5,{rcoverage}) {\textcolor{klasseHellText}{98{,}0} \,|\, \textcolor{klasseDunkel}{94{,}0}};
+\node[font=\scriptsize, anchor=west] at (axis cs:12.1,{oprecisionat5}) {\textcolor{klasseHellText}{10{,}6} \,|\, \textcolor{klasseDunkel}{9{,}8}};
+\node[font=\scriptsize, anchor=west] at (axis cs:43.0,{ohitrateat5}) {\textcolor{klasseHellText}{41{,}5} \,|\, \textcolor{klasseDunkel}{38{,}0}};
+\node[font=\scriptsize, anchor=west] at (axis cs:16.5,{ohitrateat1}) {\textcolor{klasseHellText}{15{,}0} \,|\, \textcolor{klasseDunkel}{12{,}5}};
+\node[font=\scriptsize, anchor=west] at (axis cs:99.4,{ocoverage}) {\textcolor{klasseHellText}{97{,}9} \,|\, \textcolor{klasseDunkel}{95{,}0}};
+\end{axis}
+\end{tikzpicture}
+\caption[Vergleich von YOLOv8n und YOLO-World]{Vergleich von YOLOv8n und YOLO-World (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit, ohne Klassenbedingung). Die Linie zeigt den Abstand beider Modelle, rechts die Werte (YOLOv8n | YOLO-World). Detektionen je Bild: YOLOv8n 8{,}2 bzw.\ 8{,}0, YOLO-World 3{,}7 bzw.\ 3{,}9 (Vorder- bzw.\ Rückseite).}
+\label{fig:modellvergleich}
+\end{figure}

@@ -1,0 +1,25 @@
+% Benötigt die Farben klasseHell, klasseDunkel, klasseHellText aus classicthesis-config.tex
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.85\linewidth, height=5cm,
+    ybar, bar width=16pt,
+    xtick={1,2,3,4,5,6},
+    xlabel={Münzen je Rückseitenstempel},
+    ylabel={Anzahl Rückseitenstempel},
+    ymin=0, ymax=92, ymajorgrids=true,
+    enlarge x limits=0.12,
+    nodes near coords, nodes near coords style={font=\scriptsize},
+    xtick pos=bottom, ytick pos=left,
+    axis line style={gray!60}, tick style={gray!60},
+    grid style={gray!25},
+    ticklabel style={font=\small},
+    label style={font=\small},
+]
+\addplot[fill=klasseDunkel, draw=none] coordinates {(1,79) (2,31) (3,8) (4,4) (5,1) (6,2)};
+\end{axis}
+\end{tikzpicture}
+\caption[Verteilung der Rückseitenstempel]{Verteilung der 125 Rückseitenstempel auf die 198 Münzen mit Rückseiten-ID. 79 Stempel kommen nur auf einer Münze vor; für diese Münzen gibt es keinen stempelgleichen Treffer.}
+\label{fig:rueckseitenstempel}
+\end{figure}

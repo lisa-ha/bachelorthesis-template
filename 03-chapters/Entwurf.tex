@@ -84,7 +84,9 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 
 \noindent \textbf{Merkmalsdetektion}
 
-\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
+\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in der \cref{fig:schwellenwerte}, sowie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
+
+\input{07-figures/fig-schwellenwerte.tex}
 
 \begin{table}[H]
 \centering
