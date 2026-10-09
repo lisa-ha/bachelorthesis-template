@@ -6,6 +6,8 @@
   \node[figbox, right=of s4, text width=1.8cm] (res) {Ergebnis};
   \node[cylinder, shape border rotate=90, draw=black!70, fill=black!5, aspect=0.25, minimum height=1.2cm, minimum width=1.4cm, font=\footnotesize, align=center, below=7mm of s4] (db) {Datenbank};
   \node[figlabel, below=1mm of db] {bereits verarbeitete Münzen};
+  \node[cylinder, shape border rotate=90, draw=black!70, fill=black!5, aspect=0.25, minimum height=1.2cm, minimum width=1.4cm, font=\footnotesize, align=center, below=7mm of s2] (yolo) {YOLO-World-Modell};
   \foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/res} \draw[figarrow] (\a) -- (\b);
+  \draw[figarrow] (yolo) -- (s2);
   \draw[figarrow] (db) -- (s4);
 \end{tikzpicture}

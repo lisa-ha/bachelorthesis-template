@@ -55,13 +55,52 @@ Der \lstinline|Request_handler| bezieht Daten und Bilder aus der CN-Schnittstell
 
 \noindent \textbf{Detektion und Vektorextraktion}
 
-\noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Zuvor werden Detektionen verworfen, deren Box mindestens 85\,\% der Bildfläche einnimmt (\texttt{max\_area\_ratio}, Anhang B). Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 21, der letzte Block des Necks (C2fAttn, P5/32), dessen Ausgabe an den Detektionskopf weitergegeben wird \todo{QUELLE: yolov8-worldv2.yaml}. Die Ausgabe wird räumlich gemittelt \todo{QUELLE: Ultralytics, tasks.py} und ergibt einen Vektor der Dimension 512 \todo{Wert prüfen}. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 16 Bildern verarbeitet, die Größe ist konfigurierbar.
+\noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Zuvor werden Detektionen verworfen, deren Box mindestens 85\,\% der Bildfläche einnimmt (\texttt{max\_area\_ratio}, Anhang B). Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 18, einer der drei Blöcke des Necks (C2fAttn, P4/16), deren Ausgaben an den Detektionskopf weitergegeben werden \todo{QUELLE: yolov8-worldv2.yaml}. Die Ausgabe wird räumlich gemittelt \todo{QUELLE: Ultralytics, tasks.py} und ergibt einen Vektor der Dimension 256. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 16 Bildern verarbeitet, die Größe ist konfigurierbar.
+
+Die Schicht wurde anhand eines Vergleichs der drei Neck-Blöcke (Schichten 15, 18 und 21) gewählt. Verglichen wurde jeweils der Gesamtbild-Vektor des ersten Bildes jeder Münzseite: Jede Münze wurde mit jeder anderen verglichen und geprüft, ob die ähnlichste Münze denselben Stempel hat (Top-1). \cref{tab:schichten-obverse} zeigt das Ergebnis für die Vorderseiten, \cref{tab:schichten-reverse} für die Rückseiten. Auf den Vorderseiten, auf die sich die Grundwahrheit bezieht (vgl. \cref{sec:evaluationsaufbau}), erreicht Schicht 18 mit 39 von 200 Münzen (19,5\,\%) den höchsten Wert, vor Schicht 21 (17,5\,\%) und Schicht 15 (17,0\,\%). Zudem hat sie mit 256 nur halb so viele Dimensionen wie Schicht 21 (512). Die Unterschiede zwischen den Schichten sind klein und die Auswahl erfolgte auf denselben Münzen wie die spätere Evaluation. Die Wahl ist daher eine pragmatische Entscheidung und kein Nachweis einer besten Schicht. Die gewählte Schicht liefert für ein Bild mehrere Merkmalskarten (Kanäle), die angeben, wo im Bild bestimmte gelernte Muster auftreten. Um daraus einen Vektor zu erhalten, der sich vergleichen lässt, wird jede Merkmalskarte durch ihren Durchschnittswert ersetzt (Average Pooling, vgl. \cref{sec:glmaschinelleslernen}). Der Vektor enthält somit nur noch einen Wert pro Kanal. Bei Schicht 18 sind das 256 Werte \todo{Quelle: Code object\_detection\_handler bzw Ultralytics embed (adaptive\_avg\_pool2d)}.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Vergleich der Schichten 15, 18 und 21 auf den Vorderseiten (200 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
+\label{tab:schichten-obverse}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
+\hline
+\textbf{Vektordimension}                          & 128         & 256         & 512         \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel} \\ \textbf{(900 Paare)}}  & 0{,}9976    & 0{,}9911    & 0{,}9865    \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel} \\ \textbf{(19\,000 Paare)}} & 0{,}9974 & 0{,}9902 & 0{,}9853   \\ \hline
+\textbf{Differenz der Mittelwerte}                & 0{,}0002    & 0{,}0009    & 0{,}0012    \\ \hline
+\textbf{Top-1 richtig (von 200)}                  & 34          & 39          & 35          \\ \hline
+\textbf{Top-1-Genauigkeit}                        & 17{,}0\,\%  & 19{,}5\,\%  & 17{,}5\,\%  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Vergleich der Schichten 15, 18 und 21 auf den Rückseiten (198 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
+\label{tab:schichten-reverse}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
+\hline
+\textbf{Vektordimension}                         & 128         & 256         & 512         \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel}\\\textbf{(119 Paare)}}  & 0{,}9980    & 0{,}9928    & 0{,}9894    \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel}\\\textbf{(19\,384 Paare)}} & 0{,}9973 & 0{,}9900 & 0{,}9858   \\ \hline
+\textbf{Differenz der Mittelwerte}               & 0{,}0007    & 0{,}0028    & 0{,}0036    \\ \hline
+\textbf{Top-1 richtig (von 198)}                & 10          & 7           & 8           \\ \hline
+\textbf{Top-1-Genauigkeit}                       & 5{,}1\,\%   & 3{,}5\,\%   & 4{,}0\,\%   \\ \hline
+\end{tabular}
+\end{table}
+\todo{Rückfrage 1: Welcher Vektor wird verglichen? Weil hier gesamtbildvektor satt merkmalsvektor..}
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Vergleich}
 
-\noindent Der \lstinline|CoinMatcher| lädt beim Start alle Münzen mit ihren Vektoren in den Arbeitsspeicher und vergleicht eine Anfrage sequenziell mit allen. Der \lstinline|VectorComparator| setzt die Maße aus \cref{sec:merkmale} um und rechnet sie in eine Ähnlichkeit zwischen 0 und 1 um. Die Kosinus-Ähnlichkeit wird dazu linear von $ [-1, 1] $ auf $ [0, 1] $ abgebildet, die beiden Distanzen $ d $ als $ \frac{1}{1+d} $. Beim objektbasierten Vergleich wählt die nutzende Person ein detektiertes Merkmal aus. Dessen Ausschnitt wird durch das Modell geführt, der Vektor wird  mit den Vektoren gleicher Klasse auf der gewählten Münzseite verglichen. Treffer müssen den Positions- und Größenfilter erfüllen (Werte in \cref{app:example}); beide Werte sind konfigurierbar. Pro Münze zählt de rhöchste Wert, danach werden die münzen absteigend sortiert und die ersten \lstinline|top_k| zurückgegeben. Ähnliche Klassen werden nicht zusammengefasst.
+\noindent Der \lstinline|CoinMatcher| lädt beim Start alle Münzen mit ihren Vektoren in den Arbeitsspeicher und vergleicht eine Anfrage sequenziell mit allen. Der \lstinline|VectorComparator| setzt die Maße aus \cref{sec:merkmale} um und rechnet sie in eine Ähnlichkeit zwischen 0 und 1 um. Die Kosinus-Ähnlichkeit wird dazu linear von $ [-1, 1] $ auf $ [0, 1] $ abgebildet, die beiden Distanzen $ d $ als $ \frac{1}{1+d} $. Beim objektbasierten Vergleich wählt die nutzende Person ein detektiertes Merkmal aus. Dessen Ausschnitt wird durch das Modell geführt, der Vektor wird  mit den Vektoren gleicher Klasse auf der gewählten Münzseite verglichen. Treffer müssen den Positions- und Größenfilter erfüllen (Werte in \cref{app:example}); beide Werte sind konfigurierbar. Pro Münze zählt der höchste Wert, danach werden die Münzen absteigend sortiert und die ersten \lstinline|top_k| zurückgegeben. Ähnliche Klassen werden nicht zusammengefasst.
 
 Zusätzlich ist ein Gesamtbildvergleich umgesetzt, bei dem der Vektor des Gesamtbildes mit denen in der Datenbank verglichen wird. Hat eine Münze mehrere Bilder einer Seite, zählt das ähnlichste. Er ergänzt die Anwendung und ist nicht Gegenstand der Untersuchung (vgl. \cref{sec:gesamtansatzdatengrundlage}).
 
@@ -83,7 +122,8 @@ Die Oberfläche läuft in zwei Schritten. Der Nutzer lädt ein Münzbild hoch, b
 \vspace{\baselineskip}
 
 \noindent \textbf{Evaluation}
-\todo{evaluationsklassen aufnehmen}
+
+\noindent Die Statistiken für \cref{ch:evaluation} erzeugt die Klasse \lstinline|EvaluationHandler| aus den gespeicherten Daten. Sie schreibt die Ergebnisse als JSON-Dateien in den Ordner \texttt{evaluation}, jeweils für Vorder- und Rückseite. \lstinline|dataset_overview| fasst die Vollständigkeit des Datensatzes zusammen (Bilder, Stempel-IDs, Legenden und Beschreibungen). \lstinline|table_5_1| bestimmt die häufigsten Klassen mit der Zahl der Münzen und der mittleren höchsten Confidence je Münze. \lstinline|table_5_2| führt die Detektion mit verschiedenen Schwellenwerten erneut aus. \lstinline|table_5_3| vergleicht die drei Ähnlichkeitsmaße anhand bekannter Stempel, und \lstinline|evaluate_feature_layers| vergleicht verschiedene Schichten für die Feature-Vektoren. \todo{HitRate@k, Precision@k und Zufallsuntergrenze: im Code nicht gefunden, ergänzen, sobald umgesetzt}
 
 %**********Herausforderungen*************
 \section{Herausforderungen}
