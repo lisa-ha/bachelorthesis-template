@@ -10,25 +10,25 @@
 \label{sec:evaluationsaufbau}
 \noindent \textbf{Grundwahrheit/Ground Truth}
 
-\noindent Als Grundwahrheit dienen die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Da die Gruppen anhand der Vorderseiten-ID gebildet wurden, wird die Auswertung auf den Vorderseiten durchgeführt. Für die Rückseiten gilt die Grundwahrheit nur eingeschränkt, da Münzen mit gleichen Vorderseitenstempel unterschiedliche Rückseitenstempel haben können.
+\noindent Als Grundwahrheit dienen die Stempelzuordnungen aus CN. Auf der Vorderseite sind das die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Auf der Rückseite werden die Rückseitenstempel-IDs verwendet. Von den 198 Münzen mit Rückseiten-ID teilen nur 119 ihren Stempel mit mindestens einer anderen Münze (125 verschiedene IDs), sodass die Rückseite nur ergänzend ausgewertet wird. Hauptgrundlage ist die Vorderseite.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Protokoll}
 
-\noindent Jede der 200 Münzen dient als Anfrage und wird mit den übrigen 199 verglichen. Als Treffer gelten die 9 anderen Münzen derselben Gruppe (alle Münzen besitzen ein Vorderseitenbild).Für jede Klasse wird das Merkmal mit der höchsten Confidence der Anfrage-Münze verwendet \todo{Entscheidung bestätigen}. Es wird mit den Merkmalen derselben Klasse auf der Vorderseite der übrigen Münzen verglichen (vgl. \cref{sec:vorgehen}). Der Wert einer Münze ist die höchste Ähnlichkeit über alle ihre passenden Merkmale. Anfragen, auf denen die Klasse nicht detektiert wurde, gehen nicht in die Wertung dieser Klasse ein. Für jede Klasse wird daher angegeben, auf wie vielen Münzen sie vorkommt (n). Zusätzlich wird ein Gesamtwert gebildet, indem die Ähnlichkeiten über alle Klassen gemittelt werden, die bei Anfrage und Kandidat vorliegen \todo{Entscheidung bestätigen}.
+\noindent Für jede Münze wird auf dem ersten Bild der jeweiligen Seite die Detektion mit der höchsten Confidence ausgewählt, unabhängig von ihrer Klasse. Ihr Feature-Vektor vertritt die Münze. Jede Münze dient als Anfrage und wird mit allen Münzen verglichen, deren ausgewählte Detektion dieselbe Klasse hat (vgl. \cref{sec:vorgehen}). Als Treffer gelten Münzen mit demselben Stempel. Eine Anfrage geht nur in die Wertung ein, wenn mindestens fünf Kandidaten und darunter mindestens ein Treffer vorliegen. Dadurch werden auf der Vorderseite 156 der 200 Münzen gewertet, auf der Rückseite 62. Anders als in der Anwendung wird kein Merkmal manuell gewählt, und der Positions- und Größenfilter wird nicht angewendet, damit das Ergebnis nicht von einer Auswahl abhängt. \todo{macht das sinn? würde sagen muss ergänzt werden}
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Kennzahlen}
 
-\noindent Bewertet wird die Reihenfolge der Suchergebnisse. Die Kennzahlen beziehen sich auf die ersten $k$ Münzen dieser Reihenfolge, also auf die Ergebnisse, die die Anwendung anzeigt. Da die Anwendung bis zu fünf Ergebnisse ausgibt, werden $k = 1$ und $k = 5$ betrachtet. HitRate@1 gibt den Anteil der Anfragen an, bei denen die ähnlichste Münze denselben Vorderseitenstempel hat. HitRate@5 gibt den Anteil der Anfragen an, bei denen mindestens eine der ersten fünf Münzen denselben Stempel hat. Beide Werte zeigen, wie oft eine Suche überhaupt zu einem Treffer führt. Precision@5 ist der Anteil der Treffer unter den ersten fünf Münzen, gemittelt über alle Anfragen. Sie zeigt, wie viele der angezeigten Ergebnisse im Durchschnitt passen. \todo{Quelle} Alle Werte werden pro Klasse und als Gesamtwert für jedes der drei Ähnlichkeitsmaße angegeben. Als Untergrenze dient der Wert, der sich bei einer zufälligen Reihenfolge ergibt. Er liegt für HitRate@1 und Precision@5 bei etwa $ \frac{9}{199} = 4,5\,\% $ und für HitRate@5 bei etwa $ 20,8\,\% $.
+\noindent Bewertet wird die Reihenfolge der Suchergebnisse. Die Kennzahlen beziehen sich auf die ersten $k$ Münzen dieser Reihenfolge, also auf die Ergebnisse, die die Anwendung anzeigt. Da die Anwendung bis zu fünf Ergebnisse ausgibt, werden $k = 1$ und $k = 5$ betrachtet. HitRate@1 gibt den Anteil der Anfragen an, bei denen die ähnlichste Münze denselben Vorderseitenstempel hat. HitRate@5 gibt den Anteil der Anfragen an, bei denen mindestens eine der ersten fünf Münzen denselben Stempel hat. Beide Werte zeigen, wie oft eine Suche überhaupt zu einem Treffer führt. Precision@5 ist der Anteil der Treffer unter den ersten fünf Münzen, gemittelt über alle Anfragen. Sie zeigt, wie viele der angezeigten Ergebnisse im Durchschnitt passen. \todo{Quelle} Alle Werte werden pro Klasse und als Gesamtwert für jedes der drei Ähnlichkeitsmaße angegeben. Alle Werte werden für jedes der drei Ähnlichkeitsmaße angegeben. Als Untergrenze dient der Erwartungswert bei zufälliger Reihenfolge der Kandidaten. Da Anzahl der Kandidaten und Treffer je Anfrage durch die Klassenbedingung verschieden sind, wird er je Anfrage berechnet und gemittelt. Er liegt auf der Vorderseite bei [x]\,\% (HitRate@1, Precision@5) und [y]\,\% (HitRate@5).\todo{Werte aus Code}
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Einflussfaktoren}
 
-\noindent Zusätzlich werden die Ergebnisse nach Bildtyp (Fotos, Plaster Casts) getrennt ausgewertet, da diese sich in Darstellung und Kontrast unterscheiden. \todo{Optional: Ergebnisse mit und ohne Positions- und Größenfilter}
+\noindent Zusätzlich werden die Ergebnisse nach Bildtyp (Fotos, Plaster Casts) getrennt ausgewertet, da diese sich in Darstellung und Kontrast unterscheiden. \todo{Optional: Ergebnisse mit und ohne Positions- und Größenfilter} Außerdem werden die Modelle YOLOv8 und YOLO-World verglichen (vgl. \cref{sec:modelle}). Dafür wird je Münze die Detektion mit der höchsten Confidence auf dem ersten Bild mit dem jeweiligen Modell neu bestimmt und ohne Klassenbedingung mit allen anderen Münzen verglichen (Kosinus-Ähnlichkeit). Anfragen sind alle Münzen, deren Stempel mindestens zweimal vorkommt (Vorderseite 200, Rückseite 119); Münzen ohne Detektion zählen als Fehlschlag.
 
 \vspace{\baselineskip}
 
@@ -54,9 +54,9 @@ Bei Fehlschlägen, also wenn unter den ähnlichsten Treffern keine Münze dessel
 \label{sec:ergebnisse}
 \textbf{Merkmalsdetektion}
 
-\noindent Die Auswertung der Detektion beschränkt sich auf die Vorderseiten (242 Bilder von 200 Münzen). Bei einem Schwellenwert von 0,005 liefert YOLO-World 905 Detektionen, im Mittel 3,74 je Bild. Auf 12 Bildern (5,0\,\%) wird nichts detektiert, und 23 der 57 Prompts treten als Klasse auf (\cref{tab:schwellenwerte}). Mit steigendem Schwellenwert nimmt die Zahl der Detektionen stark ab: Bei 0,01 sind es 543, bei 0,05 noch 312 und bei 0,5 nur 7. Entsprechend steigt der Anteil der Bilder ohne Detektion von 5,0\,\% über 6,6\,\% und 16,9\,\% auf 97,1\,\% (235 Bilder). Diese Zahlen begründen die Wahl des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}).
+\noindent Die Auswertung der Detektion beschränkt sich auf die Vorderseiten (242 Bilder von 200 Münzen). Bei einem Schwellenwert von 0,005 liefert YOLO-World 905 Detektionen, im Mittel 3,74 je Bild. Auf 12 Bildern (5,0\,\%) wird nichts detektiert, und 23 der 57 Prompts treten als Klasse auf (\cref{tab:schwellenwerte_vorderseite}). Mit steigendem Schwellenwert nimmt die Zahl der Detektionen stark ab: Bei 0,01 sind es 543, bei 0,05 noch 312 und bei 0,5 nur 7. Entsprechend steigt der Anteil der Bilder ohne Detektion von 5,0\,\% über 6,6\,\% und 16,9\,\% auf 97,1\,\% (235 Bilder). Diese Zahlen begründen die Wahl des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}).
 
-Am häufigsten wird auf den Vorderseiten die Klasse \textit{human face} detektiert (176 Münzen, 88\,\%), gefolgt von \textit{person} (159, 79,5\,\%), \textit{face} (80, 40\,\%) und \textit{dog} (70, 35\,\%). Alle weiteren Klassen kommen auf höchstens 20 Münzen (10\,\%) vor (\cref{tab:klassenhaeufigkeit}). Die Confidence ist insgesamt niedrig: Die durchschnittliche höchste Confidence je Münze liegt zwischen 0,53\,\% (\textit{tree}) und 22,02\,\% (\textit{dog}), bei \textit{human face} sind es 16,72\,\%. \todo{Optional: Einordnung, ob die Klassen, z.\,B. dog, inhaltlich zutreffen, nur wenn geprüft (siehe Qualitative Analyse). Erst nach Ergebnissen der Stempelsuche formulieren.}
+Am häufigsten wird auf den Vorderseiten die Klasse \textit{human face} detektiert (176 Münzen, 88\,\%), gefolgt von \textit{person} (159, 79,5\,\%), \textit{face} (80, 40\,\%) und \textit{dog} (70, 35\,\%). Alle weiteren Klassen kommen auf höchstens 20 Münzen (10\,\%) vor (\cref{tab:klassenhaeufigkeit}). Die Confidence ist insgesamt niedrig: Die durchschnittliche höchste Confidence je Münze liegt zwischen 0,53\,\% (\textit{tree}) und 22,02\,\% (\textit{dog}), bei \textit{human face} sind es 16,72\,\%. \todo{Optional: Einordnung, ob die Klassen, z.\,B. dog, inhaltlich zutreffen, nur wenn geprüft (siehe Qualitative Analyse). Erst nach Ergebnissen der Stempelsuche formulieren.} Auf den Rückseiten ergibt sich ein ähnliches Bild: Am häufigsten sind \textit{human face} (192 Münzen, 96\,\%), \textit{person} (168, 84\,\%), \textit{face} (67, 33,5\,\%) und \textit{dog} (44, 22\,\%), alle weiteren Klassen kommen auf höchstens 24 Münzen (12\,\%) vor.
 
 \input{07-figures/fig-diagramm-most-classes.tex}
 
@@ -92,13 +92,66 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 
 \noindent \textbf{Vergleich}
 
-\noindent \textit{Welches Ähnlichkeitsmaß trennt Münzen desselben Stempels am besten von Münzen anderer Stempel?} 
+\noindent \cref{tab:distanzen} zeigt die Kennzahlen der drei Maße. Auf der Vorderseite erzielt die Manhattan-Distanz die höchsten Werte: Bei 17,3\,\% der 156 Anfragen hat die ähnlichste Münze denselben Vorderseitenstempel (HitRate@1), bei 46,2\,\% liegt mindestens eine Münze desselben Stempels unter den fünf ähnlichsten (HitRate@5). Kosinus-Ähnlichkeit und euklidische Distanz liefern nahezu dieselben Rangfolgen (HitRate@1 je 16,7\,\%, HitRate@5 43,6\,\% bzw. 42,9\,\%). Die Unterschiede entsprechen einer Anfrage bei HitRate@1 und bis zu fünf Anfragen bei HitRate@5 und sind daher gering. Auf der Rückseite liegen Kosinus und euklidische Distanz bei HitRate@5 vorn (29,0\,\% gegenüber 27,4\,\%), die Manhattan-Distanz bei HitRate@1 (16,1\,\% gegenüber 14,5\,\%). Da die Grundwahrheit über den Vorderseitenstempel gebildet wurde, wird die Manhattan-Distanz für die weiteren Auswertungen verwendet.
 
-\noindent Bei [x]\,\% der Anfragen hat die ähnlichste gefundene Münze denselben Vorderseitenstempel (HitRate@1). Unter den fünf ähnlichsten Münzen befindet sich bei [y]\,\% der Anfragen mindestens eine Münze desselben Stempels (HitRate@5). \todo{Zahlen aus Tabelle 5.x} Unter den untersuchten Maßen erzielte [Maß] auf dem verwendeten Datensatz die höchste HitRate@1 und die deutlichste Trennung zwischen stempelgleichen und stempelverschiedenen Paaren. Daher wird es für den nachfolgenden Vergleich verwendet. \todo{Nur stehen lassen, wenn es zu den Tabellenwerten passt}
+\noindent Die mittlere Ähnlichkeit stempelgleicher Paare liegt bei allen Maßen nur knapp über der stempelverschiedener Paare (Kosinus 0,9962 gegenüber 0,9957). Zudem haben nur 646 der höchstens 1\,800 stempelgleichen Paare auf der Vorderseite (36\,\%) dieselbe Klasse der ausgewählten Detektion. Bei den übrigen wird auf Münzen desselben Stempels eine andere Klasse am sichersten detektiert, sodass sie gar nicht miteinander verglichen werden.
+
+\begin{table}[H]
+\centering
+\caption{Kennzahlen der drei Ähnlichkeitsmaße (Vorderseite: 156 Anfragen, Rückseite: 62 Anfragen)}
+\label{tab:distanzen}
+\begin{tabular}{|l|r|r|r|r|r|r|}
+\hline
+ & \multicolumn{3}{c|}{\textbf{Vorderseite}} & \multicolumn{3}{c|}{\textbf{Rückseite}} \\ \hline
+\textbf{Maß} & \textbf{HR@1} & \textbf{HR@5} & \textbf{P@5} & \textbf{HR@1} & \textbf{HR@5} & \textbf{P@5} \\ \hline
+\textbf{Kosinus}     & 16{,}7\,\% & 43{,}6\,\% & 11{,}0\,\% & 14{,}5\,\% & 29{,}0\,\% & 9{,}4\,\% \\ \hline
+\textbf{Euklidisch}  & 16{,}7\,\% & 42{,}9\,\% & 10{,}9\,\% & 14{,}5\,\% & 29{,}0\,\% & 9{,}4\,\% \\ \hline
+\textbf{Manhattan}   & 17{,}3\,\% & 46{,}2\,\% & 12{,}4\,\% & 16{,}1\,\% & 27{,}4\,\% & 8{,}7\,\% \\ \hline
+\textbf{Zufall}      & [ ] & [ ] & [ ] & [ ] & [ ] & [ ] \\ \hline
+\end{tabular}
+\end{table}
 
 \vspace{\baselineskip}
 
-\noindent \textit{Bringt der Ansatz mit lokalisierten Merkmalen gegenüber dem Gesamtbild einen Vorteil?}Eig kein teil der forschungsfrage... \todo{Nur wenn der Gesamtbildvergleich ausgewertet wird}
+\noindent \textbf{Modellvergleich}
+
+\noindent \cref{tab:modelle_vorderseite, modelle_rueckseite} vergleicht YOLOv8n (COCO, 80 feste Klassen) mit YOLO-World. YOLOv8n detektiert bei gleichem Schwellenwert mehr als doppelt so viele Boxen (8,2 gegenüber 3,7 je Vorderseitenbild) und findet auf mehr Bildern mindestens ein Objekt (97,9\,\% gegenüber 95,0\,\%). Auch bei der Stempelsuche liegt YOLOv8n auf der Vorderseite leicht vorn (HitRate@5 41,5\,\% gegenüber 38,0\,\%, HitRate@1 15,0\,\% gegenüber 12,5\,\%). Auf der Rückseite ist YOLO-World bei HitRate@1 besser (14,3\,\% gegenüber 11,8\,\%), YOLOv8n bei HitRate@5 (26,9\,\% gegenüber 24,4\,\%). Die Unterschiede betragen auf der Vorderseite fünf bis sieben von 200 Anfragen. Die frei formulierbaren Prompts von YOLO-World führen hier also zu keiner besseren Stempelsuche. Zu beachten ist, dass YOLOv8n die kleinste Modellvariante ist, YOLO-World dagegen die Variante \texttt{s}. Die Werte unterscheiden sich von \cref{tab:distanzen}, da hier ohne Klassenbedingung und über alle Anfragen gerechnet wird (vgl. \cref{sec:evaluationsaufbau}).
+
+\begin{table}[H]
+\centering
+\caption{Vergleich von YOLOv8n und YOLO-World auf der Vorderseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
+\label{tab:modelle_vorderseite}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
+\textbf{Bilder}                     & 242 & 242 \\ \hline
+\textbf{Bilder mit Detektion}       & 97{,}9\,\% & 95{,}0\,\% \\ \hline
+\textbf{Ø Detektionen je Bild}      & 8{,}18 & 3{,}74 \\ \hline
+\textbf{Anfragen}                   & 200 & 200 \\ \hline
+\textbf{Münzen mit Vektor}          & 195 & 188 \\ \hline
+\textbf{HitRate@1}                  & 15{,}0\,\% & 12{,}5\,\% \\ \hline
+\textbf{HitRate@5}                  & 41{,}5\,\% & 38{,}0\,\% \\ \hline
+\textbf{Precision@5}                & 10{,}6\,\% & 9{,}8\,\% \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Vergleich von YOLOv8n und YOLO-World auf der Rückseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
+\label{tab:modelle_rueckseite}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
+\textbf{Bilder}                     & 250 & 250 \\ \hline
+\textbf{Bilder mit Detektion}       & 98{,}0\,\% & 94{,}0\,\% \\ \hline
+\textbf{Ø Detektionen je Bild}      & 8{,}00 & 3{,}90 \\ \hline
+\textbf{Anfragen}                   & 119 & 119 \\ \hline
+\textbf{Münzen mit Vektor}          & 115 & 110 \\ \hline
+\textbf{HitRate@1}                  & 11{,}8\,\% & 14{,}3\,\% \\ \hline
+\textbf{HitRate@5}                  & 26{,}9\,\% & 24{,}4\,\% \\ \hline
+\textbf{Precision@5}                & 6{,}2\,\% & 7{,}4\,\% \\ \hline
+\end{tabular}
+\end{table}
 
 \section{Qualitative Analyse}
 \label{sec:qualitativeanalyse}

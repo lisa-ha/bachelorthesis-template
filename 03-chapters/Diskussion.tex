@@ -7,9 +7,12 @@
 
 \section{Beantwortung der Forschungsfragen}
 \label{sec:beantwortungfragen}
-\noindent \textit{Welche Grenzen zeigt ein Ansatz ohne münzspezifisches Training bei der Anwendung auf antike Münzbilder?}
+\begin{enumerate}
+    \item \noindent Welche Grenzen zeigt ein Ansatz ohne münzspezifisches Training bei der Anwendung auf antike Münzbilder?
 
-\noindent Der Ansatz stößt an mehreren Stellen an Grenzen. Erstens liefert YOLO-World nur [Anzahl] der 57 Prompts als Klasse mit meist niedriger Confidence (vgl. \cref{sec:ergebnisse}), und ob eine Klasse inhaltlich zutrifft, lässt sich ohne eigene Prüfung nicht sagen \todo{an qualitative Analyse anpassen}. Zweitens hängen Detektion und Vektoren von der festgelegten Prompt-Liste ab. Drittens [Einfluss von Erhaltungszustand und Bildtyp, aus Ergebnissen]. Viertens beschreibt ein Vektor das Merkmal ohne Kontext des Gesamtbildes. Die Einzelheiten und die Grenzen der Untersuchung selbst behandelt \cref{sec:grenzen-untersuchung}.
+    \noindent Der Ansatz stößt an mehreren Stellen an Grenzen. Erstens liefert YOLO-World nur 23 (vorderseite) bzw. 22 (Rückseite) der 57 Prompts als Klasse mit meist niedriger Confidence (vgl. \cref{sec:ergebnisse}), und ob eine Klasse inhaltlich zutrifft, lässt sich ohne eigene Prüfung nicht sagen \todo{an qualitative Analyse anpassen}. Zweitens hängen Detektion und Vektoren von der festgelegten Prompt-Liste ab. Drittens [Einfluss von Erhaltungszustand und Bildtyp, aus Ergebnissen]. Viertens beschreibt ein Vektor das Merkmal ohne Kontext des Gesamtbildes. Zudem wird auf Münzen desselben Stempels häufig eine andere Klasse am sichersten detektiert, sodass nur 36\,\% der stempelgleichen Paare überhaupt verglichen werden (vgl. \cref{sec:ergebnisse}) Die Einzelheiten und die Grenzen der Untersuchung selbst behandelt \cref{sec:grenzen-untersuchung}.
+
+\end{enumerate}
 
 \section{Einordnung in bestehende Arbeiten}
 \label{sec:bestehendearbeiten}
@@ -36,12 +39,12 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 \vspace{\baselineskip}
 
 \noindent \textbf{Abgrenzung} 
-\noindent Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur [Zahl] Klassen detektiert, die Stempelsuche wird auf 200 Münzen gezeigt, und eine inhaltliche Prüfung der Klassen fehlt \todo{an Ergebnisse anpassen}.
+\noindent Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur 23 Klassen detektiert, die Stempelsuche wird auf 200 Münzen gezeigt, und eine inhaltliche Prüfung der Klassen fehlt \todo{an Ergebnisse anpassen}.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Vergleichbarkeit der Ergebnisse} 
-\noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei [x]\,\% (HitRate@1) und [y]\,\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
+\noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei 17\,3\% (HitRate@1) und 46\,2\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
 
 \section{Grenzen}
 \label{sec:grenzen}
@@ -55,7 +58,7 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 
 \noindent \textbf{Modell und Prompts} 
 
-\noindent Die detektierten Klassen hängen von der Prompt-Liste mit 57 englischen Textbeschreibungen ab, die manuell festgelegt wurde (vgl. \cref{sec:vorgehen}). Zudem hängen die Vektoren selbst von dieser Liste ab (vgl. \cref{sec:herausforderungen}), sodass ein anderes Vokabular zu anderen Ergebnissen führen kann. Ob eine detektierte Klasse inhaltlich zutrifft, wurde nur in der qualitativen Analyse an Stichproben geprüft (vgl. \cref{sec:qualitativeanalyse}). Der niedrige Schwellenwert von 0,005 führt zu vielen Detektionen mit geringer Confidence (vgl. \cref{sec:ergebnisse}). Es wurde nur ein Modell (YOLOv8s-World-v2) untersucht, und Alternativen wie größere Varianten oder ein trainiertes Modell wurden nicht verglichen.
+\noindent Die detektierten Klassen hängen von der Prompt-Liste mit 57 englischen Textbeschreibungen ab, die manuell festgelegt wurde (vgl. \cref{sec:vorgehen}). Zudem hängen die Vektoren selbst von dieser Liste ab (vgl. \cref{sec:herausforderungen}), sodass ein anderes Vokabular zu anderen Ergebnissen führen kann. Ob eine detektierte Klasse inhaltlich zutrifft, wurde nur in der qualitativen Analyse an Stichproben geprüft (vgl. \cref{sec:qualitativeanalyse}). Der niedrige Schwellenwert von 0,005 führt zu vielen Detektionen mit geringer Confidence (vgl. \cref{sec:ergebnisse}). Neben Yolov8s-WOrld-v2 wurde Yolov8n verglichen, das auf der Vorderseite leicht bessere Trefferraten erzielt (vgl. \cref{tab:modelle_vorderseite,tab:modelle_rueckseite}). 
 
 \vspace{\baselineskip}
 
@@ -73,10 +76,10 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 
 \noindent \textbf{Grundwahrheit} 
 
-\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Sie gilt nur für die Vorderseiten (vgl. \cref{sec:evaluationsaufbau}), sodass Rückseiten nicht ausgewertet werden. Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft.
+\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Sie gilt nur für die Vorderseiten (vgl. \cref{sec:evaluationsaufbau}). Für die Rückseiten gibt es nur wenige Münzen mit gleichem Stempel, sie werden daher nur ergänzend ausgewertet. Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Kein Vergleich mit anderen Verfahren} 
 
-\noindent Die Ergebnisse werden nur mit der Zufallsgrenze verglichen, nicht mit einem trainierten Modell oder einem klassischen Verfahren auf denselben Daten (vgl. \cref{sec:bestehendearbeiten}). Aussagen darüber, ob der Ansatz ohne Training mit trainierten Verfahren konkurrieren kann, sind daher nur eingeschränkt möglich.
+\noindent Die Ergebnisse werden nur mit der Zufallsgrenze verglichen, nicht mit einem trainierten Modell oder einem klassischen Verfahren auf denselben Daten (vgl. \cref{sec:bestehendearbeiten}), außer mit YOLOv8n. Aussagen darüber, ob der Ansatz ohne Training mit trainierten Verfahren konkurrieren kann, sind daher nur eingeschränkt möglich.

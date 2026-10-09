@@ -1,7 +1,7 @@
 % !TeX root = ../Thesis.tex
 
 %************************************************
-\chapter{Ergänzende Informationen}\label{ch:ergänzendeinfos}
+%\chapter{Ergänzende Informationen}\label{ch:ergänzendeinfos}
 %************************************************
 \glsresetall % Resets all acronyms to not used
 
@@ -78,7 +78,7 @@
 % Konfigurationsparameter
 % ============================================================
 Konfigurationsparameter:
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Konfigurationsparameter der Anwendung}
     \label{tab:konfigurationsparameter}
@@ -111,13 +111,18 @@ Konfigurationsparameter:
         \hline
 
         Anzahl der Prompts
-            & 57 (Anhang B)
+            & 57 (\cref{tab:promptliste})
             & \texttt{yolo\_config.json} \\
         \hline
 
         Batchgröße (Ausschnitte)
-            & 16
+            & 8
             & \texttt{data.json} \\
+        \hline
+
+        Schicht Extraktion Feature-Vektoren 
+            & 18 
+            & \texttt{yolo\_config.json} \\
         \hline
 
         Anzahl Stempelgruppen
@@ -144,16 +149,34 @@ Konfigurationsparameter:
             & 0{,}5
             & Objektkonfiguration \\
         \hline
+
+        Eingabegröße des Modells
+            & 640\,px
+            & Ultralytics-Standard \\
+        \hline
+
+        IoU-Schwelle der NMS
+            & 0{,}7
+            & Ultralytics-Standard \\
+        \hline
+
+        Maximale Detektionen je Bild
+            & 300
+            & Ultralytics-Standard \\
+        \hline
+
+        NMS über Klassen hinweg (\texttt{agnostic\_nms})
+            & nein
+            & Ultralytics-Standard \\
+        \hline
     \end{tabularx}
 \end{table}
-
-\todo{TODO: Ultralytics-Standardwerte prüfen und anschließend ergänzen: Bildgröße: vermutlich 640 px, IoU-Schwelle NMS: vermutlich 0,7, Maximale Detektionen je Bild: vermutlich 300, verwendete Ultralytics-Version}
 
 % ============================================================
 % Im Code festgelegte Parameter
 % ============================================================
 Im Code festgelegte Parameter:
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Im Programmcode festgelegte Parameter}
     \label{tab:codeparameter}
@@ -163,11 +186,6 @@ Im Code festgelegte Parameter:
         \textbf{Parameter} &
         \textbf{Wert} \\
         \hline
-
-        Schicht für die Feature-Vektoren
-            & 18 \\
-        \hline
-
         Standard-Ähnlichkeitsmaß
             & Kosinus-Ähnlichkeit \\
         \hline
@@ -182,7 +200,7 @@ Im Code festgelegte Parameter:
 % Prompt-Liste für YOLO-World
 % ============================================================
 Verwendete Prompts für die Merkmalsdetektion mit YOLO-World
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Verwendete Prompts für die Merkmalsdetektion mit YOLO-World}
     \label{tab:promptliste}

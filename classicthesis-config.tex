@@ -107,6 +107,12 @@
 	language=auto,
 	style=numeric-comp
 ]{biblatex}
+% Umbrüche in URLs und DOIs an Ziffern und Buchstaben erlauben
+\setcounter{biburlnumpenalty}{100}
+\setcounter{biburlucpenalty}{100}
+\setcounter{biburllcpenalty}{100}
+% Literaturverzeichnis linksbündig statt Blocksatz, mit etwas Spielraum
+\appto{\bibsetup}{\raggedright\emergencystretch=1em}
 \DeclareSortingTemplate{snyt}{
 	\sort{
 		\field{shorthand}

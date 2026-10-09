@@ -29,7 +29,7 @@
 formt nur die Oberfläche der Münze ab, Farbe und Patina sind darauf daher nicht erkennbar. Abnutzung bleibt im Relief erkennbar, Korrosion nur, soweit sie die Oberfläche verändert hat. Die Abbildungen der Gipsabgüsse dürfen für wissenschaftliche Zwecke unter CC BY-NC-SA verwendet werden, für Aufnahmen der Originale liegen die Rechte bei den jeweiligen Rechteinhabern \cite{cn-bildrechte}.
 
 Die Münzen wurden in aufsteigender ID-Reihenfolge abgerufen. Münzen ohne Vorderseitenbild oder ohne Stempel-ID wurden dabei übergangen. Eine Stempelgruppe wurde gebildet, sobald zehn Münzen mit demselben Vorderseitenstempel vorlagen; das wurde 20-mal wiederholt. Die Coin-IDs der 200 Münzen liegen zwischen 348 und 3561. Die Stempelzuordnung stammt aus der CN-Datenbank \cite{cn-about}. Die Gruppen dienen als Grundwahrheit für die Auswertung (vgl. \cref{ch:evaluation}). Alle 200 Münzen besitzen ein Vorderseitenbild, 199 ein Rückseitenbild. Insgesamt liegen 242 Vorderseiten- und 250 Rückseitenbilder vor; 51 Münzen haben auf mindestens einer Seite mehr als ein Bild. Die Zusammensetzung nach Bildart, Region, Münzstätte und Datierung zeigt \cref{tab:muenzdaten}, die einzelnen Stempelgruppen \cref{tab:stempelgruppen}.
-Die Bilder werden als Vorschaubilder der Größe [Wert]\todo{Wert einfügen} geladen. Sie werden nicht weiterverarbeitet; lediglich das Modell skaliert sie intern auf die Eingabegröße [Wert]\todo{Wert einfügen}.
+Die Bilder werden als Vorschaubilder der Größe \texttt{lg} aus der CN-Schnittstelle geladen [Pixelmaß prüfen]\todo{Wert einfügen}. Sie werden nicht weiterverarbeitet; lediglich das Modell skaliert sie intern auf die Eingabegröße von 640 Pixeln (Ultralytics-Standard).
 % Please add the following required packages to your document preamble:
 % \usepackage[table,xcdraw]{xcolor}
 % Beamer presentation requires \usepackage{colortbl} instead of \usepackage[table,xcdraw]{xcolor}
@@ -40,8 +40,11 @@ Die Bilder werden als Vorschaubilder der Größe [Wert]\todo{Wert einfügen} gel
 %\rowcolor[HTML]{EFEFEF} 
 \textbf{Merkmal}                                & \textbf{Wert}                             \\ \hline
 Münzen                                          & 200                                       \\ \hline
-Stempelgruppen (obverse)                    & 20                                        \\ \hline
+Stempelgruppen (Vorderseite)                    & 20                                        \\ \hline
 Münzen je Gruppe                                & 10                                        \\ \hline
+Rückseitenstempel                               & 
+\makecell[l]{125 IDs bei 198 Münzen, davon \\ 
+46 auf mindestens zwei Münzen \\ (119 Münzen)} \\ \hline
 Münzen mit Vorderseitenbild                     & 200                                       \\ \hline
 Münzen mit Rückseitenbild                       & 199                                       \\ \hline
 Bilder Vorderseite/Rückseite                    & 242/250                                   \\ \hline
@@ -81,12 +84,12 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 
 \noindent \textbf{Merkmalsdetektion}
 
-\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in den nachfolgenden \cref{tab:schwellenwerte_rückseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
+\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
 
 \begin{table}[H]
 \centering
 \caption{Detektionen auf Rückseitenbildern bei verschiedenen Schwellenwerten (250 Bilder)}
-\label{tab:schwellenwerte_rückseite}
+\label{tab:schwellenwerte_rueckseite}
 \begin{tabular}{|l|r|r|r|r|}
 \hline
 \textbf{Schwellenwert}         & 0{,}005 & 0{,}01 & 0{,}05 & 0{,}5  \\ \hline
@@ -111,7 +114,8 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 \end{tabular}
 \end{table}
 
-Überlappende Detektionen werden durch die Standard-NMS von Ultralytics zusammengefasst (Parameter in \cref{app:example}). Detektionen, deren Bounding Box mindestens 85\,\% der Bildfläche einnimmt, werden verworfen, damit nicht das gesamte Münzbild als Merkmal gilt (Parameter \texttt{max\_area\_ratio}, \cref{app:example}). \todo{Begründung für 0,85 ergänzen} Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box gespeichert.
+Überlappende Detektionen werden durch die Standard-NMS von Ultralytics zusammengefasst (IoU-Schwelle 0{,}7, höchstens 300 Detektionen je Bild, \cref{app:example}). Die NMS wird je Klasse angewendet. Überlappende Boxen verschiedener Klassen, etwa \textit{human face} und \textit{person} auf demselben Kopf, bleiben daher beide erhalten.
+Detektionen, deren Bounding Box mindestens 85\,\% der Bildfläche einnimmt, werden verworfen, damit nicht das gesamte Münzbild als Merkmal gilt (Parameter \texttt{max\_area\_ratio}, \cref{app:example}). \todo{Begründung für 0,85 ergänzen} Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box gespeichert.
 
 \vspace{\baselineskip}
 
@@ -125,7 +129,7 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 
 \noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen \todo{Umgang mit verwandten Klassen ergänzen}. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
 Für zwei Vektoren A und B der Dimension n werden die drei Maße aus \cref{sec:merkmale} verwendet. 
-Die beiden Distanzen $d$ (euklidisch, Manhattan) werden über $s = \frac{1}{1+d}$ in eine Ähnlichkeit $s \in (0, 1]$ umgerechnet, Die Kosinus-Ähnlichkeit $c$ wird über $s = \frac{c+1}{2}$ auf $[0, 1]$ abgebildet. Beide Umrechnungen sind monoton und ändern das Ranking nicht. Die Ähnlichkeitswerte verschiedener Maße sindnicht direkt vergleichbar, da sie unterschiedlich skaliert sind. Verglichen werden daher die Rangfolgen. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in \cref{ch:evaluation} verglichen. 
+Die beiden Distanzen $d$ (euklidisch, Manhattan) werden über $s = \frac{1}{1+d}$ in eine Ähnlichkeit $s \in (0, 1]$ umgerechnet. Die Kosinus-Ähnlichkeit $c$ wird über $s = \frac{c+1}{2}$ auf $[0, 1]$ abgebildet. Beide Umrechnungen sind monoton und ändern das Ranking nicht. Die Ähnlichkeitswerte verschiedener Maße sind nicht direkt vergleichbar, da sie unterschiedlich skaliert sind. Verglichen werden daher die Rangfolgen. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in \cref{ch:evaluation} verglichen. 
 Pro Münze zählt der höchste Ähnlichkeitswert über alle passenden Merkmale. Die Münzen werden nach Ähnlichkeit absteigend sortiert, und die ähnlichsten [1 bis 5] werden ausgegeben. 
 
 
