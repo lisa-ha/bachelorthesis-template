@@ -28,6 +28,12 @@
 
 \vspace{\baselineskip}
 
+\noindent \textbf{Vorverarbeitung der Bilder}
+
+\noindent Die Bilder werden bisher unverändert durch die Pipeline geführt (vgl. \cref{sec:gesamtansatzdatengrundlage}). Sie unterscheiden sich jedoch in Farbe, Kontrast und Zustand, etwa zwischen Aufnahmen von Originalen und Gipsabdrücken, die keine Farbe und Patina zeigen, oder durch Kratzer, Korrosion und Abnutzung (vgl. \cref{sec:glnumismatik}). Eine Vorverarbeitung könnte solche Unterschiede verringern, etwa durch die Umwandlung in Graustufen, einen Ausgleich des Kontrasts oder ein leichtes Weichzeichnen, das Kratzer abschwächt. Dem steht gegenüber, dass ein Weichzeichnen auch feine Details abschwächen kann, an denen sich Stempel unterscheiden. Zu prüfen wäre daher, ob die Vorverarbeitung die Trefferraten der Stempelsuche verbessert, auch getrennt nach Bildtyp (vgl. \cref{sec:evaluationsaufbau}). Da sich die Vektoren dadurch ändern, müsste die Datenbank neu aufgebaut werden.
+
+\vspace{\baselineskip}
+
 \noindent \textbf{Training auf Münzen}
 
 \noindent Ein Modell, das auf antiken Münzen nachtrainiert wird, könnte genauere Boxen und münzspezifische Klassen liefern, wie es Anwar~\cite{anwar2026reading} für Buchstaben zeigt. Dafür fehlen jedoch Annotationen der Merkmalspositionen (vgl. \cref{sec:zielsetzungundforschungsfragen}). Möglich wäre, sie aufwendig manuell zu erstellen oder wie Cooper und Arandjelović~\cite{cooper2020learning} aus vorhandenen Beschreibungstexten abzuleiten. Ein Vergleich mit dem hier untersuchten Ansatz ohne Training auf denselben Daten würde zeigen, wie viel das Training bringt.
