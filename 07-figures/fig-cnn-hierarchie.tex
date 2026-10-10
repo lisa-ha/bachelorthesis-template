@@ -1,0 +1,26 @@
+% Schematische Merkmalshierarchie in einem CNN (eigene Darstellung nach dem Prinzip aus Goodfellow, Abb. 1.2, und LeCun)
+\begin{tikzpicture}[every node/.style={font=\small}, glyph/.style={draw=black!50, fill=white, minimum width=2.2cm, minimum height=1.7cm}]
+  % Eingabe: Pixelraster
+  \node[glyph] (g0) at (0,0) {};
+  \foreach \i in {0,...,3}{\foreach \j in {0,...,3}{
+     \pgfmathsetmacro{\v}{mod(\i*3+\j*5,4)*18+8}
+     \fill[black!\v] ({-0.8+\i*0.4},{-0.6+\j*0.3}) rectangle ++(0.4,0.3);}}
+  \node[glyph] (g1) at (3.8,0) {};
+  \draw[figblue, line width=1.4pt] (3.2,-0.5) -- (3.55,0.5);
+  \draw[figblue, line width=1.4pt] (3.7,0.45) -- (4.3,0.45);
+  \draw[figblue, line width=1.4pt] (3.75,-0.5) -- (4.4,-0.25);
+  \node[glyph] (g2) at (7.6,0) {};
+  \draw[figblue, line width=1.4pt] (7.0,-0.5) -- (7.0,0.4) -- (7.5,0.4);
+  \draw[figblue, line width=1.4pt] (7.7,-0.4) arc (200:-20:0.45 and 0.7);
+  \node[glyph] (g3) at (11.4,0) {};
+  \draw[figblue, line width=1.4pt] (11.4,0.1) circle (0.5);
+  \draw[figblue, fill=figblue!30] (11.4,0.1) circle (0.16);
+  \draw[figblue, line width=1.4pt] (10.8,-0.55) -- (12.0,-0.55);
+  \node[figbox, sgreen, minimum width=2.2cm] (g4) at (15.2,0) {Objekt\\{\footnotesize (Klasse)}};
+
+  \foreach \a/\b in {g0/g1, g1/g2, g2/g3, g3/g4} {\draw[figarrow] (\a) -- (\b);}
+  \node[figlabel, below=0.1cm of g0] {Eingabebild\\{\footnotesize (Pixelwerte)}};
+  \node[figlabel, below=0.1cm of g1] {1.\ Schicht:\\Kanten};
+  \node[figlabel, below=0.1cm of g2] {2.\ Schicht:\\Muster aus Kanten};
+  \node[figlabel, below=0.1cm of g3] {3.\ Schicht:\\Objektteile};
+\end{tikzpicture}

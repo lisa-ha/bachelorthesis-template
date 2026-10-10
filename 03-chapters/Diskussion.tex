@@ -5,6 +5,7 @@
 %************************************************
 \glsresetall % Resets all acronyms to not used
 
+%************Beantwortung der Forschungsfragen**************
 \section{Beantwortung der Forschungsfragen}
 \label{sec:beantwortungfragen}
 \begin{enumerate}
@@ -14,6 +15,7 @@
 
 \end{enumerate}
 
+%*********Einordnung in bestehende Arbeiten**********************
 \section{Einordnung in bestehende Arbeiten}
 \label{sec:bestehendearbeiten}
 Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in drei Gruppen einteilen. Die Arbeit liegt an der Schnittstelle dieser Gruppen, unterscheidet sich aber in einem Punkt von allen; sie verzichtet auf münzspezifisches Training.
@@ -46,6 +48,7 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 \noindent \textbf{Vergleichbarkeit der Ergebnisse} 
 \noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei 17\,3\% (HitRate@1) und 46\,2\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
 
+%***************Grenzen*****************************
 \section{Grenzen}
 \label{sec:grenzen}
 \subsection{Grenzen des Ansatzes}
@@ -58,13 +61,21 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 
 \noindent \textbf{Modell und Prompts} 
 
-\noindent Die detektierten Klassen hängen von der Prompt-Liste mit 57 englischen Textbeschreibungen ab, die manuell festgelegt wurde (vgl. \cref{sec:vorgehen}). Zudem hängen die Vektoren selbst von dieser Liste ab (vgl. \cref{sec:herausforderungen}), sodass ein anderes Vokabular zu anderen Ergebnissen führen kann. Ob eine detektierte Klasse inhaltlich zutrifft, wurde nur in der qualitativen Analyse an Stichproben geprüft (vgl. \cref{sec:qualitativeanalyse}). Der niedrige Schwellenwert von 0,005 führt zu vielen Detektionen mit geringer Confidence (vgl. \cref{sec:ergebnisse}). Neben Yolov8s-WOrld-v2 wurde Yolov8n verglichen, das auf der Vorderseite leicht bessere Trefferraten erzielt (vgl. \cref{tab:modelle_vorderseite,tab:modelle_rueckseite}). 
+\noindent Die detektierten Klassen hängen von der Prompt-Liste mit 57 englischen Textbeschreibungen ab, die zu Beginn der Arbeit erstellt und nicht an die Motivbeschreibungen von CN angepasst wurde (vgl. \cref{sec:vorgehen}). Zudem hängen die Vektoren selbst von dieser Liste ab (vgl. \cref{sec:herausforderungen}), sodass ein anderes Vokabular zu anderen Ergebnissen führen kann. Ob eine detektierte Klasse inhaltlich zutrifft, wurde nur in der qualitativen Analyse an Stichproben geprüft (vgl. \cref{sec:qualitativeanalyse}). Der niedrige Schwellenwert von 0,005 führt zu vielen Detektionen mit geringer Confidence (vgl. \cref{sec:ergebnisse}). Auch der Grenzwert von 85\,\% der Bildfläche, ab dem Detektionen verworfen werden, wurde nicht systematisch bestimmt (vgl. \cref{sec:vorgehen}). 
+
+Neben Yolov8s-World-v2 wurde Yolov8n verglichen, das auf der Vorderseite leicht bessere Trefferraten erzielt (vgl. \cref{tab:modelle_vorderseite,tab:modelle_rueckseite}). Die Unterschiede betragen fünf bis sieben von 200 Anfragen und sind daher gering. Der Modellvergleich beruht ausschließlich auf der Kosinus-Ähnlichkeit. Ob sich das Verhältnis der beiden Modelle mit der Manhattan-Distanz ändert, wurde nicht untersucht. \todo{falls doch, einfügen!}
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Vektoren einzelner Merkmale} 
 
 \noindent Der Vektor eines Merkmals wird aus dem ausgeschnittenen Bildausschnitt bestimmt und kennt den Kontext des Gesamtbildes nicht (vgl. \cref{sec:herausforderungen}). Ob Vektoren aus dem ganzen Bild mit Pooling auf der Feature-Karte bessere Ergebnisse liefern, wurde nicht untersucht.
+
+\vspace{\baselineskip}
+
+\noindent \textbf{Vergleich nur innerhalb einer Klasse} 
+
+\noindent Merkmale werden nur mit Merkmalen derselben Klasse verglichen (vgl. \cref{sec:vorgehen}). Ob verwandte Klassen, die dasselbe Motiv unterschiedlich benennen, gemeinsam verglichen werden können, wurde im Rahmen dieser Arbeit nicht untersucht. Dadurch können Münzen desselben Stempels unverglichen bleiben, wenn auf ihnen verschiedene Klassen detektiert werden.
 
 \subsection{Grenzen der Untersuchung}
 \label{sec:grenzen-untersuchung}

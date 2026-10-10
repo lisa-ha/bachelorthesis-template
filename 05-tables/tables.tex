@@ -248,3 +248,42 @@ Verwendete Prompts für die Merkmalsdetektion mit YOLO-World
         \hline
     \end{tabularx}
 \end{table}
+
+% ============================================================
+% Vergleich YOLOv8n und YOLO-World
+% ============================================================
+\begin{table}[H]
+\centering
+\caption{Vergleich von YOLOv8n und YOLO-World auf der Vorderseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
+\label{tab:modelle_vorderseite}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
+\textbf{Bilder}                     & 242 & 242 \\ \hline
+\textbf{Bilder mit Detektion}       & 97{,}9\,\% & 95{,}0\,\% \\ \hline
+\textbf{Ø Detektionen je Bild}      & 8{,}18 & 3{,}74 \\ \hline
+\textbf{Anfragen}                   & 200 & 200 \\ \hline
+\textbf{Münzen mit Vektor}          & 195 & 188 \\ \hline
+\textbf{HitRate@1}                  & 15{,}0\,\% & 12{,}5\,\% \\ \hline
+\textbf{HitRate@5}                  & 41{,}5\,\% & 38{,}0\,\% \\ \hline
+\textbf{Precision@5}                & 10{,}6\,\% & 9{,}8\,\% \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Vergleich von YOLOv8n und YOLO-World auf der Rückseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
+\label{tab:modelle_rueckseite}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
+\textbf{Bilder}                     & 250 & 250 \\ \hline
+\textbf{Bilder mit Detektion}       & 98{,}0\,\% & 94{,}0\,\% \\ \hline
+\textbf{Ø Detektionen je Bild}      & 8{,}00 & 3{,}90 \\ \hline
+\textbf{Anfragen}                   & 119 & 119 \\ \hline
+\textbf{Münzen mit Vektor}          & 115 & 110 \\ \hline
+\textbf{HitRate@1}                  & 11{,}8\,\% & 14{,}3\,\% \\ \hline
+\textbf{HitRate@5}                  & 26{,}9\,\% & 24{,}4\,\% \\ \hline
+\textbf{Precision@5}                & 6{,}2\,\% & 7{,}4\,\% \\ \hline
+\end{tabular}
+\end{table}

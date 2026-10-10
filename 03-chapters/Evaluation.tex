@@ -8,11 +8,45 @@
 %*************Evaluationsaufbau***************
 \section{Evaluationsaufbau}
 \label{sec:evaluationsaufbau}
-\noindent \textbf{Grundwahrheit/Ground Truth}
+\noindent \textbf{Grundwahrheit}
 
-\noindent Als Grundwahrheit dienen die Stempelzuordnungen aus CN. Auf der Vorderseite sind das die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Auf der Rückseite werden die Rückseitenstempel-IDs verwendet. Von den 198 Münzen mit Rückseiten-ID teilen nur 119 ihren Stempel mit mindestens einer anderen Münze (125 verschiedene IDs, vlg. \cref{fig:rueckseitenstempel}), sodass die Rückseite nur ergänzend ausgewertet wird. Hauptgrundlage ist die Vorderseite.
+\noindent Als Grundwahrheit dienen die Stempelzuordnungen aus CN. Auf der Vorderseite sind das die 20 Stempelgruppen mit je zehn Münzen (vgl. \cref{sec:gesamtansatzdatengrundlage}). Münzen derselben Gruppe weisen denselben Vorderseitenstempel auf und sollten sich daher besonders ähnlich sein (vgl. \cref{sec:glnumismatik}). Auf der Rückseite werden die Rückseitenstempel-IDs verwendet. Von den 198 Münzen mit Rückseiten-ID teilen nur 119 ihren Stempel mit mindestens einer anderen Münze (125 verschiedene IDs, vgl. \cref{fig:rueckseitenstempel}), sodass die Rückseite nur ergänzend ausgewertet wird. Hauptgrundlage ist die Vorderseite. Dass Münzen mit demselben Vorderseitenstempel unterschiedliche Rückseitenstempel haben können, zeigt \cref{fig:stempelgruppe-glvorne-versschrueck}: Die Münzen 352 und 355 tragen denselben Vorderseitenstempel (463), ihre Rückseitenstempel sind jedoch verschieden (467 und 470) und zeigen verschiedene Motive. 
 
-\input{07-figures/fig-rueckseitenstempel.tex}
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin352_obverse.jpeg}
+        \caption{coin 352 Vorderseite}
+        \label{fig:coin352-vorderseite}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin355_obverse.jpeg}
+        \caption{coin 355 Vorderseite}
+        \label{fig:coin355-vorderseite}
+    \end{subfigure}
+
+    \vspace{0.6em}
+
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin352_reverse.jpeg}
+        \caption{coin 352 Rückseite}
+        \label{fig:coin352-rueckseite}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin355_reverse.jpeg}
+        \caption{coin 355 Rückseite}
+        \label{fig:coin352-rueckseite}
+    \end{subfigure}
+    \caption[Gleicher Vorderseitenstempel, verschiedene Rückseitenstempel]{Zwei Münzen mit demselben Vorderseitenstempel (463) und verschiedenen Rückseitenstempeln, Byzantion, Region Thrakien, ca. 178 n.~Chr. (a) cn coin 352~\cite{cn-coin-352}, Rückseitenstempel 467. (b) cn coin 355~\cite{cn-coin-355}, Rückseitenstempel 470. Beide Gipsabguss. Foto: BBAW. Lizenz: CC BY-NC-SA 4.0.}
+    \label{fig:stempelgruppe-glvorne-versschrueck}
+\end{figure}
 
 \vspace{\baselineskip}
 
@@ -30,7 +64,7 @@
 
 \noindent \textbf{Einflussfaktoren}
 
-\noindent Zusätzlich werden die Ergebnisse nach Bildtyp (Fotos, Plaster Casts) getrennt ausgewertet, da diese sich in Darstellung und Kontrast unterscheiden. \todo{Optional: Ergebnisse mit und ohne Positions- und Größenfilter} Außerdem werden die Modelle YOLOv8 und YOLO-World verglichen (vgl. \cref{sec:modelle}). Dafür wird je Münze die Detektion mit der höchsten Confidence auf dem ersten Bild mit dem jeweiligen Modell neu bestimmt und ohne Klassenbedingung mit allen anderen Münzen verglichen (Kosinus-Ähnlichkeit). Anfragen sind alle Münzen, deren Stempel mindestens zweimal vorkommt (Vorderseite 200, Rückseite 119); Münzen ohne Detektion zählen als Fehlschlag.
+\noindent Zusätzlich werden die Ergebnisse nach Bildtyp (Fotos, Plaster Casts) getrennt ausgewertet, da diese sich in Darstellung und Kontrast unterscheiden. \todo{Optional: Ergebnisse mit und ohne Positions- und Größenfilter} Außerdem werden die Modelle YOLOv8 und YOLO-World verglichen (vgl. \cref{sec:modelle}). Dafür wird je Münze die Detektion mit der höchsten Confidence auf dem ersten Bild mit dem jeweiligen Modell neu bestimmt und ohne Klassenbedingung mit allen anderen Münzen verglichen (Kosinus-Ähnlichkeit). Für diesen Vergleich steht nicht das Ähnlichkeitsmaß im Mittelpunkt, sondern die Feature-Vektoren der beiden Modelle. Es wird daher für beide Modelle einheitlich die Kosinus-Ähnlichkeit verwendet, unabhängig vom Ergebnis des Distanzvergleichs für YOLO-World (vgl. \cref{sec:ergebnisse}). Anfragen sind alle Münzen, deren Stempel mindestens zweimal vorkommt (Vorderseite 200, Rückseite 119); Münzen ohne Detektion zählen als Fehlschlag.
 
 \vspace{\baselineskip}
 
@@ -94,7 +128,7 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 
 \noindent \textbf{Vergleich}
 
-\noindent \cref{fig:distanzvergleich} und \cref{tab:distanzen} zeigt die Kennzahlen der drei Maße. Auf der Vorderseite erzielt die Manhattan-Distanz die höchsten Werte: Bei 17,3\,\% der 156 Anfragen hat die ähnlichste Münze denselben Vorderseitenstempel (HitRate@1), bei 46,2\,\% liegt mindestens eine Münze desselben Stempels unter den fünf ähnlichsten (HitRate@5). Kosinus-Ähnlichkeit und euklidische Distanz liefern nahezu dieselben Rangfolgen (HitRate@1 je 16,7\,\%, HitRate@5 43,6\,\% bzw. 42,9\,\%). Die Unterschiede entsprechen einer Anfrage bei HitRate@1 und bis zu fünf Anfragen bei HitRate@5 und sind daher gering. Auf der Rückseite liegen Kosinus und euklidische Distanz bei HitRate@5 vorn (29,0\,\% gegenüber 27,4\,\%), die Manhattan-Distanz bei HitRate@1 (16,1\,\% gegenüber 14,5\,\%). Da die Grundwahrheit über den Vorderseitenstempel gebildet wurde, wird die Manhattan-Distanz für die weiteren Auswertungen verwendet.
+\noindent \cref{fig:distanzvergleich} und \cref{tab:distanzen} zeigt die Kennzahlen der drei Maße. Auf der Vorderseite erzielt die Manhattan-Distanz die höchsten Werte: Bei 17,3\,\% der 156 Anfragen hat die ähnlichste Münze denselben Vorderseitenstempel (HitRate@1), bei 46,2\,\% liegt mindestens eine Münze desselben Stempels unter den fünf ähnlichsten (HitRate@5). Kosinus-Ähnlichkeit und euklidische Distanz liefern nahezu dieselben Rangfolgen (HitRate@1 je 16,7\,\%, HitRate@5 43,6\,\% bzw. 42,9\,\%). Die Unterschiede entsprechen einer Anfrage bei HitRate@1 und bis zu fünf Anfragen bei HitRate@5 und sind daher gering. Auf der Rückseite liegen Kosinus und euklidische Distanz bei HitRate@5 vorn (29,0\,\% gegenüber 27,4\,\%), die Manhattan-Distanz bei HitRate@1 (16,1\,\% gegenüber 14,5\,\%). Da die Grundwahrheit über den Vorderseitenstempel gebildet wurde, wird für YOLO-World die Manhattan-Distanz für die weiteren Auswertungen verwendet. Der folgende Modellvergleich ist davon ausgenommen.
 
 \input{07-figures/fig-distanzvergleich.tex}
 
@@ -128,44 +162,10 @@ owl              & 1   & 0{,}50\,\%  & 2{,}37\,\%  \\ \hline
 
 \input{07-figures/fig-modellvergleich.tex}
 
-\noindent YOLOv8n detektiert bei gleichem Schwellenwert mehr als doppelt so viele Boxen (8,2 gegenüber 3,7 je Vorderseitenbild) und findet auf mehr Bildern mindestens ein Objekt (97,9\,\% gegenüber 95,0\,\%). Auch bei der Stempelsuche liegt YOLOv8n auf der Vorderseite leicht vorn (HitRate@5 41,5\,\% gegenüber 38,0\,\%, HitRate@1 15,0\,\% gegenüber 12,5\,\%). Auf der Rückseite ist YOLO-World bei HitRate@1 besser (14,3\,\% gegenüber 11,8\,\%), YOLOv8n bei HitRate@5 (26,9\,\% gegenüber 24,4\,\%). Die Unterschiede betragen auf der Vorderseite fünf bis sieben von 200 Anfragen. Die frei formulierbaren Prompts von YOLO-World führen hier also zu keiner besseren Stempelsuche. Zu beachten ist, dass YOLOv8n die kleinste Modellvariante ist, YOLO-World dagegen die Variante \texttt{s}. Die Werte unterscheiden sich von \cref{tab:distanzen}, da hier ohne Klassenbedingung und über alle Anfragen gerechnet wird (vgl. \cref{sec:evaluationsaufbau}). Die Unterschiede sind in \cref{tab:modelle_vorderseite,tab:modelle_rueckseite} ebenso tabellarisch dargestellt.
+\noindent YOLOv8n detektiert bei gleichem Schwellenwert mehr als doppelt so viele Boxen (8,2 gegenüber 3,7 je Vorderseitenbild) und findet auf mehr Bildern mindestens ein Objekt (97,9\,\% gegenüber 95,0\,\%). Auch bei der Stempelsuche liegt YOLOv8n auf der Vorderseite leicht vorn (HitRate@5 41,5\,\% gegenüber 38,0\,\%, HitRate@1 15,0\,\% gegenüber 12,5\,\%). Auf der Rückseite ist YOLO-World bei HitRate@1 besser (14,3\,\% gegenüber 11,8\,\%), YOLOv8n bei HitRate@5 (26,9\,\% gegenüber 24,4\,\%). Die Unterschiede betragen auf der Vorderseite fünf bis sieben von 200 Anfragen. Die frei formulierbaren Prompts von YOLO-World führen hier also zu keiner besseren Stempelsuche. Zu beachten ist, dass YOLOv8n die kleinste Modellvariante ist, YOLO-World dagegen die Variante \texttt{s}. Die Werte unterscheiden sich von \cref{tab:distanzen}, da hier ohne Klassenbedingung und über alle Anfragen gerechnet wird (vgl. \cref{sec:evaluationsaufbau}). Die Unterschiede sind in den \cref{tab:modelle_vorderseite,tab:modelle_rueckseite} ebenso tabellarisch dargestellt.
 
-\begin{table}[H]
-\centering
-\caption{Vergleich von YOLOv8n und YOLO-World auf der Vorderseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
-\label{tab:modelle_vorderseite}
-\begin{tabular}{|l|r|r|r|r|}
-\hline
-\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
-\textbf{Bilder}                     & 242 & 242 \\ \hline
-\textbf{Bilder mit Detektion}       & 97{,}9\,\% & 95{,}0\,\% \\ \hline
-\textbf{Ø Detektionen je Bild}      & 8{,}18 & 3{,}74 \\ \hline
-\textbf{Anfragen}                   & 200 & 200 \\ \hline
-\textbf{Münzen mit Vektor}          & 195 & 188 \\ \hline
-\textbf{HitRate@1}                  & 15{,}0\,\% & 12{,}5\,\% \\ \hline
-\textbf{HitRate@5}                  & 41{,}5\,\% & 38{,}0\,\% \\ \hline
-\textbf{Precision@5}                & 10{,}6\,\% & 9{,}8\,\% \\ \hline
-\end{tabular}
-\end{table}
 
-\begin{table}[H]
-\centering
-\caption{Vergleich von YOLOv8n und YOLO-World auf der Rückseite (Schwellenwert 0{,}005, Kosinus-Ähnlichkeit)}
-\label{tab:modelle_rueckseite}
-\begin{tabular}{|l|r|r|r|r|}
-\hline
-\textbf{Modell} & \textbf{YOLOv8n} & \textbf{YOLO-World} \\ \hline \hline
-\textbf{Bilder}                     & 250 & 250 \\ \hline
-\textbf{Bilder mit Detektion}       & 98{,}0\,\% & 94{,}0\,\% \\ \hline
-\textbf{Ø Detektionen je Bild}      & 8{,}00 & 3{,}90 \\ \hline
-\textbf{Anfragen}                   & 119 & 119 \\ \hline
-\textbf{Münzen mit Vektor}          & 115 & 110 \\ \hline
-\textbf{HitRate@1}                  & 11{,}8\,\% & 14{,}3\,\% \\ \hline
-\textbf{HitRate@5}                  & 26{,}9\,\% & 24{,}4\,\% \\ \hline
-\textbf{Precision@5}                & 6{,}2\,\% & 7{,}4\,\% \\ \hline
-\end{tabular}
-\end{table}
-
+%**********Qualitative Analyse*************
 \section{Qualitative Analyse}
 \label{sec:qualitativeanalyse}
 Die Kennzahlen zeigen, bei welchen Münzen der Ansatz funktioniert, aber nicht warum. Dazu werden die in \cref{sec:evaluationsaufbau} beschriebenen Testfälle untersucht. Die Analyse zeigt Zusammenhänge auf und keine Ursachen, da das Modell seine Entscheidungen nicht erklärt. \todo{Befunde einfügen}

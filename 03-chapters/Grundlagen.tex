@@ -35,49 +35,9 @@ Antike Münzen werden in Vorder- und Rückseite unterteilt, die als Obverse (auc
     \label{fig:coin-3545}
 \end{figure}
 
-\noindent Auch die Herstellung beeinflusst das Erscheinungsbild. Münzen wurden von der Antike bis in die frühe Neuzeit durch Hammerprägung hergestellt \cite{wikipedia-muenzpraegung}. Ein Münzrohling, der sogenannte Schrötling, wurde auf einen fest installierten Unterstempel gelegt, der das Motiv der Vorderseite trug. Ein frei geführter Oberstempel mit dem Motiv der Rückseite wurde daraufgesetzt und mit einem Hammerschlag eingeprägt, sodass beide Seiten geprägt wurden \cite{adfontes-herstellung}. Da jeder Stempel ein in Handarbeit gefertigtes Einzelstück war, unterscheiden sich auch Münzen desselben Typs in feinen Details \cite{wikipedia-muenzpraegung}. Außerdem nutzten sich die Stempel ab und mussten ersetzt werden, wobei der Oberstempel in der Regel früher ausgetauscht wurde als der Unterstempel. Dadurch ergeben sich unterschiedliche Stempelkombinationen, anhand derer sich die Reihenfolge der Prägung rekonstruieren lässt (Stempelanalyse) \cite{wikipedia-numismatik}.
+\noindent Auch die Herstellung beeinflusst das Erscheinungsbild. Münzen wurden von der Antike bis in die frühe Neuzeit durch Hammerprägung hergestellt \cite{wikipedia-muenzpraegung}. Ein Münzrohling, der sogenannte Schrötling, wurde auf einen fest installierten Unterstempel gelegt, der das Motiv der Vorderseite trug. Ein frei geführter Oberstempel mit dem Motiv der Rückseite wurde daraufgesetzt und mit einem Hammerschlag eingeprägt, sodass beide Seiten geprägt wurden \cite{adfontes-herstellung}. Da jeder Stempel ein in Handarbeit gefertigtes Einzelstück war, unterscheiden sich auch Münzen desselben Typs in feinen Details \cite{wikipedia-muenzpraegung}. Außerdem nutzten sich die Stempel ab und mussten ersetzt werden, wobei der Oberstempel in der Regel früher ausgetauscht wurde als der Unterstempel. Dadurch ergeben sich unterschiedliche Stempelkombinationen, anhand derer sich die Reihenfolge der Prägung rekonstruieren lässt (Stempelanalyse) \cite{wikipedia-numismatik}. Für diese Arbeit ist das zentral, denn Münzen desselben Stempels dienen als Grundwahrheit für die Auswertung (vgl. \cref{sec:gesamtansatzdatengrundlage}).
 
 Zusätzlich verändert sich das Erscheinungsbild im Laufe der Objektgeschichte \cite{wikipedia-numismatik}. Nutzung und Umlauf führen zu Abnutzung, die je nach Erhaltungsgrad unterschiedlich stark ausfällt \cite{wikipedia-erhaltungsgrade,adfontes-abnutzung} (\cref{fig:erhaltung}). Bei Münzen, die lange im Boden lagen, kann je nach Bodenbedingungen außerdem das Metall korrodieren. Motive, Symbole und Legenden können dadurch teilweise oder vollständig unkenntlich werden \cite{adfontes-abnutzung}. Abnutzung und Korrosion erschweren zudem die automatisierte Erkennung von Merkmalen auf antiken Münzbildern, da Details und Legenden verloren gehen \cite{fare2017ancient,heinecke2021unsupervised} (vgl. \cref{sec:modelle}).
-
-\begin{figure}[H]
-    \centering
-
-    \begin{subfigure}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{coin1018_obverse.jpeg}
-        \caption{Original}
-        \label{fig:originalcoin1018}
-    \end{subfigure}
-    \hspace{0.04\textwidth}
-    \begin{subfigure}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{coin1019_obverse.jpeg}
-        \caption{Original}
-        \label{fig:originalcoin1019}
-    \end{subfigure}
-
-    \vspace{0.6em}
-
-    \begin{subfigure}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{coin1015_obverse.jpeg}
-        \caption{Gipsabguss}
-        \label{fig:gibsabgusscoin1015}
-    \end{subfigure}
-    \hspace{0.04\textwidth}
-    \begin{subfigure}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{coin1017_obverse.jpeg}
-        \caption{Gipsabguss}
-        \label{fig:gipsabgusscoin1017}
-    \end{subfigure}
-    \caption[Münzen in unterschiedlichem Erhaltungszustand]{Münzen aus dem Corpus Nummorum in unterschiedlichem Erhaltungszustand, alle aus Byzantion, Region Thrakien, ca. 222--235 n.~Chr.: Originale (oben) und Gipsabgüsse (unten).
-    (a) cn coin 1019~\cite{cn-coin-1019}. Original, Münzkabinett, Staatliche Museen zu Berlin, Inv.-Nr.~18235900. Foto: Reinhard Saczewski. Lizenz: Public Domain Mark 1.0.
-    (b) cn coin 1018~\cite{cn-coin-1018}. Original, Bibliothèque nationale de France, Département des Monnaies, médailles et antiques, Paris, Inv.-Nr.~466. Lizenz: CC BY-NC-SA 4.0.
-    (c) cn coin 1017~\cite{cn-coin-1017}. Gipsabguss. Foto: BBAW. Lizenz: CC BY-NC-SA 4.0.
-    (d) cn coin 1015~\cite{cn-coin-1015}. Gipsabguss. Foto: BBAW. Lizenz: CC BY-NC-SA 4.0.}
-    \label{fig:erhaltung}
-\end{figure}
 
 %**********Grundlagen des maschinellen Lernens*************
 \section{Grundlagen des maschinellen Lernens}
@@ -94,29 +54,36 @@ Eine Weiterentwicklung stellt das Deep Learning dar, dessen Grundlage künstlich
   \label{fig:nn}
 \end{figure}
 
-Verdeckt heißen die mittleren Schichten, weil die Trainingsdaten nur die gewünschte Ausgabe vorgeben, nicht aber, was in diesen Schichten berechnet werden soll \cite{goodfellow2016deep}. Jede Schicht erhält die Werte der vorherigen Schicht, verrechnet sie mit gewichteten Verbindungen und reicht das Ergebnis weiter. Die Gewichte bestimmen, wie stark ein Eingangswert in das Ergebnis eingeht. Durch eine Aktivierungsfunktion, in modernen Netzen meist die ReLU-Funktion, kann das Netz auch nichtlineare Zusammenhänge abbilden. Ohne sie ließe sich selbst ein Netz mit mehreren Schichten auf eine einzige lineare Abbildung zurückführen \cite{goodfellow2016deep, lecun2015deep}. Die Gewichte und die weiteren einstellbaren Größen des Netzes heißen zusammen Parameter. Sie werden im Training schrittweise angepasst. Die Ausgabe des Netzes wird mit dem erwarteten Ergebnis verglichen, und eine Kostenfunktion (Verlustfunktion, Loss Function) misst die Abweichung. Mit der Backpropagation wird berechnet, wie stark jeder Parameter zu diesem Fehler beiträgt. Dazu wird der Fehler mithilfe der Kettenregel (Kettenregel der Differentialrechnung) rückwärts durch das Netz geführt. Anhand dieser Werte werden die Parameter dann so verändert, dass der Fehler sinkt. Über viele Durchläufe durch die Trainingsdaten lernt das Netz so, welche Eigenschaften der Eingabe für die Aufgabe wichtig sind \cite{goodfellow2016deep, lecun2015deep}. Der Ablauf ist in \cref{fig:nn-training} dargestellt.
+\noindent Verdeckt heißen die mittleren Schichten, weil die Trainingsdaten nur die gewünschte Ausgabe vorgeben, nicht aber, was in diesen Schichten berechnet werden soll \cite{goodfellow2016deep}. Jede Schicht erhält die Werte der vorherigen Schicht, verrechnet sie mit gewichteten Verbindungen und reicht das Ergebnis weiter. Die Gewichte bestimmen, wie stark ein Eingangswert in das Ergebnis eingeht. Durch eine Aktivierungsfunktion, in modernen Netzen meist die ReLU-Funktion, kann das Netz auch nichtlineare Zusammenhänge abbilden. Ohne sie ließe sich selbst ein Netz mit mehreren Schichten auf eine einzige lineare Abbildung zurückführen \cite{goodfellow2016deep, lecun2015deep}. Die Gewichte und die weiteren einstellbaren Größen des Netzes heißen zusammen Parameter. Sie werden im Training schrittweise angepasst. Die Ausgabe des Netzes wird mit dem erwarteten Ergebnis verglichen, und eine Kostenfunktion (Verlustfunktion, Loss Function) misst die Abweichung. Mit der Backpropagation wird berechnet, wie stark jeder Parameter zu diesem Fehler beiträgt. Dazu wird der Fehler mithilfe der Kettenregel (Kettenregel der Differentialrechnung) rückwärts durch das Netz geführt. Anhand dieser Werte werden die Parameter dann so verändert, dass der Fehler sinkt. Über viele Durchläufe durch die Trainingsdaten lernt das Netz so, welche Eigenschaften der Eingabe für die Aufgabe wichtig sind \cite{goodfellow2016deep, lecun2015deep}. Der Ablauf ist in \cref{fig:nn-training} dargestellt.
 
 \begin{figure}[H]
   \centering
   \resizebox{\linewidth}{!}{\input{07-figures/fig-nn-training.tex}}
-  \caption[Training eines neuronalen Netzes]{Trainingsablauf eines neuronalen Netzes: Die Ausgabe des Netzes wird mit dem erwarteten Ergebnis verglichen, die Verlustfunktion misst die Abweichung, und per Backpropagation werden die Parameter des Netzes angepasst. Eigene Darstellung nach dem Prinzip aus \cite{goodfellow2016deep,lecun2015deep}.}
+  \caption[Training eines neuronalen Netzes]{Trainingsablauf eines neuronalen Netzes: (1) Die Eingabe wird durch das Netz geführt und liefert eine Ausgabe. (2) Die Verlustfunktion vergleicht die Ausgabe mit dem erwarteten Ergebnis, die Abweichung ist der Fehler. (3) Per Backpropagation wird berechnet, wie stark jeder Parameter zum Fehler beiträgt. (4) Die Parameter des Netzes werden angepasst. Eigene Darstellung nach dem Prinzip aus \cite{goodfellow2016deep,lecun2015deep}.}
   \label{fig:nn-training}
 \end{figure}
 
-\noindent Für Bilddaten haben sich Convolutional Neural Networks (CNNs) etabliert, deren Architektur auf räumlich strukturierte Daten ausgelegt ist \cite{goodfellow2016deep, lecun2015deep}. Ihr zentrales Element sind Faltungsschichten (Convolutional Layers). Sie verwenden Filter, kleine Gewichtsmatrizen, die über das Bild geschoben werden und dabei lokale Bildbereiche auf bestimmte Strukturen untersuchen (\cref{fig:faltung}). Derselbe Filter wird dabei an allen Bildpositionen verwendet, sodass das Netz weniger Parameter benötigt \cite{goodfellow2016deep}. 
+\noindent Für Bilddaten haben sich Convolutional Neural Networks (CNNs) etabliert, deren Architektur auf räumlich strukturierte Daten ausgelegt ist \cite{goodfellow2016deep, lecun2015deep}. Ihr zentrales Element sind Faltungsschichten (Convolutional Layers). Ein Bild liegt im Rechner als Raster von Zahlenwerten vor, bei Graustufenbildern sind das Helligkeitswerte. Faltungsschichten verwenden Filter, kleine Gewichtsmatrizen, die über dieses Raster geschoben werden und dabei lokale Bildbereiche auf bestimmte Strukturen untersuchen (\cref{fig:faltung}). Sie verwenden Filter, kleine Gewichtsmatrizen, die über das Bild geschoben werden und dabei lokale Bildbereiche auf bestimmte Strukturen untersuchen (\cref{fig:faltung}). Derselbe Filter wird dabei an allen Bildpositionen verwendet, sodass das Netz weniger Parameter benötigt \cite{goodfellow2016deep}. 
 
 \begin{figure}[H]
   \centering
-  \resizebox{\linewidth}{!}{\input{07-figures/fig-faltung.tex}}
-  \caption[Faltung mit einem Filter]{Funktionsprinzip eines Filters in einer Faltungsschicht: Der Filter wird über den Bildausschnitt geschoben, und an jeder Position werden die Produkte aus Bild- und Filterwerten summiert. Der markierte Ausschnitt ergibt $3\cdot(0\cdot1+0\cdot0+9\cdot(-1))=-27$, der Betrag ist bei der senkrechten Kante groß. Eigene Darstellung mit beispielhaft gewählten Zahlenwerten.}
+  \resizebox{0.7\linewidth}{!}{\input{07-figures/fig-faltung.tex}}
+  \caption[Faltung mit einem Filter]{Funktionsprinzip eines Filters in einer Faltungsschicht: Der Filter wird über den Bildausschnitt geschoben, und an jeder Position werden die Produkte aus Bild- und Filterwerten summiert. Die Zahlen im Bildausschnitt stehen für Helligkeitswerte; helle Zahlen haben große Werte. Der markierte Ausschnitt ergibt $3\cdot(0\cdot1+0\cdot0+9\cdot(-1))=-27$, der Betrag ist bei der senkrechten Kante groß. Eigene Darstellung mit beispielhaft gewählten Zahlenwerten.}
   \label{fig:faltung}
 \end{figure}
 
-\noindent Frühe Schichten erfassen einfache Strukturen wie Kanten, spätere setzen diese zu komplexeren Mustern und Formen zusammen. So entsteht eine hierarchische Repräsentation des Bildes. Anders als bei klassischen Verfahren der Bildverarbeitung müssen die relevanten Merkmale dabei nicht manuell festgelegt werden, sondern werden aus den Trainingsdaten erlernt \cite{lecun2015deep, goodfellow2016deep}. Pooling-Schichten fassen benachbarte Werte zusammen, beispielsweise über den Maximalwert oder den Durchschnitt, und verkleinern so die räumliche Auflösung der Merkmalskarten \cite{goodfellow2016deep}. 
+\noindent Frühe Schichten erfassen einfache Strukturen wie Kanten, spätere setzen diese zu komplexeren Mustern und Formen zusammen. So entsteht eine hierarchische Repräsentation des Bildes (\cref{fig:cnn-hierarchie}). 
 
-\noindent Ein Modell muss nicht für jede Aufgabe von Grund auf trainiert werden. Beim Transfer Learning werden Repräsentationen, die ein Modell auf einem großen, allgemeinen Datensatz gelernt hat, für eine andere Zielaufgabe weiterverwendet. Wird das vortrainierte Modell anschließend mit gelabelten Daten der Zielaufgabe weiter trainiert, spricht man von Fine-Tuning. Beim Few-Shot Learning genügen dafür wenige Beispiele der Zielaufgabe, beim Zero-Shot Learning kommt das Modell ganz ohne solche Beispiele aus. Stattdessen wird zusätzliches Wissen über die Zielklassen benötigt, etwa in Form von Attributen oder Textbeschreibungen \cite{zhang2019recent}. Ein Beispiel sind Modelle, die
-Bilder anhand von Texten ihrer Klassen einordnen \cite{zhai2022lit}.
-Dieses Prinzip nutzt das in dieser Arbeit eingesetzte YOLO-World \cite{cheng2024yoloworld} (vgl. \cref{sec:modelle}). Es gehört zur Objekterkennung, einer zentralen Aufgabe der Computer Vision, die im folgenden Abschnitt behandelt wird. 
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-cnn-hierarchie.tex}}
+  \caption[Merkmalshierarchie in einem CNN]{Vereinfachte schematische Darstellung, wie aufeinanderfolgende Schichten eines CNN zunehmend komplexe Strukturen erfassen. Eigene Darstellung nach dem Prinzip aus \cite{lecun2015deep,goodfellow2016deep}.}
+  \label{fig:cnn-hierarchie}
+\end{figure}
+
+\noindent Anders als bei klassischen Verfahren der Bildverarbeitung müssen die relevanten Merkmale dabei nicht manuell festgelegt werden, sondern werden aus den Trainingsdaten erlernt \cite{lecun2015deep, goodfellow2016deep}. Pooling-Schichten fassen benachbarte Werte zusammen, beispielsweise über den Maximalwert oder den Durchschnitt, und verkleinern so die räumliche Auflösung der Merkmalskarten \cite{goodfellow2016deep}. 
+
+Ein Modell muss nicht für jede Aufgabe von Grund auf trainiert werden. Beim Transfer Learning werden Repräsentationen, die ein Modell auf einem großen, allgemeinen Datensatz gelernt hat, für eine andere Zielaufgabe weiterverwendet. Wird das vortrainierte Modell anschließend mit gelabelten Daten der Zielaufgabe weiter trainiert, spricht man von Fine-Tuning. Beim Few-Shot Learning genügen dafür wenige Beispiele der Zielaufgabe, beim Zero-Shot Learning kommt das Modell ganz ohne solche Beispiele aus. Stattdessen wird zusätzliches Wissen über die Zielklassen benötigt, etwa in Form von Attributen oder Textbeschreibungen \cite{zhang2019recent}. Ein Beispiel sind Modelle, die Bilder anhand von Texten ihrer Klassen einordnen \cite{zhai2022lit}. Dieses Prinzip nutzt das in dieser Arbeit eingesetzte YOLO-World \cite{cheng2024yoloworld} (vgl. \cref{sec:modelle}). Es gehört zur Objekterkennung, einer zentralen Aufgabe der Computer Vision, die im folgenden Abschnitt behandelt wird. 
 
 %**********Objekterkennung und YOLO*************
 \section{Objekterkennung und YOLO}
@@ -132,7 +99,7 @@ Die Objekterkennung (Object Detection), im Folgenden synonym als Detektion bezei
 
 \noindent Für das überwachte Training eines Detektors (vgl. \cref{sec:glmaschinelleslernen}) müssen die Trainingsbilder annotiert sein. Zu jedem Objekt werden Klasse und Position, in der Regel in Form einer Bounding Box angegeben. Ein so trainierter Detektor kann ausschließlich die Klassen detektieren, die in den Trainingsdaten annotiert waren \cite{cheng2024yoloworld}. Zweistufige Detektoren wie R-CNN \cite{girshick2014rich} schlagen zunächst Bildregionen vor, die ein Objekt enthalten könnten, und klassifizieren diese anschließend einzeln \cite{redmon2016yolo,cheng2024yoloworld}. Da pro Bild mehrere Verarbeitungsschritte nötig sind, ist dieses Vorgehen rechenintensiv \cite{redmon2016yolo}. Das YOLO-Verfahren (You Only Look Once) wurde 2016 von Redmon et al. \cite{redmon2016yolo} vorgestellt und verfolgt einen anderen Ansatz. Es formuliert die Detektion als einzelnes Regressionsproblem. Ein neuronales Netz sagt Koordinaten der Bounding Boxes und Klassenwahrscheinlichkeiten als Zahlenwerte direkt aus dem Bild vorher, und zwar in einem einzigen Durchlauf. Daraus leitet sich der Name ab, denn das Bild wird dem Netz nur einmal gezeigt. Bereits das ursprüngliche Modell arbeitet in Echtzeit; Redmon et al. geben 45 Bilder pro Sekunde an \cite{redmon2016yolo}.
 
-Zur Veranschaulichung des Grundprinzips wird zunächst die ursprüngliche Architektur (YOLOv1) beschrieben. Dort wird das Eingabebild in ein regelmäßiges Raster aus Zellen unterteilt. Jede Zelle ist für Objekte zuständig, deren Mittelpunkt in ihr liegt. Sie sagt eine feste Anzahl von Bounding Boxes vor, jeweils mit Koordinaten und einem Confidence Score. Dieser Wert gibt an, wie sicher sich in der Box ein Objekt befindet und wie gut die Box dessen tatsächliche Position trifft. Zusätzlich bestimmt die Zelle, zu welcher Klasse ein enthaltenes Objekt am wahrscheinlichsten gehört \cite{redmon2016yolo} ()\cref{fig:yolov1raster}. 
+Zur Veranschaulichung des Grundprinzips wird zunächst die ursprüngliche Architektur (YOLOv1) beschrieben. Dort wird das Eingabebild in ein regelmäßiges Raster aus Zellen unterteilt. Jede Zelle ist für Objekte zuständig, deren Mittelpunkt in ihr liegt. Sie sagt eine feste Anzahl von Bounding Boxes vor, jeweils mit Koordinaten und einem Confidence Score. Dieser Wert gibt an, wie sicher sich in der Box ein Objekt befindet und wie gut die Box dessen tatsächliche Position trifft. Zusätzlich bestimmt die Zelle, zu welcher Klasse ein enthaltenes Objekt am wahrscheinlichsten gehört \cite{redmon2016yolo} (\cref{fig:yolov1raster}). 
 
 \begin{figure}[H]
     \centering
@@ -145,7 +112,7 @@ Zur Veranschaulichung des Grundprinzips wird zunächst die ursprüngliche Archit
     \label{fig:yolov1raster}
 \end{figure}
 
-\noindent Spätere Generationen wie YOLOv8 \cite{jocher2023yolov8} haben dieses Prinzip weiterentwickelt, unter anderem durch Vorhersagen auf mehreren Skalen und einen entkoppelten Head \cite{cheng2024yoloworld}. Es ist daher nicht unverändert auf moderne YOLO-Modelle übertragbar. Moderne YOLO-Netze lassen sich vereinfacht in drei Abschnitte gliedern \cite{cheng2024yoloworld} ()\cref{fig:backbone-neck-head}. Der Backbone extrahiert aus dem Eingabebild Features und überführt es schrittweise in eine kompakte Repräsentation. Der Neck führt diese Repräsentationen aus verschiedenen Ebenen zusammen und bereitet sie auf. Der Head berechnet daraus die finalen Bounding Boxes, Confidence Scores und Klassenwahrscheinlichkeiten. 
+\noindent Spätere Generationen wie YOLOv8 \cite{jocher2023yolov8} haben dieses Prinzip weiterentwickelt, unter anderem durch Vorhersagen auf mehreren Skalen und einen entkoppelten Head \cite{cheng2024yoloworld}. Es ist daher nicht unverändert auf moderne YOLO-Modelle übertragbar. Moderne YOLO-Netze lassen sich vereinfacht in drei Abschnitte gliedern \cite{cheng2024yoloworld} (\cref{fig:backbone-neck-head}). Der Backbone extrahiert aus dem Eingabebild Features und überführt es schrittweise in eine kompakte Repräsentation. Der Neck führt diese Repräsentationen aus verschiedenen Ebenen zusammen und bereitet sie auf. Der Head berechnet daraus die finalen Bounding Boxes, Confidence Scores und Klassenwahrscheinlichkeiten. 
 
 \begin{figure}[H]
   \centering
@@ -171,4 +138,14 @@ Zwei Feature-Vektoren $ A $ und $ B $ gleicher Dimension $ n $ lassen sich mithi
     \item Die Kosinus-Ähnlichkeit misst den Winkel zwischen zwei Vektoren \cite{manning2008introduction}: \[ \cos(A, B) = \frac{A \cdot B}{||A|| \cdot ||B||} \] Der Wert liegt zwischen $ -1 $ und $ 1 $. Er hängt nur von der Richtung der Vektoren ab, nicht von ihrer Länge.
     \todo{Buch: Abschnitt 6.3 bzw. Goodfellow nachschauen}
 \end{itemize}
-Bei den beiden Distanzen bedeutet ein kleiner Wert eine hohe Ähnlichkeit, bei der Kosinus-Ähnlichkeit ein großer. Die drei Maße gewichten Unterschiede zwischen Vektoren verschieden. Welches sich für den Vergleich von Merkmalen auf Münzbildern eignet, ist vorab nicht bekannt. Die Auswahl und Anwendung werden ebenfalls in \cref{sec:vorgehen} beschrieben.
+
+\noindent Die Unterschiede der drei Maße sind in \cref{fig:aehnlichkeitsmasse} an zwei Vektoren im zweidimensionalen Raum grafisch dargestellt. Die Manhattan-Distanz summiert die Teilstrecken entlang der Achsen, die euklidische Distanz misst den geraden (direkten) Abstand, und die Kosinus-Ähnlichkeit betrachtet den Winkel zwischen den Vektoren. Die in dieser Arbeit verwendeten Vektoren haben mehr Dimensionen (Schicht 18: 256), das Prinzip bleibt aber gleich.
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-aehnlichkeitsmasse.tex}}
+  \caption[Veranschaulichung der Ähnlichkeitsmaße]{Veranschaulichung der drei Maße an zwei Vektoren $A$ und $B$ im zweidimensionalen Raum: Die Manhattan-Distanz summiert die Teilstrecken entlang der Achsen, die euklidische Distanz misst die gerade Verbindung, die Kosinus-Ähnlichkeit beruht auf dem Winkel zwischen den Vektoren. Eigene Darstellung.}
+  \label{fig:aehnlichkeitsmasse}
+\end{figure}
+
+\noindent Bei den beiden Distanzen bedeutet ein kleiner Wert eine hohe Ähnlichkeit, bei der Kosinus-Ähnlichkeit dagegen ein großer. Die drei Maße gewichten Unterschiede zwischen Vektoren verschieden. Welches sich für den Vergleich von Merkmalen auf Münzbildern eignet, ist vorab nicht bekannt. Die Auswahl und Anwendung werden ebenfalls in \cref{sec:vorgehen} beschrieben.

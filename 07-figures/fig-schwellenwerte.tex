@@ -9,11 +9,11 @@
     xticklabels={0{,}005,0{,}01,0{,}05,0{,}5},
     ytick={0.01,0.1,1,10},
     yticklabels={0{,}01,0{,}1,1,10},
-    ymin=0.008, ymax=12,
+    ymin=0.008, ymax=30, xmin=0.0028, xmax=1.6,
     xlabel={Schwellenwert (Confidence)},
     ylabel={Ø Detektionen je Bild},
     xmajorgrids=true, ymajorgrids=true,
-    legend style={at={(0.03,0.04)}, anchor=south west, font=\footnotesize, draw=none, fill=white, fill opacity=0.85, text opacity=1},
+    legend style={at={(0.99,0.97)}, anchor=north east, font=\scriptsize, draw=none, fill=white, fill opacity=0.85, text opacity=1},
     legend cell align=left,
     xtick pos=bottom, ytick pos=left,
     axis line style={gray!60}, tick style={gray!60},
@@ -25,12 +25,20 @@
 \addlegendentry{Vorderseite (242 Bilder)}
 \addplot[klasseHellText, thick, dashed, mark=square*, mark size=2pt] coordinates {(0.005,3.896) (0.01,2.208) (0.05,1.172) (0.5,0.012)};
 \addlegendentry{Rückseite (250 Bilder)}
-\node[font=\scriptsize, anchor=south west, text=klasseDunkel] at (axis cs:0.005,3.740) {3{,}74};
-\node[font=\scriptsize, anchor=south west, text=klasseDunkel] at (axis cs:0.01,2.244) {2{,}24};
-\node[font=\scriptsize, anchor=south west, text=klasseDunkel] at (axis cs:0.05,1.289) {1{,}29};
-\node[font=\scriptsize, anchor=south west, text=klasseDunkel] at (axis cs:0.5,0.029) {0{,}03};
+\draw[klasseDunkel!70, densely dotted, thin] (axis cs:0.005,3.74) -- (axis cs:0.0028,3.74);
+\draw[klasseHellText!80, densely dotted] (axis cs:0.005,3.896) -- (axis cs:0.0028,3.896);
+\draw[klasseDunkel!70, densely dotted, thin] (axis cs:0.01,2.244) -- (axis cs:0.0028,2.244);
+\draw[klasseHellText!80, densely dotted] (axis cs:0.01,2.208) -- (axis cs:0.0028,2.208);
+\draw[klasseDunkel!70, densely dotted, thin] (axis cs:0.05,1.289) -- (axis cs:0.0028,1.289);
+\draw[klasseHellText!80, densely dotted] (axis cs:0.05,1.172) -- (axis cs:0.0028,1.172);
+\draw[klasseDunkel!70, densely dotted, thin] (axis cs:0.5,0.029) -- (axis cs:0.0028,0.029);
+\draw[klasseHellText!80, densely dotted] (axis cs:0.5,0.012) -- (axis cs:0.0028,0.012);
+\node[font=\footnotesize, anchor=south west, inner sep=2pt, xshift=1pt] at (axis cs:0.005,3.896) {\textcolor{klasseHellText}{3{,}90}\,\textcolor{gray}{|}\,\textcolor{klasseDunkel}{3{,}74}};
+\node[font=\footnotesize, anchor=south west, inner sep=2pt, xshift=1pt] at (axis cs:0.01,2.244) {\textcolor{klasseHellText}{2{,}21}\,\textcolor{gray}{|}\,\textcolor{klasseDunkel}{2{,}24}};
+\node[font=\footnotesize, anchor=south west, inner sep=2pt, xshift=1pt] at (axis cs:0.05,1.289) {\textcolor{klasseHellText}{1{,}17}\,\textcolor{gray}{|}\,\textcolor{klasseDunkel}{1{,}29}};
+\node[font=\footnotesize, anchor=south west, inner sep=2pt, xshift=1pt] at (axis cs:0.5,0.029) {\textcolor{klasseHellText}{0{,}01}\,\textcolor{gray}{|}\,\textcolor{klasseDunkel}{0{,}03}};
 \end{axis}
 \end{tikzpicture}
-\caption[Detektionen je Bild bei verschiedenen Schwellenwerten]{Durchschnittliche Zahl der Detektionen je Bild bei verschiedenen Schwellenwerten (beide Achsen logarithmisch). Beschriftet sind die Werte der Vorderseite.}
+\caption[Detektionen je Bild bei verschiedenen Schwellenwerten]{Durchschnittliche Zahl der Detektionen je Bild bei verschiedenen Schwellenwerten (beide Achsen logarithmisch). Beschriftet sind die Werte als Rückseite~|~Vorderseite.}
 \label{fig:schwellenwerte}
 \end{figure}

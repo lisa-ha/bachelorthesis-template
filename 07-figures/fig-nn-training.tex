@@ -1,14 +1,33 @@
-% Optional: nur einbinden, wenn der Text Verlustfunktion und Backpropagation beschreibt
-\begin{tikzpicture}
+\begin{tikzpicture}[stepno/.style={circle, fill=figorange, text=white, inner sep=1.5pt, minimum size=5mm, font=\footnotesize\bfseries}]
   \node[figbox, sblue] (in) at (0,0) {Eingabe};
-  \node[figbox, sorange] (net) at (3,0) {Netz};
-  \node[figbox, sblue] (out) at (6,0) {Ausgabe};
-  \node[figbox, sorange] (loss) at (9,0) {Verlust-\\funktion};
-  \node[figbox, sgreen] (exp) at (9,-1.8) {erwartetes\\Ergebnis};
+  \node[figbox, sorange] (net) at (3.4,0) {Netz\\{\footnotesize (Parameter)}};
+  \node[figbox, sblue] (out) at (6.8,0) {Ausgabe};
+  \node[figbox, sorange] (loss) at (10.2,0) {Verlust-\\funktion};
+  \node[figbox, sgreen] (exp) at (10.2,-2.2) {erwartetes\\Ergebnis};
+  \node[figbox, spurple] (err) at (13.6,0) {Fehler};
   \draw[figarrow] (in) -- (net);
   \draw[figarrow] (net) -- (out);
   \draw[figarrow] (out) -- (loss);
   \draw[figarrow] (exp) -- (loss);
-  \draw[figarrow, dashed] (loss.north) -- ++(0,0.8) -| (net.north)
-    node[pos=0.25, above, figlabel] {Backpropagation};
+  \draw[figarrow] (loss) -- (err);
+  \draw[figarrow, dashed] (err.north) -- ++(0,1.3) -| (net.north);
+  \node[figlabel, above] at (8.5,1.75) {Backpropagation};
+  \node[stepno] at (1.7,0.55) {1};
+  \node[stepno] at (8.5,0.55) {2};
+  \node[stepno] at (8.5,2.45) {3};
+  \node[stepno] at (2.75,1.0) {4};
+  % Veranschaulichung des Fehlers: Abstand zwischen Ausgabe und erwartetem Ergebnis
+  \begin{scope}[shift={(12.7,-3.3)}]
+    \draw[black!45] (-0.5,0) -- (2.7,0);
+    \fill[figblue!35, draw=figblue] (0,0) rectangle (0.5,0.7);
+    \fill[figgreen!35, draw=figgreen] (1.6,0) rectangle (2.1,1.4);
+    \draw[gray, dashed] (0.5,0.7) -- (1.6,0.7);
+    \draw[gray, dashed] (0.5,1.4) -- (1.6,1.4);
+    \draw[<->, figpurple, line width=0.9pt] (1.05,0.7) -- (1.05,1.4);
+    \node[figlabel] at (0.2,-0.3) {Ausgabe};
+    \node[figlabel] at (1.9,-0.3) {erwartet};
+    \node[figlabel, text=figpurple] at (1.05,1.75) {Abweichung};
+  \end{scope}
+  \draw[dotted, figpurple, line width=0.9pt] (err.south) -- (13.75,-1.3);
+  \node[figlabel] at (4.2,-2.2) {Die Schritte 1 bis 4 werden über viele\\Trainingsbeispiele wiederholt.};
 \end{tikzpicture}

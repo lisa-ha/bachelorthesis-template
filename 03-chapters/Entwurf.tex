@@ -25,9 +25,57 @@
 
 \noindent \textbf{Datengrundlage}
 
-\noindent Die Münzbilder stammen aus dem Corpus Nummorum (CN) \cite{corpusnummorum,peter2024corpus}, einem Online-Portal für antike Münzen, die in der archaischen Zeit bis unter römischer Herrschaft in den Regionen Thrakien, Moesia Inferior, Mysien und der Troas geprägt wurden. Die Datenbasis besteht aus Münzen des Münzkabinetts Berlin und aus Gipsabdrücken (engl. Plaster Casts) von Münzen, die an der Berlin-Brandenburgischen Akademie der Wissenschaften (BBAW) aufbewahrt werden und aus zahlreichen, heute teilweise nicht mehr vorhandenen Sammlungen stammen \cite{cn-about}. Daneben werden digitale Museumskataloge integriert, und Nutzer können eigene Münzen hochladen \cite{cn-about}. Das Portal umfasst rund 41.000 Münzen (Stand: 5.\ Oktober 2026) \cite{corpusnummorum}. Die Zahl wächst laufend. Davon werden 200 über die öffentliche API bezogen \cite{cn-data-api}, damit die Auswertung im Rahmen der Arbeit möglich bleibt. Die Bilder zeigen daher je nach Münze ein Original oder einen Gipsabdruck. Die Angaben zur Bildart stammen aus einem Auszug der CN-Datenbank (Stand: Januar 2025), der vom Betreuer dieser Arbeit bereitgestellt wurde. Danach zeigen von den Vorderseitenbildern 184 einen Gipsabguss und 57 ein Original, auf der Rückseite sind es 192 Gipsabgüsse und 57 Originale. Für je ein Bild pro Seite fehlt die Angabe, da es im Auszug noch nicht enthalten war. Für 143 Münzen liegt auf der Vorderseite nur ein Gipsabguss vor, für 16 nur ein Original und für 41 beides. Ein Gipsabguss formt nur die Oberfläche der Münze ab, Farbe und Patina sind darauf daher nicht erkennbar. Abnutzung bleibt im Relief erkennbar, Korrosion nur, soweit sie die Oberfläche verändert hat. Die Abbildungen der Gipsabgüsse dürfen für wissenschaftliche Zwecke unter CC BY-NC-SA verwendet werden, für Aufnahmen der Originale liegen die Rechte bei den jeweiligen Rechteinhabern \cite{cn-bildrechte}. Die Aufnahmen der Originale stammen überwiegend aus dem Münzkabinett Berlin und aus Gallica, der digitalen Bibliothek der Bibliothèque nationale de France, einzelne aus der Staatlichen Münzsammlung München.
+\noindent Die Münzbilder stammen aus dem Corpus Nummorum (CN) \cite{corpusnummorum,peter2024corpus}, einem Online-Portal für antike Münzen, die in der archaischen Zeit bis unter römischer Herrschaft in den Regionen Thrakien, Moesia Inferior, Mysien und der Troas geprägt wurden. Die Datenbasis besteht aus Münzen des Münzkabinetts Berlin und aus Gipsabdrücken (engl. Plaster Casts) von Münzen, die an der Berlin-Brandenburgischen Akademie der Wissenschaften (BBAW) aufbewahrt werden und aus zahlreichen, heute teilweise nicht mehr vorhandenen Sammlungen stammen \cite{cn-about}. Daneben werden digitale Museumskataloge integriert, und Nutzer können eigene Münzen hochladen \cite{cn-about}. Das Portal umfasst rund 41.000 Münzen (Stand: 5.\ Oktober 2026) \cite{corpusnummorum}. Die Zahl wächst laufend. Davon werden 200 über die öffentliche API bezogen \cite{cn-data-api}, damit die Auswertung im Rahmen der Arbeit möglich bleibt. Die Bilder zeigen daher je nach Münze ein Original oder einen Gipsabdruck. 
+Die Angaben zur Bildart stammen aus einem Auszug der CN-Datenbank (Stand: Januar 2025), der vom Betreuer dieser Arbeit bereitgestellt wurde. Danach zeigen von den 242 Vorderseitenbildern 185 einen Gipsabguss und 57 ein Original, auf der Rückseite sind es 193 Gipsabgüsse und 57 Originale (250 Bilder). Für 143 Münzen liegt auf der Vorderseite nur ein Gipsabguss vor, für 16 nur ein Original und für 41 beides. Auf der Rückseite sind es 142, 7 und 50 Münzen.
+Ein Gipsabguss formt nur die Oberfläche der Münze ab, Farbe und Patina sind darauf daher nicht erkennbar. Abnutzung bleibt im Relief erkennbar, Korrosion nur, soweit sie die Oberfläche verändert hat. Die Münzen wurden in aufsteigender ID-Reihenfolge abgerufen. Münzen ohne Vorderseitenbild oder ohne Stempel-ID wurden dabei übergangen. Eine Stempelgruppe wurde gebildet, sobald zehn Münzen mit demselben Vorderseitenstempel vorlagen; das wurde 20-mal wiederholt. Beispielhaft zeigt \cref{fig:erhaltung} vier unterschiedliche Bildarten von Münzen mit derselben Vorderseiten-Stempelgruppe. Die Coin-IDs der 200 Münzen liegen zwischen 348 und 3561. Die Stempelzuordnung stammt aus der CN-Datenbank \cite{cn-about}. Die Gruppen dienen als Grundwahrheit für die Auswertung (vgl. \cref{ch:evaluation}). 
 
-Die Münzen wurden in aufsteigender ID-Reihenfolge abgerufen. Münzen ohne Vorderseitenbild oder ohne Stempel-ID wurden dabei übergangen. Eine Stempelgruppe wurde gebildet, sobald zehn Münzen mit demselben Vorderseitenstempel vorlagen; das wurde 20-mal wiederholt. Die Coin-IDs der 200 Münzen liegen zwischen 348 und 3561. Die Stempelzuordnung stammt aus der CN-Datenbank \cite{cn-about}. Die Gruppen dienen als Grundwahrheit für die Auswertung (vgl. \cref{ch:evaluation}). Alle 200 Münzen besitzen ein Vorderseitenbild, 199 ein Rückseitenbild. Insgesamt liegen 242 Vorderseiten- und 250 Rückseitenbilder vor; 51 Münzen haben auf mindestens einer Seite mehr als ein Bild. Die Zusammensetzung nach Bildart, Region, Münzstätte und Datierung zeigt \cref{tab:muenzdaten}, die einzelnen Stempelgruppen \cref{tab:stempelgruppen}.
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin1018_obverse.jpeg}
+        \caption{Original}
+        \label{fig:originalcoin1018}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin1019_obverse.jpeg}
+        \caption{Original}
+        \label{fig:originalcoin1019}
+    \end{subfigure}
+
+    \vspace{0.6em}
+
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin1015_obverse.jpeg}
+        \caption{Gipsabguss}
+        \label{fig:gibsabgusscoin1015}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{coin1017_obverse.jpeg}
+        \caption{Gipsabguss}
+        \label{fig:gipsabgusscoin1017}
+    \end{subfigure}
+    \caption[Münzen in unterschiedlichem Erhaltungszustand und Bildart mit demselben Vorderseitenstempel]{Münzen aus dem Corpus Nummorum in unterschiedlichem Erhaltungszustand, alle aus Byzantion, Region Thrakien, ca. 222--235 n.~Chr.: Originale (oben) und Gipsabgüsse (unten).
+    (a) cn coin 1019~\cite{cn-coin-1019}. Original, Münzkabinett, Staatliche Museen zu Berlin, Inv.-Nr.~18235900. Foto: Reinhard Saczewski. Lizenz: Public Domain Mark 1.0.
+    (b) cn coin 1018~\cite{cn-coin-1018}. Original, Bibliothèque nationale de France, Département des Monnaies, médailles et antiques, Paris, Inv.-Nr.~466. Lizenz: CC BY-NC-SA 4.0.
+    (c) cn coin 1017~\cite{cn-coin-1017}. Gipsabguss. Foto: BBAW. Lizenz: CC BY-NC-SA 4.0.
+    (d) cn coin 1015~\cite{cn-coin-1015}. Gipsabguss. Foto: BBAW. Lizenz: CC BY-NC-SA 4.0.}
+    \label{fig:erhaltung}
+\end{figure}
+
+\noindent Die Abbildungen der Gipsabgüsse dürfen für wissenschaftliche Zwecke unter CC BY-NC-SA verwendet werden, für Aufnahmen der Originale liegen die Rechte bei den jeweiligen Rechteinhabern \cite{cn-bildrechte}. Die Aufnahmen der Originale stammen überwiegend aus dem Münzkabinett Berlin und aus Gallica, der digitalen Bibliothek der Bibliothèque nationale de France, einzelne aus der Staatlichen Münzsammlung München.
+
+Alle 200 Münzen besitzen ein Vorderseitenbild, 199 ein Rückseitenbild. Die Rückseitenstempel waren kein Auswahlkriterium und sind daher ungleich verteilt: Von den 198 Münzen mit Rückseiten-ID verteilen sich 125 verschiedene Stempel. 79 davon kommen nur auf einer Münze vor, 46 auf mindestens zwei Münzen (zusammen 119 Münzen, \cref{fig:rueckseitenstempel}). Für 79 Münzen gibt es auf der Rückseite somit keine stempelgleiche Münze im Datensatz. Insgesamt liegen 242 Vorderseiten- und 250 Rückseitenbilder vor; 51 Münzen haben auf mindestens einer Seite mehr als ein Bild. 
+
+\input{07-figures/fig-rueckseitenstempel.tex}
+
+\noindent Die Zusammensetzung nach Bildart, Region, Münzstätte und Datierung zeigt \cref{tab:muenzdaten}, die einzelnen Stempelgruppen \cref{tab:stempelgruppen}.
 Die Bilder werden als Vorschaubilder der Größe \texttt{lg} aus der CN-Schnittstelle geladen [Pixelmaß prüfen]\todo{Wert einfügen}. Sie werden nicht weiterverarbeitet; lediglich das Modell skaliert sie intern auf die Eingabegröße von 640 Pixeln (Ultralytics-Standard).
 % Please add the following required packages to your document preamble:
 % \usepackage[table,xcdraw]{xcolor}
@@ -48,7 +96,7 @@ Münzen mit Vorderseitenbild                     & 200                          
 Münzen mit Rückseitenbild                       & 199                                       \\ \hline
 Bilder Vorderseite/Rückseite                    & 242/250                                   \\ \hline
 Münzen mit \textgreater{1} Bild pro Seite & 51 (Vorderseite: 42, Rückseite: 51)                                        \\ \hline
-Bildart                                         & \makecell[l]{Vorderseite: 57 Original, \\ 184 Gipsabguss, \\ Rückseite: 57 Original, \\ 192 Gipsabguss \\(je 1 Bild ohne Angabe)} \\ \hline
+Bildart                                         & \makecell[l]{Vorderseite: 57 Original, \\ 185 Gipsabguss, \\ Rückseite: 57 Original, \\ 193 Gipsabguss} \\ \hline
 Regionen                                        & Thrakien: 190, ohne Angabe: 10                          \\ \hline
 Münzstätten                                     & \makecell[l]{Byzantion: 110, Perinthos: 80, \\ Nikaia: 10}            \\ \hline
 Datierung                                       & \makecell[l]{Ende 1./Mitte 2. Jh. - ca. 253--268 \\ n. Chr; 7 Münzen ohne Angabe}               \\ \hline
@@ -71,7 +119,7 @@ Ein wesentliches Kriterium für den weiteren Verlauf war daher, visuelle Merkmal
   \label{fig:yolo-world}
 \end{figure}
 
-Die Leistung eines Detektors hängt von der Architektur, den Trainingsdaten und dem Bildmaterial ab. Kleine, schlecht sichtbare oder teilweise verdeckte Objekte erschweren die Detektion, ebenso starke Unterschiede innerhalb einer Klasse oder schwer abgrenzbare Klassen \cite{liu2020deep}. Bei antiken Münzbildern treten auch Probleme auf wie Korrosion und Abnutzung (vgl. \cref{sec:glnumismatik}), die Motive und Legenden teilweise unkenntlich machen~\cite{cooper2020learning,anwar2026reading}.
+\noindent Die Leistung eines Detektors hängt von der Architektur, den Trainingsdaten und dem Bildmaterial ab. Kleine, schlecht sichtbare oder teilweise verdeckte Objekte erschweren die Detektion, ebenso starke Unterschiede innerhalb einer Klasse oder schwer abgrenzbare Klassen \cite{liu2020deep}. Bei antiken Münzbildern treten auch Probleme auf wie Korrosion und Abnutzung (vgl. \cref{sec:glnumismatik}), die Motive und Legenden teilweise unkenntlich machen~\cite{cooper2020learning,anwar2026reading}.
 Stempelunterschiede führen zu Abweichungen innerhalb derselben Motivklasse~\cite{wikipedia-muenzpraegung}. Zudem wurden im Rahmen der Recherche für diese Arbeit keine Untersuchungen gefunden, in denen YOLO-World auf Münzbildern trainiert oder angepasst wurde. YOLO-Varianten wurden dagegen bereits zur Zeichenerkennung auf Münzen eingesetzt~\cite{anwar2026reading}.
 
 %****************Vorgehen****************************
@@ -83,7 +131,9 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 
 \noindent \textbf{Merkmalsdetektion}
 
-\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). \todo{Ergänzen: Wie ist die Liste entstanden, zum Beispiel aus den Beschreibungen der CN-Münzen, und wurde sie angepasst?} Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in der \cref{fig:schwellenwerte}, sowie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
+\noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). Die Liste wurde zu Beginn der Arbeit erstellt und danach nicht mehr angepasst. Sie wurde weder auf die Datengrundlage abgestimmt noch daraufhin geprüft, ob die Motive auf den Münzen des Corpus Nummorum tatsächlich vorkommen. Die Prompts sind daher keine genauen Bezeichnungen der Motive, sondern Annäherungen. So enthält die Liste etwa \enquote{hedgehog}, weil eine Krone vom Modell auch als Igel gelesen werden kann. Das ist für diese Arbeit unproblematisch, denn es kommt nicht auf die richtige Benennung an, sondern auf die Vergleichbarkeit (vgl. \cref{sec:zielsetzungundforschungsfragen}). Wird auf zwei Münzen ein \enquote{hedgehog} detektiert, zeigen beide vermutlich dasselbe Motiv, etwa eine Krone, und die beiden Ausschnitte lassen sich miteinander vergleichen. Der Igel steht hier nur als Beispiel.
+
+Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in der \cref{fig:schwellenwerte}, sowie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
 
 \input{07-figures/fig-schwellenwerte.tex}
 
@@ -115,8 +165,9 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 \end{tabular}
 \end{table}
 
-Überlappende Detektionen werden durch die Standard-NMS von Ultralytics zusammengefasst (IoU-Schwelle 0{,}7, höchstens 300 Detektionen je Bild, \cref{app:example}). Die NMS wird je Klasse angewendet. Überlappende Boxen verschiedener Klassen, etwa \textit{human face} und \textit{person} auf demselben Kopf, bleiben daher beide erhalten.
-Detektionen, deren Bounding Box mindestens 85\,\% der Bildfläche einnimmt, werden verworfen, damit nicht das gesamte Münzbild als Merkmal gilt (Parameter \texttt{max\_area\_ratio}, \cref{app:example}). \todo{Begründung für 0,85 ergänzen} Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box gespeichert.
+\noindent Überlappende Detektionen werden durch die Standard-NMS von Ultralytics zusammengefasst (IoU-Schwelle 0{,}7, höchstens 300 Detektionen je Bild, \cref{app:example}). Die NMS wird je Klasse angewendet. Überlappende Boxen verschiedener Klassen, etwa \textit{human face} und \textit{person} auf demselben Kopf, bleiben daher beide erhalten. Detektionen, deren Bounding Box mindestens 85\,\% der Bildfläche einnimmt, werden verworfen, damit nicht das gesamte Münzbild als Merkmal gilt (Parameter \texttt{max\_area\_ratio}, \cref{app:example}). Der Wert von 0,85 wurde pragmatisch festgelegt, um Detektionen der ganzen Münze auszuschließen, und nicht systematisch bestimmt; andere Werte wurden nicht getestet. Wie stark sich ein anderer Schwellenwert auf die Zahl der Detektionen und auf die Ergebnisse auswirkt, ist daher offen. 
+
+Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box gespeichert.
 
 \vspace{\baselineskip}
 
@@ -128,9 +179,9 @@ Detektionen, deren Bounding Box mindestens 85\,\% der Bildfläche einnimmt, werd
 
 \noindent \textbf{Vergleich}
 
-\noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen \todo{Umgang mit verwandten Klassen ergänzen}. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
-Für zwei Vektoren A und B der Dimension n werden die drei Maße aus \cref{sec:merkmale} verwendet. 
-Die beiden Distanzen $d$ (euklidisch, Manhattan) werden über $s = \frac{1}{1+d}$ in eine Ähnlichkeit $s \in (0, 1]$ umgerechnet. Die Kosinus-Ähnlichkeit $c$ wird über $s = \frac{c+1}{2}$ auf $[0, 1]$ abgebildet. Beide Umrechnungen sind monoton und ändern das Ranking nicht. Die Ähnlichkeitswerte verschiedener Maße sind nicht direkt vergleichbar, da sie unterschiedlich skaliert sind. Verglichen werden daher die Rangfolgen. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in \cref{ch:evaluation} verglichen. 
+\noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen. Verwandte Klassen, etwa ähnliche Motive wie \enquote{hedgehog} und \enquote{crown} oder auch \enquote{human face} und \enquote{profile portait} werden dabei nicht zusammengefasst. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
+
+Für zwei Vektoren A und B der Dimension n werden die drei Maße aus \cref{sec:merkmale} verwendet. Die beiden Distanzen $d$ (euklidisch, Manhattan) werden über $s = \frac{1}{1+d}$ in eine Ähnlichkeit $s \in (0, 1]$ umgerechnet. Die Kosinus-Ähnlichkeit $c$ wird über $s = \frac{c+1}{2}$ auf $[0, 1]$ abgebildet. Beide Umrechnungen sind monoton und ändern das Ranking nicht. Die Ähnlichkeitswerte verschiedener Maße sind nicht direkt vergleichbar, da sie unterschiedlich skaliert sind. Verglichen werden daher die Rangfolgen. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in \cref{ch:evaluation} verglichen. 
 Pro Münze zählt der höchste Ähnlichkeitswert über alle passenden Merkmale. Die Münzen werden nach Ähnlichkeit absteigend sortiert, und die ähnlichsten [1 bis 5] werden ausgegeben. 
 
 
@@ -138,3 +189,5 @@ Pro Münze zählt der höchste Ähnlichkeitswert über alle passenden Merkmale. 
 \section{Bewertungskonzept}
 \label{sec:bewertungskonzept}
 Ob sich Münzen desselben Stempels anhand einzelner Merkmale wiederfinden lassen, wird mithilfe der Stempelgruppen als Grundwahrheit untersucht (vgl. \cref{sec:gesamtansatzdatengrundlage}). Für jede Münze wird geprüft, ob Münzen derselben Gruppe unter den ähnlichsten Treffern liegen. Verglichen werden die Merkmalsklassen und die drei Ähnlichkeitsmaße. Ergänzend werden einzelne Fälle qualitativ untersucht. Das genaue Vorgehen und die Kennzahlen werden in \cref{sec:evaluationsaufbau} beschrieben.
+
+Zusätzlich wird YOLOv8n als Vergleich herangezogen, um einzuordnen, ob die freien Textbeschreibungen von YOLO-World für die Stempelsuche einen Vorteil bringen. Der Vergleich ist nicht Teil der Forschungsfragen.

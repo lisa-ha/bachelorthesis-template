@@ -1,0 +1,48 @@
+% Drei Panels mit denselben Vektoren A und B (2D-Beispiel).
+\begin{tikzpicture}[x=0.9cm,y=0.9cm, every node/.style={font=\small}]
+  % ---------- Panel 1: Manhattan ----------
+  \begin{scope}[shift={(0,0)}]
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (1.2,3.4);
+    \coordinate (B) at (4.2,1.4);
+    \draw[->, black!45] (0,0) -- (5.2,0) node[right, figlabel] {$x_1$};
+    \draw[->, black!45] (0,0) -- (0,4.2) node[above, figlabel] {$x_2$};
+    \draw[figarrow, figblue] (O) -- (A) node[above left, text=figblue] {$A$};
+    \draw[figarrow, figgreen] (O) -- (B) node[right, text=figgreen] {$B$};
+    \draw[figorange, line width=1.6pt] (A) -- (1.2,1.4) -- (B);
+    \node[figlabel, text=figorange, above right] at (2.1,1.4) {$d_1$};
+    \node[figlabel, font=\small\bfseries] at (2.6,-0.9) {Manhattan-Distanz};
+    \node[figlabel, text width=5.6cm] at (2.6,-1.75) {$d_1(A,B)=|a_1-b_1|+|a_2-b_2|$\\(Summe der Teilstrecken)};
+  \end{scope}
+
+  % ---------- Panel 2: Euklid ----------
+  \begin{scope}[shift={(6.6,0)}]
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (1.2,3.4);
+    \coordinate (B) at (4.2,1.4);
+    \draw[->, black!45] (0,0) -- (5.2,0) node[right, figlabel] {$x_1$};
+    \draw[->, black!45] (0,0) -- (0,4.2) node[above, figlabel] {$x_2$};
+    \draw[figarrow, figblue] (O) -- (A) node[above left, text=figblue] {$A$};
+    \draw[figarrow, figgreen] (O) -- (B) node[right, text=figgreen] {$B$};
+    \draw[figorange, line width=1.6pt] (A) -- (B);
+    \node[figlabel, text=figorange, above right] at (2.7,2.45) {$d_2$};
+    \node[figlabel, font=\small\bfseries] at (2.6,-0.9) {Euklidische Distanz};
+    \node[figlabel, text width=5.6cm] at (2.6,-1.75) {$d_2(A,B)=\sqrt{(a_1-b_1)^2+(a_2-b_2)^2}$\\(gerade Verbindungsstrecke)};
+  \end{scope}
+
+  % ---------- Panel 3: Kosinus ----------
+  \begin{scope}[shift={(13.2,0)}]
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (1.2,3.4);
+    \coordinate (B) at (4.2,1.4);
+    \draw[->, black!45] (0,0) -- (5.2,0) node[right, figlabel] {$x_1$};
+    \draw[->, black!45] (0,0) -- (0,4.2) node[above, figlabel] {$x_2$};
+    \draw[figarrow, figblue] (O) -- (A) node[above left, text=figblue] {$A$};
+    \draw[figarrow, figgreen] (O) -- (B) node[right, text=figgreen] {$B$};
+    % A liegt bei etwa 70,6 Grad, B bei etwa 18,4 Grad
+    \draw[figorange, line width=1.6pt] (18.43:1.5) arc (18.43:70.56:1.5);
+    \node[figlabel, text=figorange] at (44:1.95) {$\theta$};
+    \node[figlabel, font=\small\bfseries] at (2.6,-0.9) {Kosinus-Ähnlichkeit};
+    \node[figlabel, text width=5.6cm] at (2.6,-1.75) {$\cos(A,B)=\cos\theta$\\(nur der Winkel, nicht die Länge)};
+  \end{scope}
+\end{tikzpicture}
