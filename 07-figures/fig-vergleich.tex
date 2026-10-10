@@ -1,0 +1,11 @@
+\begin{tikzpicture}[node distance=7mm]
+  \node[figbox, text width=2.3cm] (sel) {Gewähltes Merkmal\\(Klasse, Münzseite)};
+  \node[figbox, sblue, text width=5.8cm, right=of sel, align=left, font=\footnotesize] (filt) {\textbf{Filter}\\1. gleiche Klasse und gleiche Münzseite\\2. Abstand der Boxmittelpunkte $\le 0{,}15$\\3. Flächenverhältnis der Boxen $\ge 0{,}5$};
+  \node[figbox, sorange, text width=3.0cm, right=of filt] (sim) {Ähnlichkeit je Merkmal\\(drei Maße)};
+  \node[figbox, sgreen, text width=2.6cm, right=of sim] (max) {Höchster Wert je Münze};
+  \node[figbox, spurple, text width=2.3cm, right=of max] (rank) {Münzen nach Ähnlichkeit sortiert};
+  \foreach \a/\b in {sel/filt,filt/sim,sim/max,max/rank} \draw[figarrow] (\a) -- (\b);
+  \node[cylinder, shape border rotate=90, draw=black!70, fill=black!5, aspect=0.25, minimum height=1.1cm, minimum width=1.3cm, font=\footnotesize, align=center, below=8mm of filt] (db) {Datenbank};
+  \draw[figarrow] (db) -- (filt);
+  \node[figlabel, right=2mm of db] {Merkmale bereits\\verarbeiteter Münzen};
+\end{tikzpicture}

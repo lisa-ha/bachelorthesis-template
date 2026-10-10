@@ -1,0 +1,9 @@
+\begin{tikzpicture}[node distance=7mm]
+  \node[figbox, text width=2.3cm] (det) {Detektion\\(Bounding Box)};
+  \node[figbox, sblue, text width=2.3cm, right=of det] (crop) {Ausschnitt aus dem Originalbild};
+  \node[figbox, sorange, text width=2.9cm, right=of crop] (net) {YOLO-World bis Neck-Schicht 18};
+  \node[figbox, sorange, text width=2.4cm, right=of net] (map) {Feature-Karte\\(256 Kanäle)};
+  \node[figbox, sgreen, text width=2.3cm, right=of map] (pool) {Mittelung über Höhe und Breite};
+  \node[figbox, spurple, text width=2.2cm, right=of pool] (vec) {Vektor\\(256 Werte)};
+  \foreach \a/\b in {det/crop,crop/net,net/map,map/pool,pool/vec} \draw[figarrow] (\a) -- (\b);
+\end{tikzpicture}

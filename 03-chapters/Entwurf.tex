@@ -133,9 +133,11 @@ Das Vorgehen besteht aus drei aufeinander aufbauenden Schritten: Merkmalsdetekti
 
 \noindent Vorder- und Rückseite werden getrennt betrachtet, Eingabe ist jeweils das Bild einer Münzseite. YOLO-World sucht darauf nach einer festen Liste von 57 englischen Textbeschreibungen (Prompts), die sich an den typischen Motiven antiker Münzen aus \cref{sec:glnumismatik} orientiert (vollständige Liste in \cref{app:example}). Die Liste wurde zu Beginn der Arbeit erstellt und danach nicht mehr angepasst. Sie wurde weder auf die Datengrundlage abgestimmt noch daraufhin geprüft, ob die Motive auf den Münzen des Corpus Nummorum tatsächlich vorkommen. Die Prompts sind daher keine genauen Bezeichnungen der Motive, sondern Annäherungen. So enthält die Liste etwa \enquote{hedgehog}, weil eine Krone vom Modell auch als Igel gelesen werden kann. Das ist für diese Arbeit unproblematisch, denn es kommt nicht auf die richtige Benennung an, sondern auf die Vergleichbarkeit (vgl. \cref{sec:zielsetzungundforschungsfragen}). Wird auf zwei Münzen ein \enquote{hedgehog} detektiert, zeigen beide vermutlich dasselbe Motiv, etwa eine Krone, und die beiden Ausschnitte lassen sich miteinander vergleichen. Der Igel steht hier nur als Beispiel.
 
-Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden, wie in der \cref{fig:schwellenwerte}, sowie in den nachfolgenden \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} zu sehen ist. 
+Eine Detektion gilt als gültig, wenn der Confidence Score 0,005 überschreitet. Der niedrige Wert wurde gewählt, weil bei höheren Schwellen kaum Detektionen entstanden. \cref{fig:schwellenwerte} zeigt, wie die durchschnittliche Zahl der Detektionen je Bild mit steigendem Schwellenwert sinkt.
 
 \input{07-figures/fig-schwellenwerte.tex}
+
+\noindent Die \cref{tab:schwellenwerte_rueckseite,tab:schwellenwerte_vorderseite} ergänzen die Abbildung um die absolute Zahl der Detektionen, die Zahl der Bilder ohne Detektion und die Zahl der detektierten Klassen. Bei 0,005 gibt es auf der Vorderseite 905 und auf der Rückseite 974 Detektionen, und nur 12 bzw. 15 Bilder bleiben ohne Detektion. Bei 0,5 sind es nur noch 7 bzw. 3 Detektionen, und 235 von 242 Vorderseitenbildern (97\,\%) sowie 247 von 250 Rückseitenbildern (99\,\%) haben keine Detektion mehr. Auch die Zahl der Klassen sinkt von 23 auf 2 (Vorderseite) bzw. von 22 auf 2 (Rückseite), es bleiben also nur noch Klassen mit hoher Confidence übrig. Schon bei 0,05 haben 41 bzw. 43 Bilder (je 17\,\%) keine Detektion mehr.
 
 \begin{table}[H]
 \centering
@@ -173,17 +175,30 @@ Eine weitere Nachbearbeitung findet nicht statt. Pro Detektion werden Klasse, Co
 
 \noindent \textbf{Vektorextraktion}
 
-\noindent Zu jeder Detektion wird ein Feature-Vektor bestimmt. Dazu wird die Bounding Box aus dem Originalbild ausgeschnitten und erneut durch YOLO-World geleitet. Als Vektor dient die Ausgabe der Neck-Schicht 18, die über die räumlichen Dimensionen gemittelt wird (Dimension 256). Die Wahl der Schicht wird in \cref{sec:implementierung} begründet. Der Vektor beschreibt damit den Ausschnitt ohne Kontext des Gesamtbildes. Ebenso wird für jedes Münzbild ein Gesamtbild-Vektor erzeugt. Alle Vektoren werden mit Klasse, Confidence Score, Bounding Box und Münzseite in der Datenbank gespeichert.
+\noindent Zu jeder Detektion wird ein Feature-Vektor bestimmt. Der Ablauf ist in \cref{fig:vektorextraktion} dargestellt. Dazu wird die Bounding Box aus dem Originalbild ausgeschnitten und erneut durch YOLO-World geleitet. Als Vektor dient die Ausgabe der Neck-Schicht 18, die über die räumlichen Dimensionen gemittelt wird (Dimension 256). Die Wahl der Schicht wird in \cref{sec:implementierung} begründet. Der Vektor beschreibt damit den Ausschnitt ohne Kontext des Gesamtbildes. Ebenso wird für jedes Münzbild ein Gesamtbild-Vektor erzeugt. Alle Vektoren werden mit Klasse, Confidence Score, Bounding Box und Münzseite in der Datenbank gespeichert.
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-vektorextraktion.tex}}
+  \caption[Ablauf der Vektorextraktion]{Bestimmung des Feature-Vektors eines Merkmals: Die Bounding Box wird aus dem Originalbild ausgeschnitten, durch YOLO-World geleitet, und die Ausgabe der Neck-Schicht 18 wird über Höhe und Breite gemittelt. Dargestellt ist nur der Ablauf für einzelne Merkmale, nicht der für das Gesamtbild. Eigene Darstellung.}
+  \label{fig:vektorextraktion}
+\end{figure}
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Vergleich}
 
-\noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen. Verwandte Klassen, etwa ähnliche Motive wie \enquote{hedgehog} und \enquote{crown} oder auch \enquote{human face} und \enquote{profile portait} werden dabei nicht zusammengefasst. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
+\noindent Verglichen werden Feature-Vektoren einzelner Merkmale. Der Ablauf ist in \cref{fig:vergleich} dargestellt. Der Nutzer wählt ein detektiertes Merkmal und eine Münzseite aus. Das Merkmal wird nur mit Merkmalen derselben Klasse auf derselben Münzseite verglichen. Verwandte Klassen, etwa ähnliche Motive wie \enquote{hedgehog} und \enquote{crown} oder auch \enquote{human face} und \enquote{profile portait} werden dabei nicht zusammengefasst. Zusätzlich müssen Position und Größe ähnlich sein. Der Abstand der Boxmittelpunkte darf 0,15 (normierte Koordinaten) nicht überschreiten, und das Flächenverhältnis der Boxen muss mindestens 0,5 betragen.
 
 Für zwei Vektoren A und B der Dimension n werden die drei Maße aus \cref{sec:merkmale} verwendet. Die beiden Distanzen $d$ (euklidisch, Manhattan) werden über $s = \frac{1}{1+d}$ in eine Ähnlichkeit $s \in (0, 1]$ umgerechnet. Die Kosinus-Ähnlichkeit $c$ wird über $s = \frac{c+1}{2}$ auf $[0, 1]$ abgebildet. Beide Umrechnungen sind monoton und ändern das Ranking nicht. Die Ähnlichkeitswerte verschiedener Maße sind nicht direkt vergleichbar, da sie unterschiedlich skaliert sind. Verglichen werden daher die Rangfolgen. Die Maße erfassen unterschiedliche Aspekte der Ähnlichkeit. Da vorab nicht bekannt ist, welches sich am besten eignet, werden alle drei parallel eingesetzt und in \cref{ch:evaluation} verglichen. 
 Pro Münze zählt der höchste Ähnlichkeitswert über alle passenden Merkmale. Die Münzen werden nach Ähnlichkeit absteigend sortiert, und die ähnlichsten [1 bis 5] werden ausgegeben. 
 
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{\input{07-figures/fig-vergleich.tex}}
+  \caption[Ablauf des Vergleichs]{Ablauf des Vergleichs: Aus der Datenbank bleiben nur Merkmale derselben Klasse und Münzseite mit ähnlicher Position und Größe übrig. Für diese wird die Ähnlichkeit mit den drei Maßen bestimmt, je Münze zählt der höchste Wert, und die Münzen werden danach sortiert. Eigene Darstellung.}
+  \label{fig:vergleich}
+\end{figure}
 
 %****************Bewertungskonzept****************************
 \section{Bewertungskonzept}
