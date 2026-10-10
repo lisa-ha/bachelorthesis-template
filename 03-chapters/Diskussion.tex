@@ -9,11 +9,19 @@
 \section{Beantwortung der Forschungsfragen}
 \label{sec:beantwortungfragen}
 \begin{enumerate}
-    \item \noindent Welche Grenzen zeigt ein Ansatz ohne münzspezifisches Training bei der Anwendung auf antike Münzbilder?
-
-    \noindent Der Ansatz stößt an mehreren Stellen an Grenzen. Erstens liefert YOLO-World nur 23 (vorderseite) bzw. 22 (Rückseite) der 57 Prompts als Klasse mit meist niedriger Confidence (vgl. \cref{sec:ergebnisse}), und ob eine Klasse inhaltlich zutrifft, lässt sich ohne eigene Prüfung nicht sagen \todo{an qualitative Analyse anpassen}. Zweitens hängen Detektion und Vektoren von der festgelegten Prompt-Liste ab. Drittens [Einfluss von Erhaltungszustand und Bildtyp, aus Ergebnissen]. Viertens beschreibt ein Vektor das Merkmal ohne Kontext des Gesamtbildes. Zudem wird auf Münzen desselben Stempels häufig eine andere Klasse am sichersten detektiert, sodass nur 36\,\% der stempelgleichen Paare überhaupt verglichen werden (vgl. \cref{sec:ergebnisse}) Die Einzelheiten und die Grenzen der Untersuchung selbst behandelt \cref{sec:grenzen-untersuchung}.
-
+    \item \textit{Inwieweit lassen sich visuelle Merkmale auf antiken Münzbildern mithilfe eines nicht speziell trainierten YOLO-Modells detektieren und lokalisieren?}
+ 
+    \noindent Detektieren lässt sich etwas fast immer, aber nur grob. YOLO-World findet bei einem Schwellenwert von 0,005 auf 95\,\% der Vorderseitenbilder mindestens ein Merkmal, im Mittel 3,7 je Bild (vgl. \cref{sec:ergebnisse}). Die Confidence ist dabei niedrig, und von 57 Prompts treten nur 23 als Klasse auf. Der Großteil fällt auf vier allgemeine Klassen (\textit{human face}, \textit{person}, \textit{face}, \textit{dog}). Feinere Motive und Inschriften werden selten benannt. Das Modell erkennt also vor allem, dass ein Kopf oder eine Figur vorhanden ist, aber kaum, welches Motiv genau. Ob die Box das Merkmal trifft, wurde nur in der Stichprobe geprüft (vgl. \cref{sec:qualitativeanalyse}). YOLOv8n mit 80 festen Klassen detektiert mehr Boxen und deckt ähnlich viele Bilder ab.
+ 
+    \item \textit{Inwiefern lassen sich lokalisierte Merkmale anhand ihrer extrahierten Feature-Vektoren sinnvoll miteinander vergleichen?}
+ 
+    \noindent Der Vergleich funktioniert nur für einen Teil der Klassen. Bei \textit{human face} und \textit{face} liegt eine Münze desselben Stempels deutlich häufiger auf den vorderen Plätzen als bei zufälliger Reihenfolge (HitRate@5 42,0\,\% bzw. 35,0\,\% gegenüber rund 21\,\%, HitRate@1 etwa viermal so hoch). Bei \textit{person} und den seltenen Klassen ist der Vergleich nicht besser als Zufall. Insgesamt liegt die Suche mit 30,8\,\% HitRate@5 über dem Zufallswert von 21,2\,\%, bleibt aber weit von einer verlässlichen Suche entfernt. Die Ähnlichkeitswerte stempelgleicher und stempelverschiedener Paare überlagern sich fast vollständig, sodass die ersten Treffer oft von anderen Stempeln stammen. Die Wahl des Maßes spielt kaum eine Rolle, ebenso wenig die Positions- und Größenfilter. Die Vektoren enthalten also stempelbezogene Information, wenn das Merkmal ein Gesicht ist, aber zu wenig, um Stempel sicher zu trennen.
+ 
+    \item \textit{Welche Grenzen zeigt ein Ansatz ohne münzspezifisches Training bei der Anwendung auf antike Münzbilder?}
+ 
+    \noindent Die wichtigste Grenze ist die uneinheitliche Klassenvergabe. Auf Münzen desselben Stempels wird oft eine andere Klasse am sichersten detektiert, sodass nur 36\,\% der stempelgleichen Paare dieselbe Klasse der ausgewählten Detektion haben. Da nur innerhalb einer Klasse verglichen wird, gehen diese Münzen für die Suche verloren. Bei seltenen Klassen fehlt der Treffer dadurch meist ganz. Zweitens hängen Detektion und Vektoren von der Prompt-Liste ab, und die Confidence ist niedrig. Drittens beschreibt ein Vektor das Merkmal ohne den Kontext des Gesamtbildes, und die Vektoren allgemeiner Klassen wie \textit{person} trennen Stempel nicht. Viertens bringt das offene Vokabular gegenüber YOLOv8n keinen Vorteil. Der Einfluss von Bildtyp und Erhaltungszustand wurde nur in der Stichprobe betrachtet [an qualitative Analyse anpassen]. Die Einzelheiten und die Grenzen der Untersuchung selbst behandelt \cref{sec:grenzen}.
 \end{enumerate}
+
 
 %*********Einordnung in bestehende Arbeiten**********************
 \section{Einordnung in bestehende Arbeiten}
@@ -41,12 +49,12 @@ Bildbasierte Verfahren für antike Münzen lassen sich nach ihrer Aufgabe in dre
 \vspace{\baselineskip}
 
 \noindent \textbf{Abgrenzung} 
-\noindent Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur 23 Klassen detektiert, die Stempelsuche wird auf 200 Münzen gezeigt, und eine inhaltliche Prüfung der Klassen fehlt \todo{an Ergebnisse anpassen}.
+\noindent Damit unterscheidet sich diese Arbeit in drei Punkten: Erstens kommt sie ohne Training und ohne Annotationen der Merkmalspositionen aus, wogegen die Verfahren zur Zuordnung und Motiverkennung \cite{guo2023siamese,cooper2020learning,anwar2026reading} auf münzspezifischen Daten trainiert werden. Zweitens wird nicht die ganze Münze verglichen, sondern einzelne lokalisierte Merkmale. Drittens dienen die Stempelgruppen aus dem Corpus Nummorum als Grundwahrheit für die Auswertung (vgl. \cref{sec:evaluationsaufbau}). Dafür wird auch weniger geleistet: Es werden nur 23 Klassen detektiert, davon nur zwei mit Ergebnissen deutlich über dem Zufall, und die Stempelsuche wird auf 200 Münzen gezeigt.
 
 \vspace{\baselineskip}
 
 \noindent \textbf{Vergleichbarkeit der Ergebnisse} 
-\noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Ergebnisse dieser Arbeit liegen bei 17\,3\% (HitRate@1) und 46\,2\% (HitRate@5) \todo{aus \cref{sec:ergebnisse} einsetzen} und sind mit 200 Münzen als Tendenz zu verstehen. Ob ein Ansatz ohne Training den trainierten Verfahren nahekommt, lässt sich daraus nur eingeschränkt beantworten; ein Vergleich auf denselben Daten steht aus \todo{Formulierung nach den Ergebnissen anpassen}.
+\noindent Die Zahlen der genannten Arbeiten lassen sich nicht direkt mit den Ergebnissen dieser Arbeit vergleichen, da Aufgabe, Daten und Kennzahlen verschieden sind. Guo et al. berichten eine Genauigkeit von 81\,\% für die Zuordnung zu einer Prägung, Cooper und Arandjelović bis zu 84\,\% je Motiv, Anwar einen mAP50 von rund 90\,\% für Buchstaben. Heinecke et al. geben ein Clustermaß (NMI) von etwa 0,96 für Vorderseiten an. Diese Werte messen jeweils, ob etwas richtig eingeordnet wird. Hier wird gemessen, ob Münzen desselben Stempels unter den ähnlichsten Treffern liegen (HitRate@$k$, vgl. \cref{sec:evaluationsaufbau}). Die Stempelsuche erreicht hier über alle Anfragen 11,4\,\% (HitRate@1) und 30,8\,\% (HitRate@5), für die Klasse \textit{human face} 17,0\,\% und 42,0\,\% (vgl. \cref{tab:klassen-suche}), und ist mit 200 Münzen als Tendenz zu verstehen. Die Werte liegen deutlich unter denen der trainierten Verfahren. Wegen der verschiedenen Aufgaben lässt sich daraus aber nur ableiten, dass der Ansatz ohne Training in dieser Form noch nicht an trainierte Verfahren heranreicht. Ein Vergleich auf denselben Daten steht aus.
 
 %***************Grenzen*****************************
 \section{Grenzen}
@@ -75,7 +83,7 @@ Neben Yolov8s-World-v2 wurde Yolov8n verglichen, das auf der Vorderseite leicht 
 
 \noindent \textbf{Vergleich nur innerhalb einer Klasse} 
 
-\noindent Merkmale werden nur mit Merkmalen derselben Klasse verglichen (vgl. \cref{sec:vorgehen}). Ob verwandte Klassen, die dasselbe Motiv unterschiedlich benennen, gemeinsam verglichen werden können, wurde im Rahmen dieser Arbeit nicht untersucht. Dadurch können Münzen desselben Stempels unverglichen bleiben, wenn auf ihnen verschiedene Klassen detektiert werden.
+\noindent Merkmale werden nur mit Merkmalen derselben Klasse verglichen (vgl. \cref{sec:vorgehen}). Ob verwandte Klassen, die dasselbe Motiv unterschiedlich benennen, gemeinsam verglichen werden können, wurde im Rahmen dieser Arbeit nicht untersucht. Dadurch können Münzen desselben Stempels unverglichen bleiben, wenn auf ihnen verschiedene Klassen detektiert werden. Wie stark das wirkt, zeigt die Auswertung: Nur 36\,\% der stempelgleichen Paare haben dieselbe Klasse der ausgewählten Detektion, und bei den seltenen Klassen trägt in 46 von 76 Anfragen keine stempelgleiche Münze dieselbe Klasse (vgl. \cref{sec:ergebnisse}).
 
 \subsection{Grenzen der Untersuchung}
 \label{sec:grenzen-untersuchung}
@@ -87,7 +95,7 @@ Neben Yolov8s-World-v2 wurde Yolov8n verglichen, das auf der Vorderseite leicht 
 
 \noindent \textbf{Grundwahrheit} 
 
-\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Sie gilt nur für die Vorderseiten (vgl. \cref{sec:evaluationsaufbau}). Für die Rückseiten gibt es nur wenige Münzen mit gleichem Stempel, sie werden daher nur ergänzend ausgewertet. Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft.
+\noindent Als Grundwahrheit dienen die Stempelgruppen aus der CN-Datenbank \cite{cn-about}. Für die Rückseiten werden die Rückseitenstempel-IDs verwendet. Da dort nur 119 Münzen ihren Stempel mit einer anderen teilen, wird die Rückseite nur ergänzend ausgewertet und die Stempelsuche je Klasse nur auf der Vorderseite (vgl. \cref{sec:evaluationsaufbau}). Die Güte der Auswertung hängt davon ab, dass die Zuordnung in CN korrekt ist. Sie wurde in dieser Arbeit nicht überprüft.
 
 \vspace{\baselineskip}
 

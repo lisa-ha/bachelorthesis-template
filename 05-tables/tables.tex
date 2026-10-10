@@ -250,6 +250,45 @@ Verwendete Prompts für die Merkmalsdetektion mit YOLO-World
 \end{table}
 
 % ============================================================
+% Vergleich der Schichten für den Gesamtbildvektor
+% ============================================================
+\begin{table}[H]
+\centering
+\small
+\caption{Vergleich der Schichten 15, 18 und 21 auf den Vorderseiten (200 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
+\label{tab:schichten-gesamtb-obverse}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
+\hline
+\textbf{Vektordimension}                          & 128         & 256         & 512         \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel} \\ \textbf{(900 Paare)}}  & 0{,}9976    & 0{,}9911    & 0{,}9865    \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel} \\ \textbf{(19\,000 Paare)}} & 0{,}9974 & 0{,}9902 & 0{,}9853   \\ \hline
+\textbf{Differenz der Mittelwerte}                & 0{,}0002    & 0{,}0009    & 0{,}0012    \\ \hline
+\textbf{Top-1 richtig (von 200)}                  & 34          & 39          & 35          \\ \hline
+\textbf{Top-1-Genauigkeit}                        & 17{,}0\,\%  & 19{,}5\,\%  & 17{,}5\,\%  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Vergleich der Schichten 15, 18 und 21 auf den Rückseiten (198 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
+\label{tab:schichten-gesamtb-reverse}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
+\hline
+\textbf{Vektordimension}                         & 128         & 256         & 512         \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel}\\\textbf{(119 Paare)}}  & 0{,}9980    & 0{,}9928    & 0{,}9894    \\ \hline
+\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel}\\\textbf{(19\,384 Paare)}} & 0{,}9973 & 0{,}9900 & 0{,}9858   \\ \hline
+\textbf{Differenz der Mittelwerte}               & 0{,}0007    & 0{,}0028    & 0{,}0036    \\ \hline
+\textbf{Top-1 richtig (von 198)}                & 10          & 7           & 8           \\ \hline
+\textbf{Top-1-Genauigkeit}                       & 5{,}1\,\%   & 3{,}5\,\%   & 4{,}0\,\%   \\ \hline
+\end{tabular}
+\end{table}
+
+% ============================================================
 % Vergleich YOLOv8n und YOLO-World
 % ============================================================
 \begin{table}[H]

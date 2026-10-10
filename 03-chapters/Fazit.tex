@@ -7,10 +7,21 @@
 
 \section{Zusammenfassung}
 \label{sec:zusammenfassung}
-\todo{ausfüllen}
+Diese Arbeit hat untersucht, ob sich einzelne Merkmale auf antiken Münzbildern ohne münzspezifisches Training mit YOLO-World detektieren und über ihre Feature-Vektoren vergleichen lassen. Dazu wurde eine Anwendung entwickelt, die Münzen aus dem Corpus Nummorum lädt, Merkmale detektiert, ihre Vektoren aus Schicht 18 speichert und Münzen mit ähnlichen Merkmalen sucht. Ausgewertet wurde auf 200 Münzen in 20 Stempelgruppen.
+ 
+Die Detektion liefert fast auf jedem Bild ein Ergebnis, benennt aber überwiegend allgemeine Klassen wie \textit{human face} oder \textit{person} mit niedriger Confidence. Der Vergleich über die Feature-Vektoren liegt insgesamt über dem Zufall (HitRate@5 30,8\,\% gegenüber 21,2\,\%). Für Gesichter ist er deutlich besser als Zufall (\textit{human face}: 42,0\,\% gegenüber 20,9\,\%), für andere Klassen nicht. Maß und Filter haben kaum Einfluss, YOLOv8n erreicht ähnliche Werte. Die größte Grenze ist, dass auf Münzen desselben Stempels oft verschiedene Klassen detektiert werden und diese nicht verglichen werden.
+ 
+Der Ansatz zeigt damit, dass Feature-Vektoren eines nicht trainierten Modells stempelbezogene Information enthalten. Für eine verlässliche Stempelsuche reicht das in der untersuchten Form nicht aus.
+
 
 \section{Ausblick}
 \label{sec:ausblick}
+\noindent \textbf{Vergleich über Klassen hinweg}
+ 
+\noindent Merkmale werden nur innerhalb derselben Klasse verglichen, und nur 36\,\% der stempelgleichen Paare haben dieselbe Klasse der ausgewählten Detektion (vgl. \cref{sec:ergebnisse}). Verwandte Klassen wie \textit{human face}, \textit{face} und \textit{head} könnten zusammengefasst oder ganz ohne Klassenbedingung verglichen werden. Zu prüfen wäre, ob dadurch mehr stempelgleiche Münzen gefunden werden.
+ 
+\vspace{\baselineskip}
+
 \textbf{Kombination mehrerer Merkmale zu einem Münzwert}
 
 \noindent Derzeit zählt je Münze der höchste Ähnlichkeitswert über alle passenden Merkmale (vgl. \cref{sec:vorgehen}). Eine Münze trägt aber meist mehrere Merkmale, die zusammen aussagekräftiger sein könnten als das ähnlichste einzelne. Denkbar sind eine Gewichtung nach Klasse oder Confidence oder ein Wert, der die Übereinstimmung mehrerer Merkmale berücksichtigt. 

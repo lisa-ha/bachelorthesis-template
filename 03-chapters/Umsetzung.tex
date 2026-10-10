@@ -57,44 +57,22 @@ Die Anwendung wurde in Python 3.14.4 entwickelt und lokal auf [CPU/GPU, Modell, 
 
 \noindent Der \lstinline|YoloHandler| lädt Modell und Einstellungen aus der Konfigurationsdatei und setzt die Prompt-Liste beim Anlegen einmalig. Für die Detektion wird das Modell mit dem konfigurierten Schwellenwert aufgerufen (Anhang B). Gespeichert werden Klasse, Confidence Score und die auf die Bildgröße normierte Bounding Box. Zuvor werden Detektionen verworfen, deren Box mindestens 85\,\% der Bildfläche einnimmt (\texttt{max\_area\_ratio}, Anhang B). Anschließend wird jede Box aus dem Originalbild ausgeschnitten. Die Feature-Vektoren entstehen über den Parameter \lstinline|embed| der Ultralytics-Vorhersage, der die Ausgabe ausgewählter Schichten liefert. Verwendet wird Schicht 18, einer der drei Blöcke des Necks (C2fAttn, P4/16), deren Ausgaben an den Detektionskopf weitergegeben werden \todo{QUELLE: yolov8-worldv2.yaml}. Die gewählte Schicht liefert für ein Bild mehrere Merkmalskarten (Kanäle), die angeben, wo im Bild bestimmte gelernte Muster auftreten. Um daraus einen vergleichbaren Vektor zu erhalten, wird jede Merkmalskarte durch ihren Durchschnittswert ersetzt (Average Pooling, vgl. \cref{sec:glmaschinelleslernen}). Der Vektor enthält somit einen Wert pro Kanal, bei Schicht 18 also 256 Werte \todo{QUELLE: Ultralytics embed (adaptive\_avg\_pool2d)}. Der Durchlauf endet an dieser Schicht, der Detektionskopf wird nicht ausgeführt. Vektoren entstehen für das Gesamtbild und für jeden Ausschnitt. Die Ausschnitte werden in Batches zu je 8 Bildern verarbeitet, die Größe ist konfigurierbar.
 
-Die Schicht wurde anhand eines Vergleichs der drei Neck-Blöcke (Schichten 15, 18 und 21) gewählt. Dazu wurde für jede Münze auf dem ersten Bild die Detektion mit der höchsten Confidence ausgewählt, ausgeschnitten und mit jeder der drei Schichten in einen Feature-Vektor umgewandelt. Jede Münze wurde anschließend mit den Münzen verglichen, deren ausgewählte Detektion dieselbe Klasse hat (Kosinus-Ähnlichkeit), nach demselben Vorgehen wie in der Evaluation (vgl. \cref{sec:evaluationsaufbau}). Alle übrigen Einstellungen blieben fest, sodass nur der Einfluss der Schicht sichtbar wird. Als Kriterium dienen HitRate@1, HitRate@5 und Precision@5. Grundlage der Auswahl ist die Vorderseite (\cref{tab:schichten-obverse}), da sich die Grundwahrheit auf sie bezieht. Schicht [X] erreicht dort mit [Wert] die höchste HitRate@5 \todo{Werte aus neuem Lauf}. Die Auswahl erfolgte auf denselben Münzen wie die spätere Evaluation und ist daher eine pragmatische Entscheidung und kein Nachweis einer besten Schicht.
+Die Schicht wurde anhand eines Vergleichs der drei Neck-Blöcke (Schichten 15, 18 und 21) gewählt. Dazu wurde für jede Münze auf dem ersten Bild die Detektion mit der höchsten Confidence ausgewählt, ausgeschnitten und mit jeder der drei Schichten in einen Feature-Vektor umgewandelt. Jede Münze wurde anschließend mit den Münzen verglichen, deren ausgewählte Detektion dieselbe Klasse hat (Kosinus-Ähnlichkeit), nach demselben Vorgehen wie in der Evaluation (vgl. \cref{sec:evaluationsaufbau}). Alle übrigen Einstellungen blieben fest, sodass nur der Einfluss der Schicht sichtbar wird. Als Kriterium dienen HitRate@1, HitRate@5 und Precision@5. Grundlage der Auswahl ist die Vorderseite (\cref{tab:schichten-merkmale}), da sich die Grundwahrheit auf sie bezieht. Schicht 18 erreicht dort bei allen drei Kennzahlen den höchsten Wert (HitRate@1 17,3\,\%, HitRate@5 42,9\,\%, Precision@5 11,2\,\%). Auf der Rückseite liegt sie ebenfalls vorn oder gleichauf. Die Unterschiede betragen auf der Vorderseite höchstens acht von 156 Anfragen. Die Auswahl erfolgte auf denselben Münzen wie die spätere Evaluation und ist daher eine pragmatische Entscheidung und kein Nachweis einer besten Schicht. \todo{im anhang ist das auch nur für den gesamtbildvektor}
 
 \begin{table}[H]
 \centering
 \small
-\caption{Vergleich der Schichten 15, 18 und 21 auf den Vorderseiten (200 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
-\label{tab:schichten-obverse}
-\begin{tabular}{|l|r|r|r|}
+\caption{Vergleich der Schichten 15, 18 und 21. Je Münze wird die Detektion mit der höchsten Confidence auf dem ersten Bild verwendet und nur mit Münzen derselben Klasse verglichen (Kosinus-Ähnlichkeit, Vorderseite 156 Anfragen, Rückseite 62 Anfragen).}
+\label{tab:schichten-merkmale}
+\begin{tabular}{|l|r|r|r|r|r|r|}
 \hline
-\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
-\hline
-\textbf{Vektordimension}                          & 128         & 256         & 512         \\ \hline
-\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel} \\ \textbf{(900 Paare)}}  & 0{,}9976    & 0{,}9911    & 0{,}9865    \\ \hline
-\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel} \\ \textbf{(19\,000 Paare)}} & 0{,}9974 & 0{,}9902 & 0{,}9853   \\ \hline
-\textbf{Differenz der Mittelwerte}                & 0{,}0002    & 0{,}0009    & 0{,}0012    \\ \hline
-\textbf{Top-1 richtig (von 200)}                  & 34          & 39          & 35          \\ \hline
-\textbf{Top-1-Genauigkeit}                        & 17{,}0\,\%  & 19{,}5\,\%  & 17{,}5\,\%  \\ \hline
+ & \multicolumn{3}{c|}{\textbf{Vorderseite}} & \multicolumn{3}{c|}{\textbf{Rückseite}} \\ \hline
+\textbf{Schicht (Dim.)} & \textbf{HR@1} & \textbf{HR@5} & \textbf{P@5} & \textbf{HR@1} & \textbf{HR@5} & \textbf{P@5} \\ \hline
+\textbf{15 (128)} & 14{,}1\,\% & 37{,}8\,\% & 11{,}2\,\% & 12{,}9\,\% & 25{,}8\,\% & 8{,}1\,\% \\ \hline
+\textbf{18 (256)} & 17{,}3\,\% & 42{,}9\,\% & 11{,}2\,\% & 14{,}5\,\% & 30{,}6\,\% & 9{,}4\,\% \\ \hline
+\textbf{21 (512)} & 15{,}4\,\% & 42{,}3\,\% & 10{,}8\,\% & 11{,}3\,\% & 30{,}6\,\% & 8{,}4\,\% \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{table}[H]
-\centering
-\small
-\caption{Vergleich der Schichten 15, 18 und 21 auf den Rückseiten (198 Münzen). Verglichen wurde der Gesamtbild-Vektor des ersten Bildes je Münze; die Ähnlichkeit ist die Kosinus-Ähnlichkeit, umgerechnet auf $[0,1]$.}
-\label{tab:schichten-reverse}
-\begin{tabular}{|l|r|r|r|}
-\hline
-\textbf{Schicht}                         & \textbf{15} & \textbf{18} & \textbf{21} \\ \hline
-\hline
-\textbf{Vektordimension}                         & 128         & 256         & 512         \\ \hline
-\makecell[l]{\textbf{Ø Ähnlichkeit, gleicher Stempel}\\\textbf{(119 Paare)}}  & 0{,}9980    & 0{,}9928    & 0{,}9894    \\ \hline
-\makecell[l]{\textbf{Ø Ähnlichkeit, verschiedene Stempel}\\\textbf{(19\,384 Paare)}} & 0{,}9973 & 0{,}9900 & 0{,}9858   \\ \hline
-\textbf{Differenz der Mittelwerte}               & 0{,}0007    & 0{,}0028    & 0{,}0036    \\ \hline
-\textbf{Top-1 richtig (von 198)}                & 10          & 7           & 8           \\ \hline
-\textbf{Top-1-Genauigkeit}                       & 5{,}1\,\%   & 3{,}5\,\%   & 4{,}0\,\%   \\ \hline
-\end{tabular}
-\end{table}
-\todo{Rückfrage: hier gesamtbildvektor statt merkmalsvektor lassen?}
 
 \vspace{\baselineskip}
 
@@ -142,7 +120,21 @@ Die Oberfläche läuft in zwei Schritten. Der Nutzer lädt ein Münzbild hoch, b
 
 \noindent \textbf{Laufzeit beim Aufbau der Datenbank}
 
-\noindent Der Aufbau erfordert viele Modellaufrufe. Je Bild einen für die Detektion und einen für den Gesamtbild-Vektor, dazu einen je detektiertem Ausschnitt. Wegen des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}) entstehen auch Detektionen mit geringer Confidence, im Mittel 3{,}7 je Vorderseiten- und 3{,}9 je Rückseitenbild, für die 200 Münzen insgesamt 1\,879 Ausschnitte (905 Vorderseite, 974 Rückseite). Deshalb werden Bilder und Detektionen gruppenweise je Stempelgruppe verarbeitet und die Ausschnitte in Batches zu 8 Bildern an das Modell übergeben. Dadurch verkürzte sich der Aufbau auf [Zeit] \todo{Wert eintragen}. Die Suche selbst vergleicht die Anfrage sequenziell mit allen gespeicherten Vektoren und benötigt bei 200 Münzen [Messwert] \todo{Wert eintragen} Sekunden.
+\noindent Der Aufbau erfordert viele Modellaufrufe. Je Bild einen für die Detektion und einen für den Gesamtbild-Vektor, dazu einen je detektiertem Ausschnitt. Wegen des niedrigen Schwellenwerts (vgl. \cref{sec:vorgehen}) entstehen auch Detektionen mit geringer Confidence, im Mittel 3{,}7 je Vorderseiten- und 3{,}9 je Rückseitenbild, für die 200 Münzen insgesamt 1\,879 Ausschnitte (905 Vorderseite, 974 Rückseite). Deshalb werden Bilder und Detektionen gruppenweise je Stempelgruppe verarbeitet und die Ausschnitte in Batches zu 8 Bildern an das Modell übergeben. Die Batchgröße wurde auf den 905 Vorderseiten-Ausschnitten verglichen (\cref{tab:batchgroessen}). Mit Batchgröße 8 dauerte die Vektorextraktion 199,8\,s (0,22\,s je Ausschnitt), einzeln 266,0\,s und mit Batchgröße 16 221,6\,s. Batchgröße 8 ist damit rund 25\,\% schneller als die Einzelverarbeitung. 
+
+\begin{table}[H]
+\centering
+\small
+\caption{Dauer der Vektorextraktion für die 905 Ausschnitte der Vorderseiten je Batchgröße}
+\label{tab:batchgroessen}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Batchgröße} & \textbf{1} & \textbf{8} & \textbf{16} \\ \hline
+\textbf{Gesamtdauer} & 266{,}0\,s & 199{,}8\,s & 221{,}6\,s \\ \hline
+\textbf{je Ausschnitt} & 0{,}29\,s & 0{,}22\,s & 0{,}24\,s \\ \hline
+\end{tabular}
+\end{table}
+
 
 \vspace{\baselineskip}
 
